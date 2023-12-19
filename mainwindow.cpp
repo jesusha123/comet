@@ -76,5 +76,6 @@ void MainWindow::initializeCollection()
 void MainWindow::initializeHeaderTables()
 {
     ui->requestHeadersTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->requestParamsTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->responseHeadersTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 }
