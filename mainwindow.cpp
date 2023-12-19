@@ -34,8 +34,18 @@ void MainWindow::sendRequest()
 void MainWindow::processReply(QNetworkReply *reply)
 {
     qInfo("Reply finished from %s", qPrintable(reply->request().url().toString()));
+
     QByteArray data = reply->readAll();
-    ui->responseWebEngine->setHtml(data);
+    ui->responseBodyPlainTextEdit->setPlainText(data);
+
+    QTableWidget *tableWidget = ui->responseHeadersTableWidget;
+    for (const QNetworkReply::RawHeaderPair &headerPair : reply->rawHeaderPairs()) {
+        qInfo("Header: \"%s\": \"%s\"", qPrintable(headerPair.first), qPrintable(headerPair.second));
+        int rowIndex = tableWidget->rowCount();
+        tableWidget->insertRow(rowIndex);
+        tableWidget->setItem(rowIndex, 0, new QTableWidgetItem(headerPair.first));
+        tableWidget->setItem(rowIndex, 1, new QTableWidgetItem(headerPair.second));
+    }
 }
 
 void MainWindow::changeActiveRequest(QListWidgetItem *item)
