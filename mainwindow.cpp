@@ -12,11 +12,9 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    connect(ui->sendButton, &QPushButton::clicked, this, &MainWindow::sendRequest);
-    connect(&networkAccessManager, &QNetworkAccessManager::finished, this, &MainWindow::processReply);
-    connect(ui->requestListWidget, &QListWidget::itemClicked, this, &MainWindow::changeActiveRequest);
-
+    initializeConnections();
     initializeCollection();
+    initializeHeaderTables();
 }
 
 MainWindow::~MainWindow()
@@ -39,6 +37,7 @@ void MainWindow::processReply(QNetworkReply *reply)
     ui->responseBodyPlainTextEdit->setPlainText(data);
 
     QTableWidget *tableWidget = ui->responseHeadersTableWidget;
+    tableWidget->clearContents();
     for (const QNetworkReply::RawHeaderPair &headerPair : reply->rawHeaderPairs()) {
         qInfo("Header: \"%s\": \"%s\"", qPrintable(headerPair.first), qPrintable(headerPair.second));
         int rowIndex = tableWidget->rowCount();
@@ -55,20 +54,22 @@ void MainWindow::changeActiveRequest(QListWidgetItem *item)
     ui->urlLineEdit->setText(itemText);
 }
 
+
+void MainWindow::initializeConnections()
+{
+    connect(ui->sendButton, &QPushButton::clicked, this, &MainWindow::sendRequest);
+    connect(&networkAccessManager, &QNetworkAccessManager::finished, this, &MainWindow::processReply);
+    connect(ui->requestListWidget, &QListWidget::itemClicked, this, &MainWindow::changeActiveRequest);
+}
+
 void MainWindow::initializeCollection()
 {
-    QFile collectionFile("/Users/max/temp/mycollection.json");
-    if (!collectionFile.open(QIODevice::ReadOnly)) {
-        qWarning("Couldn't open save file.");
-    }
-    QByteArray collectionData = collectionFile.readAll();
-    QJsonDocument collectionDocument(QJsonDocument::fromJson(collectionData));
-    QJsonObject collectionObject = collectionDocument.object();
-    QJsonArray requestsArray = collectionObject["requests"].toArray();
-    for (const QJsonValue &requestValue : requestsArray) {
-        QString name = requestValue.toObject()["name"].toString();
-        QString url = requestValue.toObject()["url"].toString();
-        qInfo("Loading request from collection: \"%s\" [%s]", qPrintable(name), qPrintable(url));
-        ui->requestListWidget->addItem(url);
-    }
+    QStringList urlList = { "https://wikipedia.org" };
+    ui->requestListWidget->addItems(urlList);
+}
+
+void MainWindow::initializeHeaderTables()
+{
+    ui->requestHeadersTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->responseHeadersTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 }

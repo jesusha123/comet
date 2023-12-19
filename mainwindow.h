@@ -29,5 +29,7 @@ private:
     Ui::MainWindow *ui;
     QNetworkAccessManager networkAccessManager;
     void initializeCollection();
+    void initializeConnections();
+    void initializeHeaderTables();
 };
 #endif // MAINWINDOW_H
