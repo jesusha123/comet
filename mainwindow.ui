@@ -50,9 +50,22 @@
          <number>0</number>
         </property>
         <widget class="QTableWidget" name="requestHeadersTableWidget">
+         <property name="editTriggers">
+          <set>QAbstractItemView::NoEditTriggers</set>
+         </property>
          <attribute name="title">
           <string>Headers</string>
          </attribute>
+         <column>
+          <property name="text">
+           <string>Key</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Value</string>
+          </property>
+         </column>
         </widget>
         <widget class="QWidget" name="paramsTab">
          <attribute name="title">
