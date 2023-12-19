@@ -14,108 +14,116 @@
    <string>Comet</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QHBoxLayout" name="horizontalLayout_2">
-    <item>
-     <widget class="QListWidget" name="requestListWidget">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QSplitter" name="splitter">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
       </property>
-     </widget>
-    </item>
-    <item>
-     <layout class="QVBoxLayout" name="verticalLayout">
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout">
+      <property name="childrenCollapsible">
+       <bool>false</bool>
+      </property>
+      <widget class="QListWidget" name="requestListWidget">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+      <widget class="QWidget" name="">
+       <layout class="QVBoxLayout" name="verticalLayout">
         <item>
-         <widget class="QLineEdit" name="urlLineEdit"/>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QLineEdit" name="urlLineEdit"/>
+          </item>
+          <item>
+           <widget class="QPushButton" name="sendButton">
+            <property name="text">
+             <string>Send</string>
+            </property>
+            <property name="shortcut">
+             <string>Ctrl+Return</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
         <item>
-         <widget class="QPushButton" name="sendButton">
-          <property name="text">
-           <string>Send</string>
+         <widget class="QTabWidget" name="requestTabWidget">
+          <property name="currentIndex">
+           <number>0</number>
           </property>
-          <property name="shortcut">
-           <string>Ctrl+Return</string>
+          <widget class="QTableWidget" name="requestHeadersTableWidget">
+           <property name="editTriggers">
+            <set>QAbstractItemView::NoEditTriggers</set>
+           </property>
+           <attribute name="title">
+            <string>Headers</string>
+           </attribute>
+           <column>
+            <property name="text">
+             <string>Key</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>Value</string>
+            </property>
+           </column>
+          </widget>
+          <widget class="QWidget" name="paramsTab">
+           <attribute name="title">
+            <string>Params</string>
+           </attribute>
+          </widget>
+          <widget class="QWidget" name="bodyTab">
+           <attribute name="title">
+            <string>Body</string>
+           </attribute>
+          </widget>
+         </widget>
+        </item>
+        <item>
+         <widget class="QTabWidget" name="responseTabWidget">
+          <property name="currentIndex">
+           <number>0</number>
           </property>
+          <widget class="QTableWidget" name="responseHeadersTableWidget">
+           <property name="editTriggers">
+            <set>QAbstractItemView::NoEditTriggers</set>
+           </property>
+           <property name="columnCount">
+            <number>2</number>
+           </property>
+           <attribute name="title">
+            <string>Headers</string>
+           </attribute>
+           <column>
+            <property name="text">
+             <string>Key</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>Value</string>
+            </property>
+           </column>
+          </widget>
+          <widget class="QPlainTextEdit" name="responseBodyPlainTextEdit">
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+           <attribute name="title">
+            <string>Body</string>
+           </attribute>
+          </widget>
          </widget>
         </item>
        </layout>
-      </item>
-      <item>
-       <widget class="QTabWidget" name="requestTabWidget">
-        <property name="currentIndex">
-         <number>0</number>
-        </property>
-        <widget class="QTableWidget" name="requestHeadersTableWidget">
-         <property name="editTriggers">
-          <set>QAbstractItemView::NoEditTriggers</set>
-         </property>
-         <attribute name="title">
-          <string>Headers</string>
-         </attribute>
-         <column>
-          <property name="text">
-           <string>Key</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Value</string>
-          </property>
-         </column>
-        </widget>
-        <widget class="QWidget" name="paramsTab">
-         <attribute name="title">
-          <string>Params</string>
-         </attribute>
-        </widget>
-        <widget class="QWidget" name="bodyTab">
-         <attribute name="title">
-          <string>Body</string>
-         </attribute>
-        </widget>
-       </widget>
-      </item>
-      <item>
-       <widget class="QTabWidget" name="responseTabWidget">
-        <property name="currentIndex">
-         <number>0</number>
-        </property>
-        <widget class="QTableWidget" name="responseHeadersTableWidget">
-         <property name="editTriggers">
-          <set>QAbstractItemView::NoEditTriggers</set>
-         </property>
-         <property name="columnCount">
-          <number>2</number>
-         </property>
-         <attribute name="title">
-          <string>Headers</string>
-         </attribute>
-         <column>
-          <property name="text">
-           <string>Key</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Value</string>
-          </property>
-         </column>
-        </widget>
-        <widget class="QPlainTextEdit" name="responseBodyPlainTextEdit">
-         <property name="readOnly">
-          <bool>true</bool>
-         </property>
-         <attribute name="title">
-          <string>Body</string>
-         </attribute>
-        </widget>
-       </widget>
-      </item>
-     </layout>
+      </widget>
+     </widget>
     </item>
    </layout>
   </widget>
