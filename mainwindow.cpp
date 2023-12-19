@@ -37,11 +37,13 @@ void MainWindow::processReply(QNetworkReply *reply)
     ui->responseBodyPlainTextEdit->setPlainText(data);
 
     QTableWidget *tableWidget = ui->responseHeadersTableWidget;
+    const QList<QNetworkReply::RawHeaderPair>& headerPairs = reply->rawHeaderPairs();
     tableWidget->clearContents();
-    for (const QNetworkReply::RawHeaderPair &headerPair : reply->rawHeaderPairs()) {
+    tableWidget->setRowCount(headerPairs.count());
+
+    for(int rowIndex=0; rowIndex<headerPairs.count(); rowIndex++) {
+        const QNetworkReply::RawHeaderPair &headerPair = headerPairs.at(rowIndex);
         qInfo("Header: \"%s\": \"%s\"", qPrintable(headerPair.first), qPrintable(headerPair.second));
-        int rowIndex = tableWidget->rowCount();
-        tableWidget->insertRow(rowIndex);
         tableWidget->setItem(rowIndex, 0, new QTableWidgetItem(headerPair.first));
         tableWidget->setItem(rowIndex, 1, new QTableWidgetItem(headerPair.second));
     }
