@@ -69,7 +69,7 @@ void MainWindow::initializeConnections()
 
 void MainWindow::initializeCollection()
 {
-    QStringList urlList = { "https://wikipedia.org" };
+    QStringList urlList = { "http://localhost:3000" };
     ui->requestListWidget->addItems(urlList);
 }
 

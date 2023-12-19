@@ -31,12 +31,16 @@
         </sizepolicy>
        </property>
       </widget>
-      <widget class="QWidget" name="">
+      <widget class="QWidget" name="layoutWidget">
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout">
           <item>
-           <widget class="QLineEdit" name="urlLineEdit"/>
+           <widget class="QLineEdit" name="urlLineEdit">
+            <property name="text">
+             <string>http://localhost:3000/</string>
+            </property>
+           </widget>
           </item>
           <item>
            <widget class="QPushButton" name="sendButton">
