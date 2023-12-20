@@ -31,5 +31,6 @@ private:
     void initializeCollection();
     void initializeConnections();
     void initializeHeaderTables();
+    void initializeVerbComboBox();
 };
 #endif // MAINWINDOW_H

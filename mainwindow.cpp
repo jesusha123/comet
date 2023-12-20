@@ -18,6 +18,7 @@ MainWindow::MainWindow(QWidget *parent)
     initializeConnections();
     initializeCollection();
     initializeHeaderTables();
+    initializeVerbComboBox();
 }
 
 MainWindow::~MainWindow()
@@ -29,9 +30,12 @@ void MainWindow::sendRequest()
 {
     const QString requestUrl = ui->urlLineEdit->text();
     const QString bodyText = ui->requestBodyPlainTextEdit->toPlainText();
+    const QString verb = ui->verbComboBox->currentText();
+
     QNetworkRequest networkRequest = QNetworkRequest(QUrl(requestUrl));
+
     qInfo("Sending request to %s", qPrintable(requestUrl));
-    networkAccessManager.post(networkRequest, bodyText.toUtf8());
+    networkAccessManager.sendCustomRequest(networkRequest, verb.toUtf8(), bodyText.toUtf8());
 }
 
 void MainWindow::processReply(QNetworkReply *reply)
@@ -80,4 +84,10 @@ void MainWindow::initializeHeaderTables()
     ui->requestHeadersTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->requestParamsTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->responseHeadersTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+}
+
+void MainWindow::initializeVerbComboBox()
+{
+    QStringList methodList = { "GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS" };
+    ui->verbComboBox->addItems(methodList);
 }

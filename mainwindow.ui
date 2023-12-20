@@ -36,6 +36,9 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout">
           <item>
+           <widget class="QComboBox" name="verbComboBox"/>
+          </item>
+          <item>
            <widget class="QLineEdit" name="urlLineEdit">
             <property name="text">
              <string>http://localhost:3000/</string>
