@@ -89,7 +89,7 @@
             </property>
            </column>
           </widget>
-          <widget class="QWidget" name="bodyTab">
+          <widget class="QPlainTextEdit" name="requestBodyPlainTextEdit">
            <attribute name="title">
             <string>Body</string>
            </attribute>

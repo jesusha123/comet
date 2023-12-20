@@ -27,9 +27,11 @@ MainWindow::~MainWindow()
 
 void MainWindow::sendRequest()
 {
-    QString requestUrl = ui->urlLineEdit->text();
+    const QString requestUrl = ui->urlLineEdit->text();
+    const QString bodyText = ui->requestBodyPlainTextEdit->toPlainText();
+    QNetworkRequest networkRequest = QNetworkRequest(QUrl(requestUrl));
     qInfo("Sending request to %s", qPrintable(requestUrl));
-    networkAccessManager.get(QNetworkRequest(QUrl(requestUrl)));
+    networkAccessManager.post(networkRequest, bodyText.toUtf8());
 }
 
 void MainWindow::processReply(QNetworkReply *reply)
