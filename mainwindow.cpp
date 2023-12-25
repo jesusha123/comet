@@ -16,6 +16,8 @@ MainWindow::MainWindow(QWidget *parent)
     initializeCollection();
     initializeHeaderTables();
     initializeVerbComboBox();
+
+    ui->statusBar->showMessage("Ready");
 }
 
 MainWindow::~MainWindow()
@@ -53,6 +55,13 @@ void MainWindow::processReply(QNetworkReply *reply)
         qInfo("Header: \"%s\": \"%s\"", qPrintable(headerPair.first), qPrintable(headerPair.second));
         tableWidget->setItem(rowIndex, 0, new QTableWidgetItem(headerPair.first));
         tableWidget->setItem(rowIndex, 1, new QTableWidgetItem(headerPair.second));
+    }
+
+    auto statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
+    if(statusCode.isValid()) {
+        ui->statusBar->showMessage(QString("Status: %1").arg(statusCode.toString()));
+    } else {
+        ui->statusBar->showMessage(QString("Error: %1").arg(reply->errorString()));
     }
 }
 
