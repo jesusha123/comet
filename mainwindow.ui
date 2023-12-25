@@ -62,35 +62,15 @@
           <property name="currentIndex">
            <number>0</number>
           </property>
-          <widget class="QTableWidget" name="requestHeadersTableWidget">
+          <widget class="PropertyTableWidget" name="requestHeadersTableWidget">
            <attribute name="title">
             <string>Headers</string>
            </attribute>
-           <column>
-            <property name="text">
-             <string>Key</string>
-            </property>
-           </column>
-           <column>
-            <property name="text">
-             <string>Value</string>
-            </property>
-           </column>
           </widget>
-          <widget class="QTableWidget" name="requestParamsTableWidget">
+          <widget class="PropertyTableWidget" name="requestParamsTableWidget">
            <attribute name="title">
             <string>Params</string>
            </attribute>
-           <column>
-            <property name="text">
-             <string>Key</string>
-            </property>
-           </column>
-           <column>
-            <property name="text">
-             <string>Value</string>
-            </property>
-           </column>
           </widget>
           <widget class="QPlainTextEdit" name="requestBodyPlainTextEdit">
            <attribute name="title">
@@ -142,6 +122,13 @@
    </layout>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PropertyTableWidget</class>
+   <extends>QTableWidget</extends>
+   <header>propertytablewidget.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

@@ -1,10 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QNetworkReply>
-#include <QFile>
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QJsonArray>
+#include <QToolButton>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -33,6 +30,7 @@ void MainWindow::sendRequest()
     const QString verb = ui->verbComboBox->currentText();
 
     QNetworkRequest networkRequest = QNetworkRequest(QUrl(requestUrl));
+    addRequestHeaders(&networkRequest);
 
     qInfo("Sending request to %s", qPrintable(requestUrl));
     networkAccessManager.sendCustomRequest(networkRequest, verb.toUtf8(), bodyText.toUtf8());
@@ -81,8 +79,6 @@ void MainWindow::initializeCollection()
 
 void MainWindow::initializeHeaderTables()
 {
-    ui->requestHeadersTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    ui->requestParamsTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->responseHeadersTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 }
 
@@ -90,4 +86,26 @@ void MainWindow::initializeVerbComboBox()
 {
     QStringList methodList = { "GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS" };
     ui->verbComboBox->addItems(methodList);
+}
+
+void MainWindow::addRequestHeaders(QNetworkRequest* networkRequest)
+{
+    for(int rowIndex=0; rowIndex<ui->requestHeadersTableWidget->rowCount(); rowIndex++) {
+        auto keyItem = ui->requestHeadersTableWidget->item(rowIndex, 0);
+
+        if(keyItem) {
+            auto keyText = keyItem->text();
+            if(!keyText.isEmpty()) {
+                // Initialize QByteArray with empty string to avoid it being treated as null
+                QByteArray valueText("");
+
+                auto valueItem = ui->requestHeadersTableWidget->item(rowIndex, 1);
+                if (valueItem) {
+                    valueText.append(valueItem->text().toUtf8());
+                }
+
+                networkRequest->setRawHeader(keyText.toUtf8(), valueText);
+            }
+        }
+    }
 }

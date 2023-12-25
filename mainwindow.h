@@ -32,5 +32,7 @@ private:
     void initializeConnections();
     void initializeHeaderTables();
     void initializeVerbComboBox();
+
+    void addRequestHeaders(QNetworkRequest* networkRequest);
 };
 #endif // MAINWINDOW_H

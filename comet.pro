@@ -10,10 +10,12 @@ CONFIG += c++17
 
 SOURCES += \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    propertytablewidget.cpp
 
 HEADERS += \
-    mainwindow.h
+    mainwindow.h \
+    propertytablewidget.h
 
 FORMS += \
     mainwindow.ui
