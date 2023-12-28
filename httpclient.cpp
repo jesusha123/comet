@@ -2,7 +2,6 @@
 #include <QtGlobal>
 #include <curl/curl.h>
 #include "httpresponse.h"
-#include <unistd.h>
 
 static size_t writeFunction(void *data, size_t size, size_t nmemb, QByteArray* byteArray)
 {
@@ -37,7 +36,6 @@ static size_t headerFunction(char *buffer, size_t size, size_t nitems, HttpRespo
 void HttpClient::sendRequest(const HttpRequest& request)
 {
     qInfo("Sending request");
-    sleep(15);
     CURL *curl;
 
     curl = curl_easy_init();
