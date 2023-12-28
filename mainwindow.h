@@ -2,9 +2,10 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QNetworkAccessManager>
+#include "httpresponse.h"
+#include "httprequest.h"
 
-class QListWidgetItem;
+class HttpClient;
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -22,17 +23,16 @@ public:
 
 private slots:
     void sendRequest();
-    void processReply(QNetworkReply *reply);
-    void changeActiveRequest(QListWidgetItem *item);
+    void processResponse(const HttpResponse response);
 
 private:
-    Ui::MainWindow *ui;
-    QNetworkAccessManager networkAccessManager;
     void initializeCollection();
     void initializeConnections();
     void initializeHeaderTables();
-    void initializeVerbComboBox();
+    void initializeMethodComboBox();
+    void addRequestHeaders(HttpRequest& request);
 
-    void addRequestHeaders(QNetworkRequest* networkRequest);
+    Ui::MainWindow *ui;
+    HttpClient *httpClient;
 };
 #endif // MAINWINDOW_H

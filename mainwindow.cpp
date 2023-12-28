@@ -1,21 +1,19 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <QNetworkReply>
-#include <QToolButton>
+#include "httpclient.h"
+#include "httprequest.h"
+#include <QDateTime>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+    , httpClient(new HttpClient)
 {
     ui->setupUi(this);
 
-    ui->splitter->setStretchFactor(0, 1);
-    ui->splitter->setStretchFactor(1, 5);
-
     initializeConnections();
-    initializeCollection();
     initializeHeaderTables();
-    initializeVerbComboBox();
+    initializeMethodComboBox();
 
     ui->statusBar->showMessage("Ready");
 }
@@ -27,63 +25,38 @@ MainWindow::~MainWindow()
 
 void MainWindow::sendRequest()
 {
-    const QString requestUrl = ui->urlLineEdit->text();
-    const QString bodyText = ui->requestBodyPlainTextEdit->toPlainText();
-    const QString verb = ui->verbComboBox->currentText();
-
-    QNetworkRequest networkRequest = QNetworkRequest(QUrl(requestUrl));
-    addRequestHeaders(&networkRequest);
-
-    qInfo("Sending request to %s", qPrintable(requestUrl));
-    networkAccessManager.sendCustomRequest(networkRequest, verb.toUtf8(), bodyText.toUtf8());
+    HttpRequest request;
+    request.url.setUrl(ui->urlLineEdit->text(), QUrl::StrictMode);
+    request.method = ui->methodComboBox->currentText();
+    request.body.append(ui->requestBodyPlainTextEdit->toPlainText().toUtf8());
+    addRequestHeaders(request);
+    httpClient->sendRequest(request);
 }
 
-void MainWindow::processReply(QNetworkReply *reply)
+void MainWindow::processResponse(const HttpResponse response)
 {
-    qInfo("Reply finished from %s", qPrintable(reply->request().url().toString()));
+    qInfo("Processing response: %s", response.body.data());
+    ui->responseBodyPlainTextEdit->setPlainText(response.body.data());
 
-    QByteArray data = reply->readAll();
-    ui->responseBodyPlainTextEdit->setPlainText(data);
+    auto headerCount = response.headers.count();
+    auto headersTableWidget = ui->responseHeadersTableWidget;
+    headersTableWidget->clearContents();
+    headersTableWidget->setRowCount(headerCount);
 
-    QTableWidget *tableWidget = ui->responseHeadersTableWidget;
-    const QList<QNetworkReply::RawHeaderPair>& headerPairs = reply->rawHeaderPairs();
-    tableWidget->clearContents();
-    tableWidget->setRowCount(headerPairs.count());
-
-    for(int rowIndex=0; rowIndex<headerPairs.count(); rowIndex++) {
-        const QNetworkReply::RawHeaderPair &headerPair = headerPairs.at(rowIndex);
-        qInfo("Header: \"%s\": \"%s\"", qPrintable(headerPair.first), qPrintable(headerPair.second));
-        tableWidget->setItem(rowIndex, 0, new QTableWidgetItem(headerPair.first));
-        tableWidget->setItem(rowIndex, 1, new QTableWidgetItem(headerPair.second));
+    for(int rowIndex=0; rowIndex<headerCount; rowIndex++) {
+        auto header = response.headers.at(rowIndex);
+        headersTableWidget->setItem(rowIndex, 0, new QTableWidgetItem(header.first));
+        headersTableWidget->setItem(rowIndex, 1, new QTableWidgetItem(header.second));
     }
 
-    auto statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
-    if(statusCode.isValid()) {
-        ui->statusBar->showMessage(QString("Status: %1").arg(statusCode.toString()));
-    } else {
-        ui->statusBar->showMessage(QString("Error: %1").arg(reply->errorString()));
-    }
+    auto statusMessage = QString("%1%2 [%3]").arg(response.statusLine, response.error, QDateTime::currentDateTime().toString());
+    ui->statusBar->showMessage(statusMessage);
 }
-
-void MainWindow::changeActiveRequest(QListWidgetItem *item)
-{
-    QString itemText = item->text();
-    qInfo("Changing active request to %s", qPrintable(itemText));
-    ui->urlLineEdit->setText(itemText);
-}
-
 
 void MainWindow::initializeConnections()
 {
     connect(ui->sendButton, &QPushButton::clicked, this, &MainWindow::sendRequest);
-    connect(&networkAccessManager, &QNetworkAccessManager::finished, this, &MainWindow::processReply);
-    connect(ui->requestListWidget, &QListWidget::itemClicked, this, &MainWindow::changeActiveRequest);
-}
-
-void MainWindow::initializeCollection()
-{
-    QStringList urlList = { "http://localhost:3000" };
-    ui->requestListWidget->addItems(urlList);
+    connect(httpClient, &HttpClient::finished, this, &MainWindow::processResponse);
 }
 
 void MainWindow::initializeHeaderTables()
@@ -91,21 +64,21 @@ void MainWindow::initializeHeaderTables()
     ui->responseHeadersTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 }
 
-void MainWindow::initializeVerbComboBox()
+void MainWindow::initializeMethodComboBox()
 {
     QStringList methodList = { "GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS" };
-    ui->verbComboBox->addItems(methodList);
+    ui->methodComboBox->addItems(methodList);
 }
 
-void MainWindow::addRequestHeaders(QNetworkRequest* networkRequest)
+void MainWindow::addRequestHeaders(HttpRequest& request)
 {
-    for(int rowIndex=0; rowIndex<ui->requestHeadersTableWidget->rowCount(); rowIndex++) {
+    for(int rowIndex=0; rowIndex < ui->requestHeadersTableWidget->rowCount(); rowIndex++) {
         auto keyItem = ui->requestHeadersTableWidget->item(rowIndex, 0);
 
         if(keyItem) {
             auto keyText = keyItem->text();
             if(!keyText.isEmpty()) {
-                // Initialize QByteArray with empty string to avoid it being treated as null
+                // Initialize QByteArray with empty string to avoid processing a null QByteArray
                 QByteArray valueText("");
 
                 auto valueItem = ui->requestHeadersTableWidget->item(rowIndex, 1);
@@ -113,7 +86,7 @@ void MainWindow::addRequestHeaders(QNetworkRequest* networkRequest)
                     valueText.append(valueItem->text().toUtf8());
                 }
 
-                networkRequest->setRawHeader(keyText.toUtf8(), valueText);
+                request.headers.append(qMakePair(keyText.toUtf8(), valueText));
             }
         }
     }
