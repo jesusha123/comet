@@ -4,6 +4,7 @@
 #include "httpclient.h"
 #include "httprequest.h"
 #include "debuginfoformatter.h"
+#include <QUrlQuery>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -61,10 +62,51 @@ void MainWindow::processResponse(const HttpResponse response)
     ui->statusBar->showMessage(statusMessage);
 }
 
+void MainWindow::processParams(const QString& url)
+{
+    auto urlObject = QUrl(url);
+    if(urlObject.hasQuery()) {
+        auto queryItems = QUrlQuery(urlObject).queryItems();
+        ui->requestParamsTableWidget->setRowCount(queryItems.count());
+
+        ui->requestParamsTableWidget->blockSignals(true);
+        for(int i=0; i<queryItems.count(); i++) {
+            auto queryItem = queryItems.at(i);
+            ui->requestParamsTableWidget->setProperty(i, queryItem.first, queryItem.second);
+        }
+        ui->requestParamsTableWidget->blockSignals(false);
+
+    } else {
+        ui->requestParamsTableWidget->setRowCount(0);
+    }
+}
+
+void MainWindow::buildLineEditParams(QTableWidgetItem *)
+{
+    auto url = QUrl(ui->urlLineEdit->text());
+    auto urlQuery = QUrlQuery();
+
+    for(int rowIndex=0; rowIndex < ui->requestParamsTableWidget->rowCount(); rowIndex++) {
+        auto keyItem = ui->requestParamsTableWidget->item(rowIndex, 0);
+        auto keyText = keyItem ? keyItem->text() : QString();
+
+        auto valueItem = ui->requestParamsTableWidget->item(rowIndex, 1);
+        auto valueText = valueItem ? valueItem->text() : QString();
+
+        urlQuery.addQueryItem(keyText, valueText);
+    }
+
+    url.setQuery(urlQuery);
+    ui->urlLineEdit->setText(url.toString());
+}
+
 void MainWindow::initializeConnections()
 {
     connect(ui->sendButton, &QPushButton::clicked, this, &MainWindow::sendRequest);
     connect(httpClient, &HttpClient::finished, this, &MainWindow::processResponse);
+    connect(ui->urlLineEdit, &QLineEdit::textEdited, this, &MainWindow::processParams);
+    connect(ui->addParamButton, &QToolButton::clicked, ui->requestParamsTableWidget, &PropertyTableWidget::appendRow);
+    connect(ui->requestParamsTableWidget, &QTableWidget::itemChanged, this, &MainWindow::buildLineEditParams);
 }
 
 void MainWindow::initializeHeaderTables()

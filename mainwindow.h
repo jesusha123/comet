@@ -6,6 +6,7 @@
 #include "httprequest.h"
 
 class HttpClient;
+class QTableWidgetItem;
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -24,6 +25,8 @@ public:
 private slots:
     void sendRequest();
     void processResponse(const HttpResponse response);
+    void processParams(const QString& url);
+    void buildLineEditParams(QTableWidgetItem *item);
 
 private:
     void initializeCollection();
