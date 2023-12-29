@@ -11,6 +11,7 @@ MainWindow::MainWindow(QWidget *parent)
     , httpClient(new HttpClient)
 {
     ui->setupUi(this);
+    ui->debugPlainTextEdit->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
 
     initializeConnections();
     initializeHeaderTables();
