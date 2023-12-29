@@ -117,7 +117,7 @@ void MainWindow::initializeHeaderTables()
 
 void MainWindow::initializeMethodComboBox()
 {
-    QStringList methodList = { "GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS" };
+    QStringList methodList = { "GET", "HEAD", "POST", "PUT", "DELETE", "CONNECT", "OPTIONS", "TRACE", "PATCH" };
     ui->methodComboBox->addItems(methodList);
 }
 
