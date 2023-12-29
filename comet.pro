@@ -19,13 +19,13 @@ SOURCES += \
 
 HEADERS += \
     curlutils.h \
-    debuginfo.h \
     debuginfoformatter.h \
     httpclient.h \
     httprequest.h \
     httpresponse.h \
     mainwindow.h \
-    propertytablewidget.h
+    propertytablewidget.h \
+    types.h
 
 FORMS += \
     mainwindow.ui

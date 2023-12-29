@@ -2,7 +2,7 @@
 #define HTTPRESPONSE_H
 
 #include <QList>
-#include "debuginfo.h"
+#include "types.h"
 
 class HttpResponse
 {
@@ -10,7 +10,7 @@ public:
     QByteArray body;
     QString statusLine;
     QString error;
-    QList<QPair<QByteArray, QByteArray>> headers;
+    Headers headers;
     DebugInfo debugInfo;
 };
 
