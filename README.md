@@ -9,6 +9,7 @@ Comet is an API client for sending HTTP requests
 - Low memory footprint
 - Cross-platform
 - Open source
+- Local only / no phoning home
 
 ## Build
 
