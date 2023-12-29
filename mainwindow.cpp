@@ -4,6 +4,7 @@
 #include "httpclient.h"
 #include "httprequest.h"
 #include "debuginfoformatter.h"
+#include <QUrlQuery>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -61,10 +62,29 @@ void MainWindow::processResponse(const HttpResponse response)
     ui->statusBar->showMessage(statusMessage);
 }
 
+void MainWindow::processParams(const QString& url)
+{
+    auto urlObject = QUrl(url);
+    if(urlObject.hasQuery()) {
+        auto queryItems = QUrlQuery(urlObject).queryItems();
+        ui->requestParamsTableWidget->setRowCount(queryItems.count());
+        qInfo("Table rows: %d, cols: %d", ui->requestParamsTableWidget->rowCount(), ui->requestParamsTableWidget->columnCount());
+
+        for(int i=0; i<queryItems.count(); i++) {
+            qInfo(" Inserting at row: %d", i);
+            auto queryItem = queryItems.at(i);
+            ui->requestParamsTableWidget->setProperty(i, queryItem.first, queryItem.second);
+        }
+    } else {
+        ui->requestParamsTableWidget->setRowCount(0);
+    }
+}
+
 void MainWindow::initializeConnections()
 {
     connect(ui->sendButton, &QPushButton::clicked, this, &MainWindow::sendRequest);
     connect(httpClient, &HttpClient::finished, this, &MainWindow::processResponse);
+    connect(ui->urlLineEdit, &QLineEdit::textEdited, this, &MainWindow::processParams);
 }
 
 void MainWindow::initializeHeaderTables()

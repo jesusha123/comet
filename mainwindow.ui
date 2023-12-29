@@ -66,26 +66,10 @@
       <property name="currentIndex">
        <number>0</number>
       </property>
-      <widget class="QTableWidget" name="responseHeadersTableWidget">
-       <property name="editTriggers">
-        <set>QAbstractItemView::NoEditTriggers</set>
-       </property>
-       <property name="columnCount">
-        <number>2</number>
-       </property>
+      <widget class="PropertyTableWidget" name="responseHeadersTableWidget">
        <attribute name="title">
         <string>Headers</string>
        </attribute>
-       <column>
-        <property name="text">
-         <string>Key</string>
-        </property>
-       </column>
-       <column>
-        <property name="text">
-         <string>Value</string>
-        </property>
-       </column>
       </widget>
       <widget class="QPlainTextEdit" name="responseBodyPlainTextEdit">
        <property name="readOnly">

@@ -7,13 +7,7 @@ class PropertyTableWidget : public QTableWidget
 {
 public:
     PropertyTableWidget();
-
-private slots:
-    void ensureEmptyBottomRow(QTableWidgetItem *item);
-    void deleteButtonClicked();
-
-private:
-    void addRow(int row);
+    void setProperty(int row, const QString& key, const QString& value);
 };
 
 #endif // PROPERTYTABLEWIDGET_H

@@ -8,41 +8,14 @@ PropertyTableWidget::PropertyTableWidget()
     horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     setEditTriggers(QAbstractItemView::AllEditTriggers);
 
-    setColumnCount(3);
+    setColumnCount(2);
     setRowCount(0);
 
-    setHorizontalHeaderLabels({ "Key", "Value", "Del" });
-
-    connect(this, &PropertyTableWidget::itemChanged, this, &PropertyTableWidget::ensureEmptyBottomRow);
-
-    addRow(0);
+    setHorizontalHeaderLabels({ "Key", "Value" });
 }
 
-void PropertyTableWidget::ensureEmptyBottomRow(QTableWidgetItem *item)
+void PropertyTableWidget::setProperty(int row, const QString& key, const QString& value)
 {
-    if((item->row()+1)==rowCount() && !item->text().isEmpty()) {
-        addRow(rowCount());
-    }
-}
-
-void PropertyTableWidget::deleteButtonClicked()
-{
-    QWidget* deleteButton = qobject_cast<QWidget*>(sender());
-    if(deleteButton) {
-        int row = indexAt(deleteButton->pos()).row();
-        if(rowCount()>1 && (rowCount()-1) != row) {
-            removeRow(row);
-        }
-    }
-}
-
-void PropertyTableWidget::addRow(int row)
-{
-    insertRow(row);
-
-    QToolButton* deleteButton = new QToolButton;
-    QIcon trashIcon = QApplication::style()->standardIcon(QStyle::SP_TrashIcon);
-    deleteButton->setIcon(trashIcon);
-    setCellWidget(row, 2, deleteButton);
-    connect(deleteButton, &QToolButton::clicked, this, &PropertyTableWidget::deleteButtonClicked);
+    setItem(row, 0, new QTableWidgetItem(key));
+    setItem(row, 1, new QTableWidgetItem(value));
 }

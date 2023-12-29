@@ -24,6 +24,7 @@ public:
 private slots:
     void sendRequest();
     void processResponse(const HttpResponse response);
+    void processParams(const QString& url);
 
 private:
     void initializeCollection();
