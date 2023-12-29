@@ -62,7 +62,7 @@ void DebugInfoFormatter::dump(QString& target, const QByteArray& data)
         }
 
         for(unsigned int c = 0; (c < width) && (i + c < dataSize); c++) {
-            char x = (data[i + c] >= 0x20 && data[i + c] < 0x80) ? data[i + c] : '.';
+            char x = (data[i + c] >= 0x20) ? data[i + c] : '.';
             target.append(x);
         }
 
