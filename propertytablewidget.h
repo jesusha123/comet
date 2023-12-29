@@ -6,8 +6,10 @@
 class PropertyTableWidget : public QTableWidget
 {
 public:
-    PropertyTableWidget();
+    PropertyTableWidget(QWidget *parent = nullptr);
     void setProperty(int row, const QString& key, const QString& value);
+public slots:
+    void appendRow();
 };
 
 #endif // PROPERTYTABLEWIDGET_H

@@ -3,7 +3,8 @@
 #include <QToolButton>
 #include <QApplication>
 
-PropertyTableWidget::PropertyTableWidget()
+PropertyTableWidget::PropertyTableWidget(QWidget *parent)
+    : QTableWidget(parent)
 {
     horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     setEditTriggers(QAbstractItemView::AllEditTriggers);
@@ -18,4 +19,9 @@ void PropertyTableWidget::setProperty(int row, const QString& key, const QString
 {
     setItem(row, 0, new QTableWidgetItem(key));
     setItem(row, 1, new QTableWidgetItem(value));
+}
+
+void PropertyTableWidget::appendRow()
+{
+    setRowCount(rowCount()+1);
 }
