@@ -1,7 +1,7 @@
 #ifndef DEBUGINFOFORMATTER_H
 #define DEBUGINFOFORMATTER_H
 
-#include "debuginfo.h"
+#include "types.h"
 
 class DebugInfoFormatter
 {
