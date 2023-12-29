@@ -106,6 +106,7 @@ void MainWindow::initializeConnections()
     connect(httpClient, &HttpClient::finished, this, &MainWindow::processResponse);
     connect(ui->urlLineEdit, &QLineEdit::textEdited, this, &MainWindow::processParams);
     connect(ui->addParamButton, &QToolButton::clicked, ui->requestParamsTableWidget, &PropertyTableWidget::appendRow);
+    connect(ui->addHeaderButton, &QToolButton::clicked, ui->requestHeadersTableWidget, &PropertyTableWidget::appendRow);
     connect(ui->requestParamsTableWidget, &QTableWidget::itemChanged, this, &MainWindow::buildLineEditParams);
 }
 

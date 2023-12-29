@@ -42,12 +42,36 @@
     <item>
      <widget class="QTabWidget" name="requestTabWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
-      <widget class="PropertyTableWidget" name="requestHeadersTableWidget">
+      <widget class="QWidget" name="headersTab">
        <attribute name="title">
         <string>Headers</string>
        </attribute>
+       <layout class="QVBoxLayout" name="requestHeaderLayout">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="PropertyTableWidget" name="requestHeadersTableWidget"/>
+        </item>
+        <item>
+         <widget class="QToolButton" name="addHeaderButton">
+          <property name="text">
+           <string>+</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
       <widget class="QWidget" name="paramsTab">
        <attribute name="title">
