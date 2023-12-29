@@ -2,36 +2,7 @@
 #include <QtGlobal>
 #include <curl/curl.h>
 #include "httpresponse.h"
-
-static size_t writeFunction(void *data, size_t size, size_t nmemb, QByteArray* byteArray)
-{
-    size_t realSize = size * nmemb;
-    byteArray->append((const char*)data, realSize);
-    return realSize;
-}
-
-/*
- * Processes CURL header data, which includes these:
- *   - Status line
- *   - Colon separated headers
- *   - Blank line preceding response body
- */
-static size_t headerFunction(char *buffer, size_t size, size_t nitems, HttpResponse* response)
-{
-    size_t realSize = size * nitems;
-
-    QByteArray data(buffer, realSize);
-    data = data.trimmed();
-
-    if(response->statusLine.isNull()) {
-        response->statusLine.append(data);
-    } else if(!data.isEmpty()) {
-        auto split = data.split(':');
-        response->headers.append(qMakePair(split.at(0), split.at(1)));
-    }
-
-    return realSize;
-}
+#include "curlutils.h"
 
 void HttpClient::sendRequest(const HttpRequest& request)
 {
@@ -43,6 +14,10 @@ void HttpClient::sendRequest(const HttpRequest& request)
         CURLcode res;
         HttpResponse response;
         struct curl_slist *list = NULL;
+
+        curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+        curl_easy_setopt(curl, CURLOPT_DEBUGFUNCTION, debugFunction);
+        curl_easy_setopt(curl, CURLOPT_DEBUGDATA, &response);
 
         curl_easy_setopt(curl, CURLOPT_URL, request.url.toString().toUtf8().data());
         curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, request.method.toUtf8().data());

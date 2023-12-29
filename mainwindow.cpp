@@ -1,8 +1,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QDateTime>
 #include "httpclient.h"
 #include "httprequest.h"
-#include <QDateTime>
+#include "debuginfoformatter.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -35,7 +36,7 @@ void MainWindow::sendRequest()
 
 void MainWindow::processResponse(const HttpResponse response)
 {
-    qInfo("Processing response: %s", response.body.data());
+    qInfo("Processing response");
     ui->responseBodyPlainTextEdit->setPlainText(response.body.data());
 
     auto headerCount = response.headers.count();
@@ -48,6 +49,9 @@ void MainWindow::processResponse(const HttpResponse response)
         headersTableWidget->setItem(rowIndex, 0, new QTableWidgetItem(header.first));
         headersTableWidget->setItem(rowIndex, 1, new QTableWidgetItem(header.second));
     }
+
+    DebugInfoFormatter formatter(response.debugInfo);
+    ui->debugPlainTextEdit->setPlainText(formatter.toString());
 
     auto statusMessage = QString("%1%2 [%3]").arg(response.statusLine, response.error, QDateTime::currentDateTime().toString());
     ui->statusBar->showMessage(statusMessage);

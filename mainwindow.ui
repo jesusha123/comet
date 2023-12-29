@@ -95,6 +95,14 @@
         <string>Body</string>
        </attribute>
       </widget>
+      <widget class="QPlainTextEdit" name="debugPlainTextEdit">
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+       <attribute name="title">
+        <string>Debug</string>
+       </attribute>
+      </widget>
      </widget>
     </item>
    </layout>
