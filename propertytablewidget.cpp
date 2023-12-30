@@ -7,7 +7,6 @@ PropertyTableWidget::PropertyTableWidget(QWidget *parent)
     : QTableWidget(parent)
 {
     horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    setEditTriggers(QAbstractItemView::AllEditTriggers);
 
     setColumnCount(2);
     setRowCount(0);
@@ -24,4 +23,25 @@ void PropertyTableWidget::setProperty(int row, const QString& key, const QString
 void PropertyTableWidget::appendRow()
 {
     setRowCount(rowCount()+1);
+}
+
+void PropertyTableWidget::removeSelectedRows()
+{
+    // Need to delete from the highest row number to lowest
+    auto model = selectionModel();
+    if(model) {
+        auto indexes = model->selectedRows();
+        QVector<int> rowVector;
+
+        for(auto index : indexes) {
+            rowVector.append(index.row());
+        }
+
+        // Sort in descending order
+        std::sort(rowVector.begin(), rowVector.end(), std::greater<int>());
+
+        for(auto row : rowVector) {
+            removeRow(row);
+        }
+    }
 }

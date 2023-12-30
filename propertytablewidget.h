@@ -10,6 +10,7 @@ public:
     void setProperty(int row, const QString& key, const QString& value);
 public slots:
     void appendRow();
+    void removeSelectedRows();
 };
 
 #endif // PROPERTYTABLEWIDGET_H
