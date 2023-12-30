@@ -4,6 +4,7 @@
 #include "httpresponse.h"
 #include "curlutils.h"
 #include <QIODevice>
+#include "httpmethod.h"
 
 void HttpClient::sendRequest(HttpRequest& request)
 {
@@ -57,23 +58,43 @@ void HttpClient::sendRequest(HttpRequest& request)
  */
 void HttpClient::configureMethodAndBody(CURL* curl, HttpRequest& request, QDataStream& dataStream)
 {
-    auto method = request.method;
+    auto methodKey = Http::OfficialMethods.indexOf(request.method);
 
-    if(method.compare("GET") == 0) {
+    switch(methodKey) {
+    case Http::GET:
         curl_easy_setopt(curl, CURLOPT_HTTPGET, 1L);
-    } else if (method.compare("POST") == 0) {
+        break;
+    case Http::POST:
         curl_easy_setopt(curl, CURLOPT_POST, 1L);
         curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, request.body.size());
         curl_easy_setopt(curl, CURLOPT_POSTFIELDS, request.body.constData());
-    } else if (method.compare("PUT") == 0) {
+        break;
+    case Http::PUT:
         curl_easy_setopt(curl, CURLOPT_UPLOAD, 1L);
         curl_easy_setopt(curl, CURLOPT_READFUNCTION, readFunction);
         curl_easy_setopt(curl, CURLOPT_READDATA, &dataStream);
         curl_easy_setopt(curl, CURLOPT_INFILESIZE_LARGE, request.body.size());
-    } else if (method.compare("HEAD") == 0) {
-        curl_easy_setopt(curl, CURLOPT_NOBODY, 1L);
-    } else {
+        break;
+    case Http::PATCH:
         curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, request.method.toUtf8().data());
+        curl_easy_setopt(curl, CURLOPT_POST, 1L);
+        curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, request.body.size());
+        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, request.body.constData());
+        break;
+    case Http::DELETE:
+        curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, request.method.toUtf8().data());
+        if(!request.body.isNull()) {
+            curl_easy_setopt(curl, CURLOPT_POST, 1L);
+            curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, request.body.size());
+            curl_easy_setopt(curl, CURLOPT_POSTFIELDS, request.body.constData());
+        }
+        break;
+    case Http::HEAD:
+        curl_easy_setopt(curl, CURLOPT_NOBODY, 1L);
+        break;
+    default:
+        curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, request.method.toUtf8().data());
+        break;
     }
 }
 

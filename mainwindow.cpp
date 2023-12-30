@@ -35,7 +35,11 @@ void MainWindow::sendRequest()
     HttpRequest request;
     request.url.setUrl(ui->urlLineEdit->text(), QUrl::StrictMode);
     request.method = ui->methodComboBox->currentText();
-    request.body.append(ui->requestBodyPlainTextEdit->toPlainText().toUtf8());
+
+    if(ui->reqBodyComboBox->currentText().compare("None") != 0) {
+      request.body.append(ui->requestBodyPlainTextEdit->toPlainText().toUtf8());
+    }
+
     addRequestHeaders(request);
     httpClient->sendRequest(request);
 }
