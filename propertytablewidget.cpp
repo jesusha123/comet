@@ -48,7 +48,7 @@ void PropertyTableWidget::removeSelectedRows()
     }
 
     if(removedRowCount==0) {
-        errorMessage.showMessage("Could not delete any rows. Please make sure to select at least an entire row for deletion.");
+        errorMessage.showMessage("Could not delete any rows. Select at least one row for deletion.");
     }
 
     emit rowsRemoved();
