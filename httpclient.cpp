@@ -3,8 +3,9 @@
 #include <curl/curl.h>
 #include "httpresponse.h"
 #include "curlutils.h"
+#include <QIODevice>
 
-void HttpClient::sendRequest(const HttpRequest& request)
+void HttpClient::sendRequest(HttpRequest& request)
 {
     qInfo("Sending request");
     CURL *curl;
@@ -18,7 +19,8 @@ void HttpClient::sendRequest(const HttpRequest& request)
 
         curl_easy_setopt(curl, CURLOPT_URL, request.url.toString().toUtf8().data());
 
-        configureMethodAndBody(curl, request);
+        QDataStream bodyDataStream(request.body);
+        configureMethodAndBody(curl, request, bodyDataStream);
 
         auto list = addRequestHeaders(curl, request);
 
@@ -53,7 +55,7 @@ void HttpClient::sendRequest(const HttpRequest& request)
  * This method combines both HTTP method and body because they go hand in hand. Setting the wrong body options
  * will make cURL send a different HTTP method than expected.
  */
-void HttpClient::configureMethodAndBody(CURL* curl, const HttpRequest& request)
+void HttpClient::configureMethodAndBody(CURL* curl, HttpRequest& request, QDataStream& dataStream)
 {
     auto method = request.method;
 
@@ -65,6 +67,9 @@ void HttpClient::configureMethodAndBody(CURL* curl, const HttpRequest& request)
         curl_easy_setopt(curl, CURLOPT_POSTFIELDS, request.body.constData());
     } else if (method.compare("PUT") == 0) {
         curl_easy_setopt(curl, CURLOPT_UPLOAD, 1L);
+        curl_easy_setopt(curl, CURLOPT_READFUNCTION, readFunction);
+        curl_easy_setopt(curl, CURLOPT_READDATA, &dataStream);
+        curl_easy_setopt(curl, CURLOPT_INFILESIZE_LARGE, request.body.size());
     } else if (method.compare("HEAD") == 0) {
         curl_easy_setopt(curl, CURLOPT_NOBODY, 1L);
     } else {

@@ -9,11 +9,11 @@ class HttpClient : public QObject
 {
     Q_OBJECT
 public:
-    void sendRequest(const HttpRequest& request);
+    void sendRequest(HttpRequest& request);
 signals:
     void finished(const HttpResponse response);
 private:
-    void configureMethodAndBody(CURL* curl, const HttpRequest& request);
+    void configureMethodAndBody(CURL* curl, HttpRequest& request, QDataStream& dataStream);
     void enableDebugData(CURL* curl, const HttpResponse& response);
     curl_slist* addRequestHeaders(CURL* curl, const HttpRequest& request);
 };

@@ -216,7 +216,7 @@
         <item>
          <widget class="QStackedWidget" name="reqBodyStackedWidget">
           <property name="currentIndex">
-           <number>1</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="page1"/>
           <widget class="QWidget" name="page2">
