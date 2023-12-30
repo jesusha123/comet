@@ -26,11 +26,12 @@ size_t headerFunction(char *buffer, size_t size, size_t nitems, HttpResponse* re
     QByteArray data(buffer, realSize);
     data = data.trimmed();
 
-    if(response->statusLine.isNull()) {
-        response->statusLine.append(data);
-    } else if(!data.isEmpty()) {
+    if(data.contains(':')) {
         auto split = data.split(':');
         response->headers.append(qMakePair(split.at(0), split.at(1)));
+    } else if (!data.isEmpty()) {
+        // We might have multiple status lines, save only the last one.
+        response->statusLine.append(data);
     }
 
     return realSize;

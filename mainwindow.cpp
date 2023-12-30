@@ -116,6 +116,8 @@ void MainWindow::initializeConnections()
     connect(httpClient, &HttpClient::finished, this, &MainWindow::processResponse);
     connect(ui->urlLineEdit, &QLineEdit::textEdited, this, &MainWindow::processParams);
 
+    connect(ui->reqBodyComboBox, &QComboBox::activated, ui->reqBodyStackedWidget, &QStackedWidget::setCurrentIndex);
+
     connect(ui->addReqParamButton, &QToolButton::clicked, ui->requestParamsTableWidget, &PropertyTableWidget::appendRow);
     connect(ui->removeReqParamButton, &QToolButton::clicked, ui->requestParamsTableWidget, &PropertyTableWidget::removeSelectedRows);
     connect(ui->requestParamsTableWidget, &QTableWidget::itemChanged, this, &MainWindow::processParamsChanged);
