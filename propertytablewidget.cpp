@@ -29,6 +29,7 @@ void PropertyTableWidget::removeSelectedRows()
 {
     // Need to delete from the highest row number to lowest
     auto model = selectionModel();
+    int removedRowCount = 0;
     if(model) {
         auto indexes = model->selectedRows();
         QVector<int> rowVector;
@@ -43,5 +44,10 @@ void PropertyTableWidget::removeSelectedRows()
         for(auto row : rowVector) {
             removeRow(row);
         }
+        removedRowCount = rowVector.size();
+    }
+
+    if(removedRowCount==0) {
+        errorMessage.showMessage("Could not delete any rows. Please make sure to select at least an entire row for deletion.");
     }
 }

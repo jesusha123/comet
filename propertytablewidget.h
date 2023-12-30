@@ -2,6 +2,7 @@
 #define PROPERTYTABLEWIDGET_H
 
 #include <QTableWidget>
+#include <QErrorMessage>
 
 class PropertyTableWidget : public QTableWidget
 {
@@ -11,6 +12,8 @@ public:
 public slots:
     void appendRow();
     void removeSelectedRows();
+private:
+    QErrorMessage errorMessage;
 };
 
 #endif // PROPERTYTABLEWIDGET_H
