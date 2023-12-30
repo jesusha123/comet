@@ -1,4 +1,5 @@
 #include "curlutils.h"
+#include <QDataStream>
 
 int debugFunction(CURL *, curl_infotype type, char *data, size_t size, HttpResponse* response)
 {
@@ -6,6 +7,9 @@ int debugFunction(CURL *, curl_infotype type, char *data, size_t size, HttpRespo
     return 0;
 }
 
+/*
+ * Callback for writing received data
+ */
 size_t writeFunction(void *data, size_t size, size_t nmemb, QByteArray* byteArray)
 {
     size_t realSize = size * nmemb;
@@ -14,8 +18,8 @@ size_t writeFunction(void *data, size_t size, size_t nmemb, QByteArray* byteArra
 }
 
 /*
- * Processes CURL header data, which includes these:
- *   - Status line
+ * Processes cURL response header data, which includes these:
+ *   - Status line(s)
  *   - Colon separated headers
  *   - Blank line preceding response body
  */
@@ -26,12 +30,23 @@ size_t headerFunction(char *buffer, size_t size, size_t nitems, HttpResponse* re
     QByteArray data(buffer, realSize);
     data = data.trimmed();
 
-    if(response->statusLine.isNull()) {
-        response->statusLine.append(data);
-    } else if(!data.isEmpty()) {
+    if(data.contains(':')) {
         auto split = data.split(':');
         response->headers.append(qMakePair(split.at(0), split.at(1)));
+    } else if (!data.isEmpty()) {
+        // We might have multiple status lines, save only the last one.
+        response->statusLine.append(data);
     }
 
     return realSize;
+}
+
+/*
+ * Read callback for data uploads
+ */
+size_t readFunction(char *ptr, size_t size, size_t nmemb, QDataStream* dataStream)
+{
+    size_t maxReadSize = size * nmemb;
+    int bytesRead = dataStream->readRawData(ptr, maxReadSize);
+    return bytesRead;
 }

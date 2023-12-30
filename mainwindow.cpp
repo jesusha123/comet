@@ -5,6 +5,7 @@
 #include "httprequest.h"
 #include "debuginfoformatter.h"
 #include <QUrlQuery>
+#include "httpmethod.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -34,7 +35,11 @@ void MainWindow::sendRequest()
     HttpRequest request;
     request.url.setUrl(ui->urlLineEdit->text(), QUrl::StrictMode);
     request.method = ui->methodComboBox->currentText();
-    request.body.append(ui->requestBodyPlainTextEdit->toPlainText().toUtf8());
+
+    if(ui->reqBodyComboBox->currentText().compare("None") != 0) {
+      request.body.append(ui->requestBodyPlainTextEdit->toPlainText().toUtf8());
+    }
+
     addRequestHeaders(request);
     httpClient->sendRequest(request);
 }
@@ -116,6 +121,8 @@ void MainWindow::initializeConnections()
     connect(httpClient, &HttpClient::finished, this, &MainWindow::processResponse);
     connect(ui->urlLineEdit, &QLineEdit::textEdited, this, &MainWindow::processParams);
 
+    connect(ui->reqBodyComboBox, &QComboBox::activated, ui->reqBodyStackedWidget, &QStackedWidget::setCurrentIndex);
+
     connect(ui->addReqParamButton, &QToolButton::clicked, ui->requestParamsTableWidget, &PropertyTableWidget::appendRow);
     connect(ui->removeReqParamButton, &QToolButton::clicked, ui->requestParamsTableWidget, &PropertyTableWidget::removeSelectedRows);
     connect(ui->requestParamsTableWidget, &QTableWidget::itemChanged, this, &MainWindow::processParamsChanged);
@@ -132,8 +139,7 @@ void MainWindow::initializeHeaderTables()
 
 void MainWindow::initializeMethodComboBox()
 {
-    QStringList methodList = { "GET", "HEAD", "POST", "PUT", "DELETE", "CONNECT", "OPTIONS", "TRACE", "PATCH" };
-    ui->methodComboBox->addItems(methodList);
+    ui->methodComboBox->addItems(Http::OfficialMethods);
 }
 
 void MainWindow::addRequestHeaders(HttpRequest& request)
