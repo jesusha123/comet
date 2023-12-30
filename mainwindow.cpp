@@ -5,6 +5,7 @@
 #include "httprequest.h"
 #include "debuginfoformatter.h"
 #include <QUrlQuery>
+#include "httpmethod.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -134,8 +135,7 @@ void MainWindow::initializeHeaderTables()
 
 void MainWindow::initializeMethodComboBox()
 {
-    QStringList methodList = { "GET", "HEAD", "POST", "PUT", "DELETE", "CONNECT", "OPTIONS", "TRACE", "PATCH" };
-    ui->methodComboBox->addItems(methodList);
+    ui->methodComboBox->addItems(Http::OfficialMethods);
 }
 
 void MainWindow::addRequestHeaders(HttpRequest& request)

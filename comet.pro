@@ -13,6 +13,7 @@ SOURCES += \
     curlutils.cpp \
     debuginfoformatter.cpp \
     httpclient.cpp \
+    httpmethod.cpp \
     main.cpp \
     mainwindow.cpp \
     propertytablewidget.cpp
@@ -21,6 +22,7 @@ HEADERS += \
     curlutils.h \
     debuginfoformatter.h \
     httpclient.h \
+    httpmethod.h \
     httprequest.h \
     httpresponse.h \
     mainwindow.h \
