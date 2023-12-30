@@ -26,7 +26,8 @@ private slots:
     void sendRequest();
     void processResponse(const HttpResponse response);
     void processParams(const QString& url);
-    void buildLineEditParams(QTableWidgetItem *item);
+    void processParamsChanged(QTableWidgetItem *item);
+    void processParamsRemoved();
 
 private:
     void initializeCollection();
@@ -34,6 +35,7 @@ private:
     void initializeHeaderTables();
     void initializeMethodComboBox();
     void addRequestHeaders(HttpRequest& request);
+    void buildParamsLineEdit();
 
     Ui::MainWindow *ui;
     HttpClient *httpClient;

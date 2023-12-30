@@ -81,7 +81,17 @@ void MainWindow::processParams(const QString& url)
     }
 }
 
-void MainWindow::buildLineEditParams(QTableWidgetItem *)
+void MainWindow::processParamsChanged(QTableWidgetItem *)
+{
+    buildParamsLineEdit();
+}
+
+void MainWindow::processParamsRemoved()
+{
+    buildParamsLineEdit();
+}
+
+void MainWindow::buildParamsLineEdit()
 {
     auto url = QUrl(ui->urlLineEdit->text());
     auto urlQuery = QUrlQuery();
@@ -105,11 +115,14 @@ void MainWindow::initializeConnections()
     connect(ui->sendButton, &QPushButton::clicked, this, &MainWindow::sendRequest);
     connect(httpClient, &HttpClient::finished, this, &MainWindow::processResponse);
     connect(ui->urlLineEdit, &QLineEdit::textEdited, this, &MainWindow::processParams);
+
     connect(ui->addReqParamButton, &QToolButton::clicked, ui->requestParamsTableWidget, &PropertyTableWidget::appendRow);
-    connect(ui->addReqHeaderButton, &QToolButton::clicked, ui->requestHeadersTableWidget, &PropertyTableWidget::appendRow);
     connect(ui->removeReqParamButton, &QToolButton::clicked, ui->requestParamsTableWidget, &PropertyTableWidget::removeSelectedRows);
+    connect(ui->requestParamsTableWidget, &QTableWidget::itemChanged, this, &MainWindow::processParamsChanged);
+    connect(ui->requestParamsTableWidget, &PropertyTableWidget::rowsRemoved, this, &MainWindow::processParamsRemoved);
+
+    connect(ui->addReqHeaderButton, &QToolButton::clicked, ui->requestHeadersTableWidget, &PropertyTableWidget::appendRow);
     connect(ui->removeReqHeaderButton, &QToolButton::clicked, ui->requestHeadersTableWidget, &PropertyTableWidget::removeSelectedRows);
-    connect(ui->requestParamsTableWidget, &QTableWidget::itemChanged, this, &MainWindow::buildLineEditParams);
 }
 
 void MainWindow::initializeHeaderTables()
