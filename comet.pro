@@ -16,6 +16,7 @@ SOURCES += \
     httpmethod.cpp \
     main.cpp \
     mainwindow.cpp \
+    methodcombobox.cpp \
     propertytablewidget.cpp \
     requestbuilder.cpp
 
@@ -27,6 +28,7 @@ HEADERS += \
     httprequest.h \
     httpresponse.h \
     mainwindow.h \
+    methodcombobox.h \
     propertytablewidget.h \
     requestbuilder.h \
     types.h

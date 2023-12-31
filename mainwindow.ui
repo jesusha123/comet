@@ -18,7 +18,7 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <widget class="QComboBox" name="methodComboBox"/>
+       <widget class="MethodComboBox" name="methodComboBox"/>
       </item>
       <item>
        <widget class="QLineEdit" name="urlLineEdit">
@@ -289,6 +289,11 @@
    <class>PropertyTableWidget</class>
    <extends>QTableWidget</extends>
    <header>propertytablewidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>MethodComboBox</class>
+   <extends>QComboBox</extends>
+   <header>methodcombobox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

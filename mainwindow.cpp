@@ -4,7 +4,6 @@
 #include "httpclient.h"
 #include "debuginfoformatter.h"
 #include <QUrlQuery>
-#include "httpmethod.h"
 #include "requestbuilder.h"
 
 MainWindow::MainWindow(QWidget *parent)
@@ -22,7 +21,6 @@ MainWindow::MainWindow(QWidget *parent)
     ui->infoTableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
     initializeConnections();
-    initializeMethodComboBox();
 
     ui->statusBar->showMessage("Ready");
 }
@@ -131,9 +129,4 @@ void MainWindow::initializeConnections()
 
     connect(ui->addReqHeaderButton, &QToolButton::clicked, ui->requestHeadersTableWidget, &PropertyTableWidget::appendRow);
     connect(ui->removeReqHeaderButton, &QToolButton::clicked, ui->requestHeadersTableWidget, &PropertyTableWidget::removeSelectedRows);
-}
-
-void MainWindow::initializeMethodComboBox()
-{
-    ui->methodComboBox->addItems(Http::OfficialMethods);
 }

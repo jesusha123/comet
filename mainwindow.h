@@ -32,7 +32,6 @@ private slots:
 private:
     void initializeCollection();
     void initializeConnections();
-    void initializeMethodComboBox();
     void buildParamsLineEdit();
 
     Ui::MainWindow *ui;
