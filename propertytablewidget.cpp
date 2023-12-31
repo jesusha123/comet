@@ -20,6 +20,32 @@ void PropertyTableWidget::setProperty(int row, const QString& key, const QString
     setItem(row, 1, new QTableWidgetItem(value));
 }
 
+QList<QPair<QString, QString>> PropertyTableWidget::getProperties()
+{
+    QList<QPair<QString, QString>> propertyList;
+
+    for(int rowIndex = 0; rowIndex < rowCount(); rowIndex++) {
+        auto keyItem = item(rowIndex, 0);
+
+        if(keyItem) {
+            auto keyText = keyItem->text();
+            if(!keyText.isEmpty()) {
+                // Initialize QString with empty string to avoid processing a null QString
+                QString valueText("");
+
+                auto valueItem = item(rowIndex, 1);
+                if (valueItem) {
+                    valueText.append(valueItem->text().toUtf8());
+                }
+
+                propertyList.append(qMakePair(keyText, valueText));
+            }
+        }
+    }
+
+    return propertyList;
+}
+
 void PropertyTableWidget::appendRow()
 {
     setRowCount(rowCount()+1);

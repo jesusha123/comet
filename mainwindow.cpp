@@ -147,22 +147,7 @@ void MainWindow::initializeMethodComboBox()
 
 void MainWindow::addRequestHeaders(HttpRequest& request)
 {
-    for(int rowIndex=0; rowIndex < ui->requestHeadersTableWidget->rowCount(); rowIndex++) {
-        auto keyItem = ui->requestHeadersTableWidget->item(rowIndex, 0);
-
-        if(keyItem) {
-            auto keyText = keyItem->text();
-            if(!keyText.isEmpty()) {
-                // Initialize QByteArray with empty string to avoid processing a null QByteArray
-                QByteArray valueText("");
-
-                auto valueItem = ui->requestHeadersTableWidget->item(rowIndex, 1);
-                if (valueItem) {
-                    valueText.append(valueItem->text().toUtf8());
-                }
-
-                request.headers.append(qMakePair(keyText.toUtf8(), valueText));
-            }
-        }
+    for(const auto& propertyPair : ui->requestHeadersTableWidget->getProperties()) {
+        request.headers.append(qMakePair(propertyPair.first.toUtf8(), propertyPair.second.toUtf8()));
     }
 }

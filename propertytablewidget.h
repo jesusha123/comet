@@ -10,6 +10,7 @@ class PropertyTableWidget : public QTableWidget
 public:
     PropertyTableWidget(QWidget *parent = nullptr);
     void setProperty(int row, const QString& key, const QString& value);
+    QList<QPair<QString, QString>> getProperties();
 public slots:
     void appendRow();
     void removeSelectedRows();
