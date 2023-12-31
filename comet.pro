@@ -16,7 +16,8 @@ SOURCES += \
     httpmethod.cpp \
     main.cpp \
     mainwindow.cpp \
-    propertytablewidget.cpp
+    propertytablewidget.cpp \
+    requestbuilder.cpp
 
 HEADERS += \
     curlutils.h \
@@ -27,6 +28,7 @@ HEADERS += \
     httpresponse.h \
     mainwindow.h \
     propertytablewidget.h \
+    requestbuilder.h \
     types.h
 
 FORMS += \

@@ -33,7 +33,6 @@ private:
     void initializeCollection();
     void initializeConnections();
     void initializeMethodComboBox();
-    void addRequestHeaders(HttpRequest& request);
     void buildParamsLineEdit();
 
     Ui::MainWindow *ui;

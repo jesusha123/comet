@@ -6,6 +6,7 @@
 #include "debuginfoformatter.h"
 #include <QUrlQuery>
 #include "httpmethod.h"
+#include "requestbuilder.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -34,15 +35,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::sendRequest()
 {
-    HttpRequest request;
-    request.url.setUrl(ui->urlLineEdit->text(), QUrl::StrictMode);
-    request.method = ui->methodComboBox->currentText();
-
-    if(ui->reqBodyComboBox->currentText().compare("None") != 0) {
-      request.body.append(ui->requestBodyPlainTextEdit->toPlainText().toUtf8());
-    }
-
-    addRequestHeaders(request);
+    RequestBuilder builder(ui);
+    auto request = builder.buildRequest();
     httpClient->sendRequest(request);
 }
 
@@ -143,11 +137,4 @@ void MainWindow::initializeConnections()
 void MainWindow::initializeMethodComboBox()
 {
     ui->methodComboBox->addItems(Http::OfficialMethods);
-}
-
-void MainWindow::addRequestHeaders(HttpRequest& request)
-{
-    for(const auto& propertyPair : ui->requestHeadersTableWidget->getProperties()) {
-        request.headers.append(qMakePair(propertyPair.first.toUtf8(), propertyPair.second.toUtf8()));
-    }
 }
