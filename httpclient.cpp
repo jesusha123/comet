@@ -19,6 +19,7 @@ void HttpClient::sendRequest(HttpRequest& request)
         enableDebugData(curl, response);
 
         curl_easy_setopt(curl, CURLOPT_URL, request.url.toString().toUtf8().data());
+        curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
 
         QDataStream bodyDataStream(request.body);
         configureMethodAndBody(curl, request, bodyDataStream);
