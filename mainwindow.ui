@@ -265,17 +265,17 @@
         <string>Body</string>
        </attribute>
       </widget>
+      <widget class="PropertyTableWidget" name="infoTableWidget">
+       <attribute name="title">
+        <string>Info</string>
+       </attribute>
+      </widget>
       <widget class="QPlainTextEdit" name="debugPlainTextEdit">
        <property name="readOnly">
         <bool>true</bool>
        </property>
        <attribute name="title">
         <string>Debug</string>
-       </attribute>
-      </widget>
-      <widget class="PropertyTableWidget" name="infoTableWidget">
-       <attribute name="title">
-        <string>Info</string>
        </attribute>
       </widget>
      </widget>
