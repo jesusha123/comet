@@ -23,7 +23,7 @@
       <item>
        <widget class="QLineEdit" name="urlLineEdit">
         <property name="text">
-         <string>http://localhost:3000</string>
+         <string/>
         </property>
        </widget>
       </item>
