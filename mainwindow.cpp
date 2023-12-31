@@ -17,7 +17,9 @@ MainWindow::MainWindow(QWidget *parent)
     auto fixedFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
     fixedFont.setPointSize(QApplication::font().pointSize());
     ui->debugPlainTextEdit->setFont(fixedFont);
+
     ui->responseHeadersTableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    ui->infoTableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
     initializeConnections();
     initializeHeaderTables();
@@ -45,7 +47,7 @@ void MainWindow::sendRequest()
     httpClient->sendRequest(request);
 }
 
-void MainWindow::processResponse(const HttpResponse response)
+void MainWindow::processResponse(const HttpResponse& response)
 {
     qInfo("Processing response");
     ui->responseBodyPlainTextEdit->setPlainText(response.body.data());
@@ -66,6 +68,12 @@ void MainWindow::processResponse(const HttpResponse response)
 
     auto statusMessage = QString("%1%2 [%3]").arg(response.statusLine, response.error, QDateTime::currentDateTime().toString());
     ui->statusBar->showMessage(statusMessage);
+
+    ui->infoTableWidget->setRowCount(response.info.size());
+    int row = 0;
+    for(const auto& pair : response.info) {
+        ui->infoTableWidget->setProperty(row++, pair.first, pair.second);
+    }
 }
 
 void MainWindow::processParams(const QString& url)

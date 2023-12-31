@@ -1,7 +1,6 @@
 #ifndef HTTPRESPONSE_H
 #define HTTPRESPONSE_H
 
-#include <QList>
 #include "types.h"
 
 class HttpResponse
@@ -12,6 +11,7 @@ public:
     QString error;
     Headers headers;
     DebugInfo debugInfo;
+    Info info;
 };
 
 #endif // HTTPRESPONSE_H

@@ -34,7 +34,6 @@ size_t headerFunction(char *buffer, size_t size, size_t nitems, HttpResponse* re
         auto split = data.split(':');
         response->headers.append(qMakePair(split.at(0), split.at(1)));
     } else if (!data.isEmpty()) {
-        // We might have multiple status lines, save only the last one.
         response->statusLine.append(data);
     }
 

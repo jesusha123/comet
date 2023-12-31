@@ -273,6 +273,11 @@
         <string>Debug</string>
        </attribute>
       </widget>
+      <widget class="PropertyTableWidget" name="infoTableWidget">
+       <attribute name="title">
+        <string>Info</string>
+       </attribute>
+      </widget>
      </widget>
     </item>
    </layout>

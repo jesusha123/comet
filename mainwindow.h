@@ -24,7 +24,7 @@ public:
 
 private slots:
     void sendRequest();
-    void processResponse(const HttpResponse response);
+    void processResponse(const HttpResponse& response);
     void processParams(const QString& url);
     void processParamsChanged(QTableWidgetItem *item);
     void processParamsRemoved();
