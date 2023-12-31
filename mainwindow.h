@@ -32,7 +32,6 @@ private slots:
 private:
     void initializeCollection();
     void initializeConnections();
-    void initializeHeaderTables();
     void initializeMethodComboBox();
     void addRequestHeaders(HttpRequest& request);
     void buildParamsLineEdit();

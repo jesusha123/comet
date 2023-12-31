@@ -22,7 +22,6 @@ MainWindow::MainWindow(QWidget *parent)
     ui->infoTableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
     initializeConnections();
-    initializeHeaderTables();
     initializeMethodComboBox();
 
     ui->statusBar->showMessage("Ready");
@@ -139,11 +138,6 @@ void MainWindow::initializeConnections()
 
     connect(ui->addReqHeaderButton, &QToolButton::clicked, ui->requestHeadersTableWidget, &PropertyTableWidget::appendRow);
     connect(ui->removeReqHeaderButton, &QToolButton::clicked, ui->requestHeadersTableWidget, &PropertyTableWidget::removeSelectedRows);
-}
-
-void MainWindow::initializeHeaderTables()
-{
-    ui->responseHeadersTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 }
 
 void MainWindow::initializeMethodComboBox()
