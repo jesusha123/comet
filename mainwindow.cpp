@@ -17,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent)
     auto fixedFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
     fixedFont.setPointSize(QApplication::font().pointSize());
     ui->debugPlainTextEdit->setFont(fixedFont);
+    ui->responseHeadersTableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
     initializeConnections();
     initializeHeaderTables();
