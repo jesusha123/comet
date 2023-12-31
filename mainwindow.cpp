@@ -2,7 +2,6 @@
 #include "ui_mainwindow.h"
 #include <QDateTime>
 #include "httpclient.h"
-#include "httprequest.h"
 #include "debuginfoformatter.h"
 #include <QUrlQuery>
 #include "httpmethod.h"
