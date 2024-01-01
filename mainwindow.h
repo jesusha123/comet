@@ -28,6 +28,7 @@ private slots:
     void processParams(const QString& url);
     void processParamsChanged(QTableWidgetItem *item);
     void processParamsRemoved();
+    void processRequestBodyAllowed(bool reqBodyAllowed);
 
 private:
     void initializeCollection();

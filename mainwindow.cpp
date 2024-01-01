@@ -23,6 +23,9 @@ MainWindow::MainWindow(QWidget *parent)
     initializeConnections();
 
     ui->statusBar->showMessage("Ready");
+
+    // Initial method is GET, so hide body tab.
+    ui->requestTabWidget->setTabVisible(2, false);
 }
 
 MainWindow::~MainWindow()
@@ -129,4 +132,11 @@ void MainWindow::initializeConnections()
 
     connect(ui->addReqHeaderButton, &QToolButton::clicked, ui->requestHeadersTableWidget, &PropertyTableWidget::appendRow);
     connect(ui->removeReqHeaderButton, &QToolButton::clicked, ui->requestHeadersTableWidget, &PropertyTableWidget::removeSelectedRows);
+
+    connect(ui->methodComboBox, &MethodComboBox::requestBodyAllowed, this, &MainWindow::processRequestBodyAllowed);
+}
+
+void MainWindow::processRequestBodyAllowed(bool reqBodyAllowed)
+{
+    ui->requestTabWidget->setTabVisible(2, reqBodyAllowed);
 }

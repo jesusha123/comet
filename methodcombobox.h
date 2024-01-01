@@ -5,8 +5,13 @@
 
 class MethodComboBox : public QComboBox
 {
+    Q_OBJECT
 public:
-    explicit MethodComboBox(QWidget *parent = nullptr);
+    MethodComboBox(QWidget *parent = nullptr);
+signals:
+    void requestBodyAllowed(bool activeMethodAllowsBody);
+private:
+    void processIndexChange(int index);
 };
 
 #endif // METHODCOMBOBOX_H
