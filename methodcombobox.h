@@ -2,6 +2,7 @@
 #define METHODCOMBOBOX_H
 
 #include <QComboBox>
+#include "httpmethod.h"
 
 class MethodComboBox : public QComboBox
 {
@@ -9,7 +10,7 @@ class MethodComboBox : public QComboBox
 public:
     MethodComboBox(QWidget *parent = nullptr);
 signals:
-    void requestBodyAllowed(bool activeMethodAllowsBody);
+    void requestBodyAllowed(Http::HasBody reqHasBody);
 private:
     void processIndexChange(int index);
 };

@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include "httpresponse.h"
-#include "httprequest.h"
+#include "httpmethod.h"
 
 class HttpClient;
 class QTableWidgetItem;
@@ -28,7 +28,7 @@ private slots:
     void processParams(const QString& url);
     void processParamsChanged(QTableWidgetItem *item);
     void processParamsRemoved();
-    void processRequestBodyAllowed(bool reqBodyAllowed);
+    void processRequestBodyAllowed(Http::HasBody reqHasBody);
 
 private:
     void initializeCollection();

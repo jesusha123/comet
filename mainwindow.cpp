@@ -136,7 +136,7 @@ void MainWindow::initializeConnections()
     connect(ui->methodComboBox, &MethodComboBox::requestBodyAllowed, this, &MainWindow::processRequestBodyAllowed);
 }
 
-void MainWindow::processRequestBodyAllowed(bool reqBodyAllowed)
+void MainWindow::processRequestBodyAllowed(Http::HasBody hasBody)
 {
-    ui->requestTabWidget->setTabVisible(2, reqBodyAllowed);
+    ui->requestTabWidget->setTabVisible(2, hasBody != Http::No);
 }
