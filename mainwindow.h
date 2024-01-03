@@ -29,6 +29,7 @@ private slots:
     void processParamsChanged(QTableWidgetItem *item);
     void processParamsRemoved();
     void processRequestBodyAllowed(Http::HasBody reqHasBody);
+    void processReqContentTypeChange(int index);
 
 private:
     void initializeCollection();
