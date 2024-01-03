@@ -33,7 +33,7 @@ void RequestBuilder::addBody(HttpRequest& request)
             }
 
             request.body.append(query.toString().toUtf8());
-        } else if(contentType.compare("none") == 0) {
+        } else if(contentType.compare("none") != 0) {
             request.body.append(ui->reqBodyTextWidget->toPlainText().toUtf8());
             request.headers.append(qMakePair("Content-Type", contentType.toUtf8()));
         }
