@@ -12,6 +12,7 @@ PropertyTableWidget::PropertyTableWidget(QWidget *parent)
     setRowCount(0);
 
     setHorizontalHeaderLabels({ "Key", "Value" });
+    setAlternatingRowColors(true);
 }
 
 void PropertyTableWidget::setProperty(int row, const QString& key, const QString& value)
