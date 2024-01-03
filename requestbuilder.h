@@ -13,6 +13,7 @@ public:
     RequestBuilder(Ui::MainWindow* ui);
     HttpRequest buildRequest();
 private:
+    void addBody(HttpRequest& request);
     void addRequestHeaders(HttpRequest& request);
 
     Ui::MainWindow* ui;

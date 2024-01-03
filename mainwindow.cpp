@@ -5,6 +5,7 @@
 #include "debuginfoformatter.h"
 #include <QUrlQuery>
 #include "requestbuilder.h"
+#include "contenttypecombobox.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -123,7 +124,7 @@ void MainWindow::initializeConnections()
     connect(httpClient, &HttpClient::finished, this, &MainWindow::processResponse);
     connect(ui->urlLineEdit, &QLineEdit::textEdited, this, &MainWindow::processParams);
 
-    connect(ui->reqBodyComboBox, &QComboBox::activated, ui->reqBodyStackedWidget, &QStackedWidget::setCurrentIndex);
+    connect(ui->reqContentTypeComboBox, &QComboBox::currentIndexChanged, this, &MainWindow::processReqContentTypeChange);
 
     connect(ui->addReqParamButton, &QToolButton::clicked, ui->requestParamsTableWidget, &PropertyTableWidget::appendRow);
     connect(ui->removeReqParamButton, &QToolButton::clicked, ui->requestParamsTableWidget, &PropertyTableWidget::removeSelectedRows);
@@ -133,7 +134,22 @@ void MainWindow::initializeConnections()
     connect(ui->addReqHeaderButton, &QToolButton::clicked, ui->requestHeadersTableWidget, &PropertyTableWidget::appendRow);
     connect(ui->removeReqHeaderButton, &QToolButton::clicked, ui->requestHeadersTableWidget, &PropertyTableWidget::removeSelectedRows);
 
+    connect(ui->addReqBodyPropButton, &QToolButton::clicked, ui->reqBodyTableWidget, &PropertyTableWidget::appendRow);
+    connect(ui->removeReqBodyPropButton, &QToolButton::clicked, ui->reqBodyTableWidget, &PropertyTableWidget::removeSelectedRows);
+
     connect(ui->methodComboBox, &MethodComboBox::requestBodyAllowed, this, &MainWindow::processRequestBodyAllowed);
+}
+
+void MainWindow::processReqContentTypeChange(int)
+{
+    auto contentType = ui->reqContentTypeComboBox->currentText();
+    if(contentType.compare("none") == 0) {
+        ui->reqBodyStackedWidget->setCurrentIndex(0);
+    } else if(contentType.compare("application/x-www-form-urlencoded") == 0 || contentType.compare("multipart/form-data") == 0) {
+        ui->reqBodyStackedWidget->setCurrentIndex(2);
+    } else {
+        ui->reqBodyStackedWidget->setCurrentIndex(1);
+    }
 }
 
 void MainWindow::processRequestBodyAllowed(Http::HasBody hasBody)
