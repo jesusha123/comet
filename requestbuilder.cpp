@@ -46,3 +46,14 @@ void RequestBuilder::addRequestHeaders(HttpRequest& request)
         request.headers.append(qMakePair(propertyPair.first.toUtf8(), propertyPair.second.toUtf8()));
     }
 }
+
+void RequestBuilder::restoreRequest(const HttpRequest& request)
+{
+    ui->urlLineEdit->setText(request.url.toString());
+
+    ui->requestHeadersTableWidget->setRowCount(request.headers.count());
+    int i = 0;
+    for(const auto &header : request.headers) {
+        ui->requestHeadersTableWidget->setProperty(i++, header.first, header.second);
+    }
+}

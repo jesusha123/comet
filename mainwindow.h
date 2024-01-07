@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "httpresponse.h"
 #include "httpmethod.h"
+#include "httprequeststorage.h"
 
 class HttpClient;
 class QTableWidgetItem;
@@ -24,6 +25,8 @@ public:
 
 private slots:
     void sendRequest();
+    void saveRequest();
+    void readRequest();
     void processResponse(const HttpResponse& response);
     void processParams(const QString& url);
     void processParamsChanged(QTableWidgetItem *item);
@@ -38,5 +41,6 @@ private:
 
     Ui::MainWindow *ui;
     HttpClient *httpClient;
+    HttpRequestStorage requestStorage;
 };
 #endif // MAINWINDOW_H

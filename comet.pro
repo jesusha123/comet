@@ -15,6 +15,7 @@ SOURCES += \
     debuginfoformatter.cpp \
     httpclient.cpp \
     httpmethod.cpp \
+    httprequeststorage.cpp \
     main.cpp \
     mainwindow.cpp \
     methodcombobox.cpp \
@@ -28,6 +29,7 @@ HEADERS += \
     httpclient.h \
     httpmethod.h \
     httprequest.h \
+    httprequeststorage.h \
     httpresponse.h \
     mainwindow.h \
     methodcombobox.h \

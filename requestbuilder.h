@@ -12,6 +12,7 @@ class RequestBuilder
 public:
     RequestBuilder(Ui::MainWindow* ui);
     HttpRequest buildRequest();
+    void restoreRequest(const HttpRequest& request);
 private:
     void addBody(HttpRequest& request);
     void addRequestHeaders(HttpRequest& request);

@@ -27,6 +27,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Initial method is GET, so hide body tab.
     ui->requestTabWidget->setTabVisible(2, false);
+
+    ui->splitter->setStretchFactor(0, 1);
+    ui->splitter->setStretchFactor(1, 5);
 }
 
 MainWindow::~MainWindow()
@@ -39,6 +42,20 @@ void MainWindow::sendRequest()
     RequestBuilder builder(ui);
     auto request = builder.buildRequest();
     httpClient->sendRequest(request);
+}
+
+void MainWindow::saveRequest()
+{
+    RequestBuilder builder(ui);
+    auto request = builder.buildRequest();
+    requestStorage.save(request);
+}
+
+void MainWindow::readRequest()
+{
+    QScopedPointer<HttpRequest> request(requestStorage.read());
+    RequestBuilder builder(ui);
+    builder.restoreRequest(*request);
 }
 
 void MainWindow::processResponse(const HttpResponse& response)
@@ -123,6 +140,9 @@ void MainWindow::initializeConnections()
     connect(ui->sendButton, &QPushButton::clicked, this, &MainWindow::sendRequest);
     connect(httpClient, &HttpClient::finished, this, &MainWindow::processResponse);
     connect(ui->urlLineEdit, &QLineEdit::textEdited, this, &MainWindow::processParams);
+
+    connect(ui->saveButton, &QPushButton::clicked, this, &MainWindow::saveRequest);
+    connect(ui->readButton, &QPushButton::clicked, this, &MainWindow::readRequest);
 
     connect(ui->reqContentTypeComboBox, &QComboBox::currentIndexChanged, this, &MainWindow::processReqContentTypeChange);
 
