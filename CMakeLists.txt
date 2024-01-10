@@ -42,5 +42,6 @@ target_link_libraries(comet
         Qt::Core
         Qt::Gui
         Qt::Widgets
+        curl
 )
 
