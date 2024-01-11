@@ -14,9 +14,10 @@ Comet is an API client for sending HTTP requests
 ## Build
 
 - Install Qt 6 SDK
+- Install CMake
 - Generate Makefile
 ```sh
-qmake
+cmake .
 ```
 - Make application
 ```sh
