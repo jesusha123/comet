@@ -45,3 +45,6 @@ target_link_libraries(comet
         curl
 )
 
+set_target_properties(comet PROPERTIES
+        MACOSX_BUNDLE TRUE
+)
