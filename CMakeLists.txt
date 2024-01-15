@@ -8,6 +8,7 @@ set(CMAKE_AUTOUIC ON)
 
 set(CMAKE_PREFIX_PATH "/Users/max/Qt/6.6.1/macos/lib/cmake/Qt6")
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/network)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/view)
 
 find_package(Qt6 COMPONENTS
@@ -19,14 +20,14 @@ find_package(Qt6 COMPONENTS
 add_executable(comet
         src/view/contenttypecombobox.h
         src/view/contenttypecombobox.cpp
-        src/curlutils.cpp
-        src/curlutils.h
+        src/network/curlutils.cpp
+        src/network/curlutils.h
         src/debuginfoformatter.h
         src/debuginfoformatter.cpp
-        src/httpclient.cpp
-        src/httpclient.h
-        src/httpmethod.cpp
-        src/httpmethod.h
+        src/network/httpclient.cpp
+        src/network/httpclient.h
+        src/network/httpmethod.cpp
+        src/network/httpmethod.h
         src/httprequest.h
         src/httprequeststorage.cpp
         src/httprequeststorage.h
