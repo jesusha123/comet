@@ -1,4 +1,4 @@
-#include "debuginfoformatter.h"
+#include "DebugInfoFormatter.h"
 
 DebugInfoFormatter::DebugInfoFormatter(const DebugInfo& debugInfo)
     : debugInfo(debugInfo)

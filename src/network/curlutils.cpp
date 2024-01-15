@@ -1,7 +1,7 @@
 #include "curlutils.h"
 #include <QDataStream>
 
-int debugFunction(CURL *, curl_infotype type, char *data, size_t size, HttpResponse* response)
+int debugFunction(CURL *, curl_infotype type, char *data, size_t size, Response* response)
 {
     response->debugInfo.append(qMakePair(type, QByteArray(data, size)));
     return 0;
@@ -23,7 +23,7 @@ size_t writeFunction(void *data, size_t size, size_t nmemb, QByteArray* byteArra
  *   - Colon separated headers
  *   - Blank line preceding response body
  */
-size_t headerFunction(char *buffer, size_t size, size_t nitems, HttpResponse* response)
+size_t headerFunction(char *buffer, size_t size, size_t nitems, Response* response)
 {
     size_t realSize = size * nitems;
 

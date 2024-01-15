@@ -1,7 +1,7 @@
 #ifndef REQUESTBUILDER_H
 #define REQUESTBUILDER_H
 
-#include "httprequest.h"
+#include "Request.h"
 
 namespace Ui {
 class MainWindow;
@@ -11,11 +11,11 @@ class RequestBuilder
 {
 public:
     RequestBuilder(Ui::MainWindow* ui);
-    HttpRequest buildRequest();
-    void restoreRequest(const HttpRequest& request);
+    Request buildRequest();
+    void restoreRequest(const Request& request);
 private:
-    void addBody(HttpRequest& request);
-    void addRequestHeaders(HttpRequest& request);
+    void addBody(Request& request);
+    void addRequestHeaders(Request& request);
 
     Ui::MainWindow* ui;
 };

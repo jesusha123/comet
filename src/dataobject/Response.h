@@ -1,9 +1,9 @@
-#ifndef HTTPRESPONSE_H
-#define HTTPRESPONSE_H
+#ifndef RESPONSE_H
+#define RESPONSE_H
 
 #include "types.h"
 
-class HttpResponse
+class Response
 {
 public:
     QByteArray body;
@@ -14,4 +14,4 @@ public:
     Info info;
 };
 
-#endif // HTTPRESPONSE_H
+#endif // RESPONSE_H

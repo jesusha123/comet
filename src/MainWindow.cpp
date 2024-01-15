@@ -1,11 +1,11 @@
-#include "mainwindow.h"
+#include "MainWindow.h"
 #include "ui_mainwindow.h"
 #include <QDateTime>
-#include "httpclient.h"
-#include "debuginfoformatter.h"
+#include "HttpClient.h"
+#include "DebugInfoFormatter.h"
 #include <QUrlQuery>
-#include "requestbuilder.h"
-#include "contenttypecombobox.h"
+#include "RequestBuilder.h"
+#include "ContentTypeComboBox.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -53,12 +53,12 @@ void MainWindow::saveRequest()
 
 void MainWindow::readRequest()
 {
-    QScopedPointer<HttpRequest> request(requestStorage.read());
+    QScopedPointer<Request> request(requestStorage.read());
     RequestBuilder builder(ui);
     builder.restoreRequest(*request);
 }
 
-void MainWindow::processResponse(const HttpResponse& response)
+void MainWindow::processResponse(const Response& response)
 {
     qInfo("Processing response");
     ui->responseBodyPlainTextEdit->setPlainText(response.body.data());

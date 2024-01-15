@@ -1,4 +1,4 @@
-#include "requestbuilder.h"
+#include "RequestBuilder.h"
 #include "ui_mainwindow.h"
 #include <QUrlQuery>
 
@@ -7,9 +7,9 @@ RequestBuilder::RequestBuilder(Ui::MainWindow* ui)
 {
 }
 
-HttpRequest RequestBuilder::buildRequest()
+Request RequestBuilder::buildRequest()
 {
-    HttpRequest request;
+    Request request;
     request.url.setUrl(ui->urlLineEdit->text(), QUrl::StrictMode);
     request.method = ui->methodComboBox->currentText();
 
@@ -19,7 +19,7 @@ HttpRequest RequestBuilder::buildRequest()
     return request;
 }
 
-void RequestBuilder::addBody(HttpRequest& request)
+void RequestBuilder::addBody(Request& request)
 {
     if(Http::hasRequestBody(static_cast<Http::Method>(ui->methodComboBox->currentIndex()))) {
         auto contentType = ui->reqContentTypeComboBox->currentText();
@@ -40,14 +40,14 @@ void RequestBuilder::addBody(HttpRequest& request)
     }
 }
 
-void RequestBuilder::addRequestHeaders(HttpRequest& request)
+void RequestBuilder::addRequestHeaders(Request& request)
 {
     for(const auto& propertyPair : ui->requestHeadersTableWidget->getProperties()) {
         request.headers.append(qMakePair(propertyPair.first.toUtf8(), propertyPair.second.toUtf8()));
     }
 }
 
-void RequestBuilder::restoreRequest(const HttpRequest& request)
+void RequestBuilder::restoreRequest(const Request& request)
 {
     ui->urlLineEdit->setText(request.url.toString());
 
