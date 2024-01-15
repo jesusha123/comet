@@ -1,7 +1,7 @@
 #include "httpclient.h"
 #include <QtGlobal>
 #include <curl/curl.h>
-#include "httpresponse.h"
+#include "dataobject/httpresponse.h"
 #include "curlutils.h"
 #include <QIODevice>
 #include "httpmethod.h"

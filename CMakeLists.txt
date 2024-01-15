@@ -8,6 +8,7 @@ set(CMAKE_AUTOUIC ON)
 
 set(CMAKE_PREFIX_PATH "/Users/max/Qt/6.6.1/macos/lib/cmake/Qt6")
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/dataobject)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/network)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/view)
 
@@ -28,10 +29,10 @@ add_executable(comet
         src/network/httpclient.h
         src/network/httpmethod.cpp
         src/network/httpmethod.h
-        src/httprequest.h
+        src/dataobject/httprequest.h
         src/httprequeststorage.cpp
         src/httprequeststorage.h
-        src/httpresponse.h
+        src/dataobject/httpresponse.h
         src/main.cpp
         src/mainwindow.h
         src/mainwindow.cpp
