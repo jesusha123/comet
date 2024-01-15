@@ -10,6 +10,7 @@ set(CMAKE_PREFIX_PATH "/Users/max/Qt/6.6.1/macos/lib/cmake/Qt6")
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/dataobject)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/network)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/storage)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/view)
 
 find_package(Qt6 COMPONENTS
@@ -30,8 +31,8 @@ add_executable(comet
         src/network/httpmethod.cpp
         src/network/httpmethod.h
         src/dataobject/Request.h
-        src/httprequeststorage.cpp
-        src/httprequeststorage.h
+        src/storage/RequestStorage.cpp
+        src/storage/RequestStorage.h
         src/dataobject/Response.h
         src/main.cpp
         src/mainwindow.h

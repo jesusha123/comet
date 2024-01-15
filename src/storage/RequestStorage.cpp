@@ -1,11 +1,11 @@
-#include "httprequeststorage.h"
+#include "RequestStorage.h"
 #include <QApplication>
 #include <QDir>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QStandardPaths>
 
-HttpRequestStorage::HttpRequestStorage()
+RequestStorage::RequestStorage()
 {
     appDataDirectory = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     if(appDataDirectory.isEmpty() || !QDir().mkpath(appDataDirectory)) {
@@ -14,7 +14,7 @@ HttpRequestStorage::HttpRequestStorage()
     }
 }
 
-bool HttpRequestStorage::save(const Request& request)
+bool RequestStorage::save(const Request& request)
 {
     qInfo("Saving request started");
     QFile saveFile(appDataDirectory + "/save.json");
@@ -39,7 +39,7 @@ bool HttpRequestStorage::save(const Request& request)
     return true;
 }
 
-QJsonArray HttpRequestStorage::getJsonHeaders(const Request& request)
+QJsonArray RequestStorage::getJsonHeaders(const Request& request)
 {
     QJsonArray arr;
 
@@ -53,7 +53,7 @@ QJsonArray HttpRequestStorage::getJsonHeaders(const Request& request)
     return arr;
 }
 
-Request* HttpRequestStorage::read()
+Request* RequestStorage::read()
 {
     Request* request = nullptr;
 

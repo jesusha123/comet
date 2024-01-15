@@ -1,13 +1,13 @@
-#ifndef HTTPREQUESTSTORAGE_H
-#define HTTPREQUESTSTORAGE_H
+#ifndef REQUESTSTORAGE_H
+#define REQUESTSTORAGE_H
 
 #include "Request.h"
 #include <QJsonArray>
 
-class HttpRequestStorage
+class RequestStorage
 {
 public:
-    HttpRequestStorage();
+    RequestStorage();
     bool save(const Request& request);
     Request* read();
 private:
@@ -16,4 +16,4 @@ private:
     QString appDataDirectory;
 };
 
-#endif // HTTPREQUESTSTORAGE_H
+#endif // REQUESTSTORAGE_H

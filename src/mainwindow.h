@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include "Response.h"
 #include "httpmethod.h"
-#include "httprequeststorage.h"
+#include "RequestStorage.h"
 
 class HttpClient;
 class QTableWidgetItem;
@@ -41,6 +41,6 @@ private:
 
     Ui::MainWindow *ui;
     HttpClient *httpClient;
-    HttpRequestStorage requestStorage;
+    RequestStorage requestStorage;
 };
 #endif // MAINWINDOW_H
