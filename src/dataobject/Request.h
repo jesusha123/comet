@@ -7,6 +7,7 @@
 class Request
 {
 public:
+    QString name;
     QUrl url;
     QString method;
     QByteArray body;
