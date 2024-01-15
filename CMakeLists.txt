@@ -29,10 +29,10 @@ add_executable(comet
         src/network/httpclient.h
         src/network/httpmethod.cpp
         src/network/httpmethod.h
-        src/dataobject/httprequest.h
+        src/dataobject/Request.h
         src/httprequeststorage.cpp
         src/httprequeststorage.h
-        src/dataobject/httpresponse.h
+        src/dataobject/Response.h
         src/main.cpp
         src/mainwindow.h
         src/mainwindow.cpp

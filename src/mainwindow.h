@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "httpresponse.h"
+#include "Response.h"
 #include "httpmethod.h"
 #include "httprequeststorage.h"
 
@@ -27,7 +27,7 @@ private slots:
     void sendRequest();
     void saveRequest();
     void readRequest();
-    void processResponse(const HttpResponse& response);
+    void processResponse(const Response& response);
     void processParams(const QString& url);
     void processParamsChanged(QTableWidgetItem *item);
     void processParamsRemoved();

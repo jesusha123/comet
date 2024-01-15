@@ -2,20 +2,20 @@
 #define HTTPCLIENT_H
 
 #include <QObject>
-#include "httprequest.h"
-#include "httpresponse.h"
+#include "Request.h"
+#include "Response.h"
 
 class HttpClient : public QObject
 {
     Q_OBJECT
 public:
-    void sendRequest(HttpRequest& request);
+    void sendRequest(Request& request);
 signals:
-    void finished(const HttpResponse response);
+    void finished(const Response response);
 private:
-    void configureMethodAndBody(CURL* curl, HttpRequest& request, QDataStream& dataStream);
-    void enableDebugData(CURL* curl, const HttpResponse& response);
-    curl_slist* addRequestHeaders(CURL* curl, const HttpRequest& request);
+    void configureMethodAndBody(CURL* curl, Request& request, QDataStream& dataStream);
+    void enableDebugData(CURL* curl, const Response& response);
+    curl_slist* addRequestHeaders(CURL* curl, const Request& request);
     void addSuccessInfo(CURL* curl, Info& info);
     void addInfoDouble(CURL* curl, CURLINFO curlInfo, const char* infoName, Info& info);
     void addInfoLong(CURL* curl, CURLINFO curlInfo, const char* infoName, Info& info);

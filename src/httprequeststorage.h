@@ -1,17 +1,17 @@
 #ifndef HTTPREQUESTSTORAGE_H
 #define HTTPREQUESTSTORAGE_H
 
-#include "httprequest.h"
+#include "Request.h"
 #include <QJsonArray>
 
 class HttpRequestStorage
 {
 public:
     HttpRequestStorage();
-    bool save(const HttpRequest& request);
-    HttpRequest* read();
+    bool save(const Request& request);
+    Request* read();
 private:
-    QJsonArray getJsonHeaders(const HttpRequest& request);
+    QJsonArray getJsonHeaders(const Request& request);
 
     QString appDataDirectory;
 };

@@ -53,12 +53,12 @@ void MainWindow::saveRequest()
 
 void MainWindow::readRequest()
 {
-    QScopedPointer<HttpRequest> request(requestStorage.read());
+    QScopedPointer<Request> request(requestStorage.read());
     RequestBuilder builder(ui);
     builder.restoreRequest(*request);
 }
 
-void MainWindow::processResponse(const HttpResponse& response)
+void MainWindow::processResponse(const Response& response)
 {
     qInfo("Processing response");
     ui->responseBodyPlainTextEdit->setPlainText(response.body.data());

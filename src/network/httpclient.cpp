@@ -1,12 +1,12 @@
 #include "httpclient.h"
 #include <QtGlobal>
 #include <curl/curl.h>
-#include "dataobject/httpresponse.h"
+#include "Response.h"
 #include "curlutils.h"
 #include <QIODevice>
 #include "httpmethod.h"
 
-void HttpClient::sendRequest(HttpRequest& request)
+void HttpClient::sendRequest(Request& request)
 {
     qInfo("Sending request");
     CURL *curl;
@@ -14,7 +14,7 @@ void HttpClient::sendRequest(HttpRequest& request)
     curl = curl_easy_init();
     if(curl) {
         CURLcode res;
-        HttpResponse response;
+        Response response;
 
         enableDebugData(curl, response);
 
@@ -58,7 +58,7 @@ void HttpClient::sendRequest(HttpRequest& request)
  * This method combines both HTTP method and body because they go hand in hand. Setting the wrong body options
  * will make cURL send a different HTTP method than expected.
  */
-void HttpClient::configureMethodAndBody(CURL* curl, HttpRequest& request, QDataStream& dataStream)
+void HttpClient::configureMethodAndBody(CURL* curl, Request& request, QDataStream& dataStream)
 {
     auto methodKey = Http::OfficialMethods.indexOf(request.method);
 
@@ -100,14 +100,14 @@ void HttpClient::configureMethodAndBody(CURL* curl, HttpRequest& request, QDataS
     }
 }
 
-void HttpClient::enableDebugData(CURL* curl, const HttpResponse& response)
+void HttpClient::enableDebugData(CURL* curl, const Response& response)
 {
     curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
     curl_easy_setopt(curl, CURLOPT_DEBUGFUNCTION, debugFunction);
     curl_easy_setopt(curl, CURLOPT_DEBUGDATA, &response);
 }
 
-curl_slist* HttpClient::addRequestHeaders(CURL* curl, const HttpRequest& request)
+curl_slist* HttpClient::addRequestHeaders(CURL* curl, const Request& request)
 {
     struct curl_slist *list = NULL;
 

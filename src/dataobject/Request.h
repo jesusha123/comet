@@ -1,10 +1,10 @@
-#ifndef HTTPREQUEST_H
-#define HTTPREQUEST_H
+#ifndef REQUEST_H
+#define REQUEST_H
 
 #include <QUrl>
 #include "types.h"
 
-class HttpRequest
+class Request
 {
 public:
     QUrl url;
@@ -13,4 +13,4 @@ public:
     Headers headers;
 };
 
-#endif // HTTPREQUEST_H
+#endif // REQUEST_H

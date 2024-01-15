@@ -14,7 +14,7 @@ HttpRequestStorage::HttpRequestStorage()
     }
 }
 
-bool HttpRequestStorage::save(const HttpRequest& request)
+bool HttpRequestStorage::save(const Request& request)
 {
     qInfo("Saving request started");
     QFile saveFile(appDataDirectory + "/save.json");
@@ -39,7 +39,7 @@ bool HttpRequestStorage::save(const HttpRequest& request)
     return true;
 }
 
-QJsonArray HttpRequestStorage::getJsonHeaders(const HttpRequest& request)
+QJsonArray HttpRequestStorage::getJsonHeaders(const Request& request)
 {
     QJsonArray arr;
 
@@ -53,9 +53,9 @@ QJsonArray HttpRequestStorage::getJsonHeaders(const HttpRequest& request)
     return arr;
 }
 
-HttpRequest* HttpRequestStorage::read()
+Request* HttpRequestStorage::read()
 {
-    HttpRequest* request = nullptr;
+    Request* request = nullptr;
 
     qInfo("Reading request started");
     QFile readFile(appDataDirectory + "/save.json");
@@ -66,7 +66,7 @@ HttpRequest* HttpRequestStorage::read()
         QByteArray data = readFile.readAll();
         QJsonDocument jsonDoc(QJsonDocument::fromJson(data));
 
-        request = new HttpRequest();
+        request = new Request();
 
         auto root = jsonDoc.object();
         request->url.setUrl(root["url"].toString());
