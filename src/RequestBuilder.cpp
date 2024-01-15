@@ -1,4 +1,4 @@
-#include "requestbuilder.h"
+#include "RequestBuilder.h"
 #include "ui_mainwindow.h"
 #include <QUrlQuery>
 

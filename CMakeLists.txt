@@ -20,28 +20,28 @@ find_package(Qt6 COMPONENTS
         REQUIRED)
 
 add_executable(comet
-        src/view/contenttypecombobox.h
-        src/view/contenttypecombobox.cpp
+        src/view/ContentTypeComboBox.h
+        src/view/ContentTypeComboBox.cpp
         src/network/curlutils.cpp
         src/network/curlutils.h
-        src/debuginfoformatter.h
-        src/debuginfoformatter.cpp
-        src/network/httpclient.cpp
-        src/network/httpclient.h
-        src/network/httpmethod.cpp
-        src/network/httpmethod.h
+        src/DebugInfoFormatter.h
+        src/DebugInfoFormatter.cpp
+        src/network/HttpClient.cpp
+        src/network/HttpClient.h
+        src/network/HttpMethod.cpp
+        src/network/HttpMethod.h
         src/dataobject/Request.h
         src/storage/RequestStorage.cpp
         src/storage/RequestStorage.h
         src/dataobject/Response.h
         src/main.cpp
-        src/mainwindow.h
-        src/mainwindow.cpp
-        src/view/methodcombobox.cpp
-        src/view/methodcombobox.h
-        src/view/propertytablewidget.cpp
-        src/view/propertytablewidget.h
-        src/requestbuilder.cpp)
+        src/MainWindow.h
+        src/MainWindow.cpp
+        src/view/MethodComboBox.cpp
+        src/view/MethodComboBox.h
+        src/view/PropertyTableWidget.cpp
+        src/view/PropertyTableWidget.h
+        src/RequestBuilder.cpp)
 
 target_link_libraries(comet
         Qt::Core
