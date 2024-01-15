@@ -34,8 +34,8 @@ add_executable(comet
         src/main.cpp
         src/mainwindow.h
         src/mainwindow.cpp
-        src/methodcombobox.cpp
-        src/methodcombobox.h
+        src/view/methodcombobox.cpp
+        src/view/methodcombobox.h
         src/view/propertytablewidget.cpp
         src/view/propertytablewidget.h
         src/requestbuilder.cpp)
