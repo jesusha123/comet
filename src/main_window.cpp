@@ -27,9 +27,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Initial method is GET, so hide body tab.
     ui->requestTabWidget->setTabVisible(2, false);
-
-    ui->splitter->setStretchFactor(0, 1);
-    ui->splitter->setStretchFactor(1, 5);
 }
 
 MainWindow::~MainWindow()
@@ -140,9 +137,6 @@ void MainWindow::initializeConnections()
     connect(ui->sendButton, &QPushButton::clicked, this, &MainWindow::sendRequest);
     connect(httpClient, &HttpClient::finished, this, &MainWindow::processResponse);
     connect(ui->urlLineEdit, &QLineEdit::textEdited, this, &MainWindow::processParams);
-
-    connect(ui->saveButton, &QPushButton::clicked, this, &MainWindow::saveRequest);
-    connect(ui->readButton, &QPushButton::clicked, this, &MainWindow::readRequest);
 
     connect(ui->reqContentTypeComboBox, &QComboBox::currentIndexChanged, this, &MainWindow::processReqContentTypeChange);
 
