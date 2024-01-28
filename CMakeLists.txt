@@ -31,8 +31,8 @@ add_executable(comet
         src/network/http_method.cpp
         src/network/http_method.h
         src/dataobject/request.h
-        src/storage/RequestStorage.cpp
-        src/storage/RequestStorage.h
+        src/storage/request_storage.cpp
+        src/storage/request_storage.h
         src/dataobject/response.h
         src/main.cpp
         src/MainWindow.h

@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include "response.h"
 #include "http_method.h"
-#include "RequestStorage.h"
+#include "request_storage.h"
 
 class HttpClient;
 class QTableWidgetItem;
