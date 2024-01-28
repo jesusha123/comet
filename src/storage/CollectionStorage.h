@@ -1,8 +1,8 @@
 #ifndef COLLECTIONSTORAGE_H
 #define COLLECTIONSTORAGE_H
 
-#include "Request.h"
-#include "Collection.h"
+#include "request.h"
+#include "collection.h"
 
 class CollectionStorage
 {

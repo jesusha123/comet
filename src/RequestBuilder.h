@@ -1,7 +1,7 @@
 #ifndef REQUESTBUILDER_H
 #define REQUESTBUILDER_H
 
-#include "Request.h"
+#include "request.h"
 
 namespace Ui {
 class MainWindow;
