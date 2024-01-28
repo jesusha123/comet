@@ -41,20 +41,6 @@ void MainWindow::sendRequest()
     httpClient->sendRequest(request);
 }
 
-void MainWindow::saveRequest()
-{
-    RequestBuilder builder(ui);
-    auto request = builder.buildRequest();
-    requestStorage.save(request);
-}
-
-void MainWindow::readRequest()
-{
-    QScopedPointer<Request> request(requestStorage.read());
-    RequestBuilder builder(ui);
-    builder.restoreRequest(*request);
-}
-
 void MainWindow::processResponse(const Response& response)
 {
     qInfo("Processing response");
