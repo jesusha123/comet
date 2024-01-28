@@ -402,17 +402,17 @@
   <customwidget>
    <class>PropertyTableWidget</class>
    <extends>QTableWidget</extends>
-   <header>propertytablewidget.h</header>
+   <header>property_table_widget.h</header>
   </customwidget>
   <customwidget>
    <class>MethodComboBox</class>
    <extends>QComboBox</extends>
-   <header>methodcombobox.h</header>
+   <header>method_combo_box.h</header>
   </customwidget>
   <customwidget>
    <class>ContentTypeComboBox</class>
    <extends>QComboBox</extends>
-   <header>contenttypecombobox.h</header>
+   <header>content_type_combo_box.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
