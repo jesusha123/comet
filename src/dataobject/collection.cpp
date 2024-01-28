@@ -1,4 +1,4 @@
-#include "Collection.h"
+#include "collection.h"
 
 Collection::Collection(const QString &name)
     : name(name)

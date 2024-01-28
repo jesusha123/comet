@@ -1,5 +1,5 @@
-#include "RequestBuilder.h"
-#include "ui_mainwindow.h"
+#include "request_builder.h"
+#include "ui_main_window.h"
 #include <QUrlQuery>
 
 RequestBuilder::RequestBuilder(Ui::MainWindow* ui)

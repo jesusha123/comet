@@ -2,7 +2,7 @@
 #define CURLUTILS_H
 
 #include <curl/curl.h>
-#include "Response.h"
+#include "response.h"
 
 int debugFunction(CURL *, curl_infotype type, char *data, size_t size, Response* response);
 size_t writeFunction(void *data, size_t size, size_t nmemb, QByteArray* byteArray);

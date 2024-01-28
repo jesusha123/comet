@@ -1,4 +1,4 @@
-#include "ContentTypeComboBox.h"
+#include "content_type_combo_box.h"
 #include <QStringList>
 #include <QStandardItemModel>
 

@@ -1,4 +1,4 @@
-#include "curlutils.h"
+#include "curl_utils.h"
 #include <QDataStream>
 
 int debugFunction(CURL *, curl_infotype type, char *data, size_t size, Response* response)

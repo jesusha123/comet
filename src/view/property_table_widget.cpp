@@ -1,4 +1,4 @@
-#include "PropertyTableWidget.h"
+#include "property_table_widget.h"
 #include <QHeaderView>
 #include <QToolButton>
 #include <QApplication>
