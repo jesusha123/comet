@@ -2,7 +2,7 @@
 #define METHODCOMBOBOX_H
 
 #include <QComboBox>
-#include "HttpMethod.h"
+#include "http_method.h"
 
 class MethodComboBox : public QComboBox
 {

@@ -1,7 +1,7 @@
 #include "MainWindow.h"
 #include "ui_mainwindow.h"
 #include <QDateTime>
-#include "HttpClient.h"
+#include "http_client.h"
 #include "DebugInfoFormatter.h"
 #include <QUrlQuery>
 #include "RequestBuilder.h"

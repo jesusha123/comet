@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include "response.h"
-#include "HttpMethod.h"
+#include "http_method.h"
 #include "RequestStorage.h"
 
 class HttpClient;

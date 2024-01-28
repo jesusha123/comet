@@ -22,14 +22,14 @@ find_package(Qt6 COMPONENTS
 add_executable(comet
         src/view/ContentTypeComboBox.h
         src/view/ContentTypeComboBox.cpp
-        src/network/curlutils.cpp
-        src/network/curlutils.h
+        src/network/curl_utils.cpp
+        src/network/curl_utils.h
         src/DebugInfoFormatter.h
         src/DebugInfoFormatter.cpp
-        src/network/HttpClient.cpp
-        src/network/HttpClient.h
-        src/network/HttpMethod.cpp
-        src/network/HttpMethod.h
+        src/network/http_client.cpp
+        src/network/http_client.h
+        src/network/http_method.cpp
+        src/network/http_method.h
         src/dataobject/request.h
         src/storage/RequestStorage.cpp
         src/storage/RequestStorage.h
