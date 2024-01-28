@@ -20,8 +20,8 @@ find_package(Qt6 COMPONENTS
         REQUIRED)
 
 add_executable(comet
-        src/view/ContentTypeComboBox.h
-        src/view/ContentTypeComboBox.cpp
+        src/view/content_type_combo_box.h
+        src/view/content_type_combo_box.cpp
         src/network/curl_utils.cpp
         src/network/curl_utils.h
         src/DebugInfoFormatter.h
@@ -37,10 +37,10 @@ add_executable(comet
         src/main.cpp
         src/MainWindow.h
         src/MainWindow.cpp
-        src/view/MethodComboBox.cpp
-        src/view/MethodComboBox.h
-        src/view/PropertyTableWidget.cpp
-        src/view/PropertyTableWidget.h
+        src/view/method_combo_box.cpp
+        src/view/method_combo_box.h
+        src/view/property_table_widget.cpp
+        src/view/property_table_widget.h
         src/RequestBuilder.cpp)
 
 target_link_libraries(comet

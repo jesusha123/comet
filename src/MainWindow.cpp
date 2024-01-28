@@ -5,7 +5,7 @@
 #include "DebugInfoFormatter.h"
 #include <QUrlQuery>
 #include "RequestBuilder.h"
-#include "ContentTypeComboBox.h"
+#include "content_type_combo_box.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
