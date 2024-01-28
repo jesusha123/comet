@@ -1,4 +1,4 @@
-#include "MainWindow.h"
+#include "main_window.h"
 #include <curl/curl.h>
 #include <QApplication>
 

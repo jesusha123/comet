@@ -1,10 +1,10 @@
-#include "MainWindow.h"
-#include "ui_mainwindow.h"
+#include "main_window.h"
+#include "ui_main_window.h"
 #include <QDateTime>
 #include "http_client.h"
-#include "DebugInfoFormatter.h"
+#include "debug_info_formatter.h"
 #include <QUrlQuery>
-#include "RequestBuilder.h"
+#include "request_builder.h"
 #include "content_type_combo_box.h"
 
 MainWindow::MainWindow(QWidget *parent)

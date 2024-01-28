@@ -24,8 +24,8 @@ add_executable(comet
         src/view/content_type_combo_box.cpp
         src/network/curl_utils.cpp
         src/network/curl_utils.h
-        src/DebugInfoFormatter.h
-        src/DebugInfoFormatter.cpp
+        src/debug_info_formatter.h
+        src/debug_info_formatter.cpp
         src/network/http_client.cpp
         src/network/http_client.h
         src/network/http_method.cpp
@@ -35,13 +35,13 @@ add_executable(comet
         src/storage/request_storage.h
         src/dataobject/response.h
         src/main.cpp
-        src/MainWindow.h
-        src/MainWindow.cpp
+        src/main_window.h
+        src/main_window.cpp
         src/view/method_combo_box.cpp
         src/view/method_combo_box.h
         src/view/property_table_widget.cpp
         src/view/property_table_widget.h
-        src/RequestBuilder.cpp)
+        src/request_builder.cpp)
 
 target_link_libraries(comet
         Qt::Core
