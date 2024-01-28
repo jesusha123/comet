@@ -19,6 +19,7 @@ find_package(Qt6 COMPONENTS
         Widgets
         REQUIRED)
 
+set(CMAKE_CXX_CLANG_TIDY clang-tidy -checks=-*,cppcoreguidelines-*)
 add_executable(comet
         src/view/content_type_combo_box.h
         src/view/content_type_combo_box.cpp
