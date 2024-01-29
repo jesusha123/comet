@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.27)
-project(comet)
+project(Comet)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_AUTOMOC ON)
@@ -20,7 +20,7 @@ find_package(Qt6 COMPONENTS
         REQUIRED)
 
 set(CMAKE_CXX_CLANG_TIDY clang-tidy -checks=-*,cppcoreguidelines-*)
-add_executable(comet
+add_executable(Comet
         src/view/content_type_combo_box.h
         src/view/content_type_combo_box.cpp
         src/network/curl_utils.cpp
@@ -44,13 +44,13 @@ add_executable(comet
         src/view/property_table_widget.h
         src/request_builder.cpp)
 
-target_link_libraries(comet
+target_link_libraries(Comet
         Qt::Core
         Qt::Gui
         Qt::Widgets
         curl
 )
 
-set_target_properties(comet PROPERTIES
+set_target_properties(Comet PROPERTIES
         MACOSX_BUNDLE TRUE
 )
