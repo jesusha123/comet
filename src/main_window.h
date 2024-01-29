@@ -30,6 +30,7 @@ private slots:
     void processParamsRemoved();
     void processRequestBodyAllowed(Http::HasBody reqHasBody);
     void processReqContentTypeChange(int index);
+    void showAboutDialog();
 
 private:
     void initializeConnections();

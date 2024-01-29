@@ -6,6 +6,7 @@
 #include <QUrlQuery>
 #include "request_builder.h"
 #include "content_type_combo_box.h"
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -138,6 +139,8 @@ void MainWindow::initializeConnections()
     connect(ui->removeReqBodyPropButton, &QToolButton::clicked, ui->reqBodyTableWidget, &PropertyTableWidget::removeSelectedRows);
 
     connect(ui->methodComboBox, &MethodComboBox::requestBodyAllowed, this, &MainWindow::processRequestBodyAllowed);
+
+    connect(ui->action_About, &QAction::triggered, this, &MainWindow::showAboutDialog);
 }
 
 void MainWindow::processReqContentTypeChange(int)
@@ -155,4 +158,15 @@ void MainWindow::processReqContentTypeChange(int)
 void MainWindow::processRequestBodyAllowed(Http::HasBody hasBody)
 {
     ui->requestTabWidget->setTabVisible(2, hasBody != Http::No);
+}
+
+void MainWindow::showAboutDialog()
+{
+    QMessageBox::about(this, "Comet",
+                       "<h1>Comet</h1>"
+                       "<p>Version 0.0.1</p>"
+                       "<p>Powered by open source software:</p>"
+                       "<p>Qt 6 | License: <a href='https://doc.qt.io/qt-6/lgpl.html'>LGPL</a></p>"
+                       "<p>libcurl | License: <a href='https://curl.se/docs/copyright.html'>curl license</a></p>"
+                       );
 }
