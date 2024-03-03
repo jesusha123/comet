@@ -11,6 +11,13 @@ Comet is an API client for sending HTTP requests
 - Open source
 - Local only / no phoning home
 
+## Screenshots
+
+![Headers](./screenshots/headers.png)
+![Body](./screenshots/body.png)
+![Info](./screenshots/info.png)
+![Debug](./screenshots/debug.png)
+
 ## Build
 
 - Install Qt 6 SDK
