@@ -2,6 +2,13 @@
 
 Comet is an API client for sending HTTP requests
 
+## Table of Contents
+
+1. [Features](#features)
+1. [Screenshots](#screenshots)
+1. [Installation](#installation)
+1. [Build](#build)
+
 ## Features
 
 - Fast
