@@ -31,7 +31,11 @@ Comet is an API client for sending HTTP requests
 - Install CMake
 - Generate Makefile
 ```sh
+# Single arch
 cmake .
+
+# Universal macOS build
+cmake . -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64"
 ```
 - Make application
 ```sh
@@ -40,5 +44,5 @@ make
 - Run application
 ```sh
 # macOS
-./comet.app/Contents/MacOS/comet
+open ./Comet.app
 ```
