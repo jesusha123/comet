@@ -17,6 +17,7 @@ find_package(Qt6 COMPONENTS
         Gui
         Widgets
         REQUIRED)
+find_package(CURL REQUIRED)
 
 # TODO: Re-enable clang-tidy
 # set(CMAKE_CXX_CLANG_TIDY clang-tidy -checks=-*,cppcoreguidelines-*)
@@ -49,7 +50,7 @@ target_link_libraries(Comet
         Qt::Core
         Qt::Gui
         Qt::Widgets
-        curl
+        CURL::libcurl
 )
 
 set_target_properties(Comet PROPERTIES
