@@ -34,23 +34,4 @@ Comet is an API client for sending HTTP requests
 
 ## Build
 
-### macOS
-
-- Install Qt 6 SDK via Qt Online Installer
-- Install CMake
-- Generate Makefile
-```sh
-# macOS arm64
-cmake . -DCMAKE_PREFIX_PATH="/Users/<user>/Qt/6.6.2/macos/lib/cmake/Qt6" -DCMAKE_OSX_ARCHITECTURES="arm64"
-
-# macOS x86_64
-cmake . -DCMAKE_PREFIX_PATH="/Users/<user>/Qt/6.6.2/macos/lib/cmake/Qt6" -DCMAKE_OSX_ARCHITECTURES="x86_64"
-```
-- Make application
-```sh
-make
-```
-- Run application
-```sh
-open ./Comet.app
-```
+See [BUILD.md](/BUILD.md)
