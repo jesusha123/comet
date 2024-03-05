@@ -83,7 +83,7 @@ void HttpClient::configureMethodAndBody(CURL* curl, Request& request, QDataStrea
         curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, request.body.size());
         curl_easy_setopt(curl, CURLOPT_POSTFIELDS, request.body.constData());
         break;
-    case Http::DELETE:
+    case Http::DEL:
         curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, request.method.toUtf8().data());
         if(!request.body.isNull()) {
             curl_easy_setopt(curl, CURLOPT_POST, 1L);
