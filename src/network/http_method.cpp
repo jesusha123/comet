@@ -9,7 +9,7 @@ Http::HasBody Http::hasRequestBody(Method method) {
         return No;
     case POST: case PUT: case PATCH:
         return Yes;
-    case DELETE:
+    case DEL:
         return May;
     }
 }
@@ -20,7 +20,7 @@ Http::HasBody Http::hasResponseBody(Method method) {
         return No;
     case GET: case POST: case OPTIONS:
         return Yes;
-    case PUT: case DELETE: case PATCH:
+    case PUT: case DEL: case PATCH:
         return May;
     }
 }
