@@ -27,3 +27,22 @@ make
 ```sh
 open ./Comet.app
 ```
+
+### Windows
+
+- Install Visual Studio 2022 Community Edition 
+- Install Qt 6 SDK via Qt Online Installer
+- Install CMake
+  - `winget install -e --id Kitware.CMake`
+- Install vcpkg
+  - `git clone https://github.com/microsoft/vcpkg` 
+  - `.\vcpkg\bootstrap-vcpkg.bat`
+- Use Qt MSVC terminal to run the next commands
+- Prepare MSVC environment
+  - `"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat" x86_amd64`
+- Generate Makefile
+```sh
+cmake . -DCMAKE_TOOLCHAIN_FILE="C:\Users\chuy_\dev\vcpkg\scripts\buildsystems\vcpkg.cmake" -DCMAKE_OSX_ARCHITECTURES="x86_64" -DVCPKG_TARGET_TRIPLET=x64-windows-release
+```
+- Build
+  - `msbuild Comet.sln /property:Configuration=Release`
