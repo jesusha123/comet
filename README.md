@@ -29,8 +29,15 @@ Comet is an API client for sending HTTP requests
 
 ### macOS
 
-- Download the latest QDirStat dmg file from the [releases page](https://github.com/jesusha123/comet/releases) 
+- Download the latest Comet macOS dmg file from the [releases page](https://github.com/jesusha123/comet/releases) 
 - Open the dmg file and drag Comet.app to the Applications folder
+- Run from the Applications folder
+
+### Windows
+
+- Download the latest Comet Windows zip file from the [releases page](https://github.com/jesusha123/comet/releases) 
+- Extract the zip file
+- Run Comet.exe from the extracted Comet folder
 
 ## Build
 
