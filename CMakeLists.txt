@@ -23,28 +23,28 @@ find_package(CURL REQUIRED)
 # set(CMAKE_CXX_CLANG_TIDY clang-tidy -checks=-*,cppcoreguidelines-*)
 
 add_executable(Comet
-        src/view/content_type_combo_box.h
-        src/view/content_type_combo_box.cpp
+        src/view/ContentTypeComboBox.h
+        src/view/ContentTypeComboBox.cpp
         src/network/curl_utils.cpp
         src/network/curl_utils.h
-        src/debug_info_formatter.h
-        src/debug_info_formatter.cpp
-        src/network/http_client.cpp
-        src/network/http_client.h
-        src/network/http_method.cpp
-        src/network/http_method.h
-        src/dataobject/request.h
-        src/storage/request_storage.cpp
-        src/storage/request_storage.h
-        src/dataobject/response.h
+        src/DebugInfoFormatter.h
+        src/DebugInfoFormatter.cpp
+        src/network/HttpClient.cpp
+        src/network/HttpClient.h
+        src/network/HttpMethod.cpp
+        src/network/HttpMethod.h
+        src/dataobject/Request.h
+        src/storage/RequestStorage.cpp
+        src/storage/RequestStorage.h
+        src/dataobject/Response.h
         src/main.cpp
-        src/main_window.h
-        src/main_window.cpp
-        src/view/method_combo_box.cpp
-        src/view/method_combo_box.h
-        src/view/property_table_widget.cpp
-        src/view/property_table_widget.h
-        src/request_builder.cpp)
+        src/MainWindow.h
+        src/MainWindow.cpp
+        src/view/MethodComboBox.cpp
+        src/view/MethodComboBox.h
+        src/view/PropertyTableWidget.cpp
+        src/view/PropertyTableWidget.h
+        src/RequestBuilder.cpp)
 
 target_link_libraries(Comet
         Qt::Core

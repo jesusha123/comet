@@ -1,4 +1,4 @@
-#include "collection_storage.h"
+#include "CollectionStorage.h"
 #include <QApplication>
 #include <QDir>
 #include <QJsonDocument>

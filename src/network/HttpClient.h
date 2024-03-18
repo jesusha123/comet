@@ -2,8 +2,8 @@
 #define HTTPCLIENT_H
 
 #include <QObject>
-#include "request.h"
-#include "response.h"
+#include "Request.h"
+#include "Response.h"
 
 class HttpClient : public QObject
 {

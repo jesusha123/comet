@@ -359,17 +359,17 @@
   <customwidget>
    <class>PropertyTableWidget</class>
    <extends>QTableWidget</extends>
-   <header>property_table_widget.h</header>
+   <header>PropertyTableWidget.h</header>
   </customwidget>
   <customwidget>
    <class>MethodComboBox</class>
    <extends>QComboBox</extends>
-   <header>method_combo_box.h</header>
+   <header>MethodComboBox.h</header>
   </customwidget>
   <customwidget>
    <class>ContentTypeComboBox</class>
    <extends>QComboBox</extends>
-   <header>content_type_combo_box.h</header>
+   <header>ContentTypeComboBox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

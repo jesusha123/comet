@@ -1,10 +1,10 @@
-#include "http_client.h"
+#include "HttpClient.h"
 #include <QtGlobal>
 #include <curl/curl.h>
-#include "response.h"
+#include "Response.h"
 #include "curl_utils.h"
 #include <QIODevice>
-#include "http_method.h"
+#include "HttpMethod.h"
 
 void HttpClient::sendRequest(Request& request)
 {

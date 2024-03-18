@@ -1,7 +1,7 @@
 #ifndef REQUESTSTORAGE_H
 #define REQUESTSTORAGE_H
 
-#include "request.h"
+#include "Request.h"
 #include <QJsonArray>
 
 class RequestStorage

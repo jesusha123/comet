@@ -1,5 +1,5 @@
-#include "method_combo_box.h"
-#include "http_method.h"
+#include "MethodComboBox.h"
+#include "HttpMethod.h"
 
 MethodComboBox::MethodComboBox(QWidget *parent)
     : QComboBox(parent)
