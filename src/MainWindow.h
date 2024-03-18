@@ -2,8 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "response.h"
-#include "http_method.h"
+#include "Response.h"
+#include "HttpMethod.h"
 
 class HttpClient;
 class QTableWidgetItem;
