@@ -19,6 +19,9 @@ public:
     explicit RequestWidget(std::shared_ptr<HttpClient> httpClient, QWidget* parent = nullptr);
     ~RequestWidget();
 
+signals:
+    void saveRequest();
+
 private slots:
     void sendRequest();
     void processResponse(const Response& response);

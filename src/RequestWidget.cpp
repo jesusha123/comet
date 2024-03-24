@@ -35,7 +35,7 @@ void RequestWidget::sendRequest()
 {
     RequestBuilder builder(ui);
     auto request = builder.buildRequest();
-    httpClient->sendRequest(request);
+    httpClient->sendRequest(std::move(request));
 }
 
 void RequestWidget::processResponse(const Response& response)

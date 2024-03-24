@@ -7,11 +7,11 @@ RequestBuilder::RequestBuilder(Ui::RequestWidget* ui)
 {
 }
 
-Request RequestBuilder::buildRequest()
+std::unique_ptr<Request> RequestBuilder::buildRequest()
 {
-    Request request;
-    request.url.setUrl(ui->urlLineEdit->text(), QUrl::StrictMode);
-    request.method = ui->methodComboBox->currentText();
+    std::unique_ptr<Request> request = std::make_unique<Request>();
+    request->url.setUrl(ui->urlLineEdit->text(), QUrl::StrictMode);
+    request->method = ui->methodComboBox->currentText();
 
     addBody(request);
     addRequestHeaders(request);
@@ -19,31 +19,31 @@ Request RequestBuilder::buildRequest()
     return request;
 }
 
-void RequestBuilder::addBody(Request& request)
+void RequestBuilder::addBody(std::unique_ptr<Request>& request)
 {
     if(Http::hasRequestBody(static_cast<Http::Method>(ui->methodComboBox->currentIndex()))) {
         auto contentType = ui->reqContentTypeComboBox->currentText();
 
         if(contentType.compare("application/x-www-form-urlencoded") == 0 || contentType.compare("multipart/form-data") == 0) {
-            request.headers.append(qMakePair("Content-Type", contentType.toUtf8()));
+            request->headers.append(qMakePair("Content-Type", contentType.toUtf8()));
             QUrlQuery query;
 
             for(const auto& propertyPair : ui->reqBodyTableWidget->getProperties()) {
                 query.addQueryItem(propertyPair.first, propertyPair.second);
             }
 
-            request.body.append(query.toString().toUtf8());
+            request->body.append(query.toString().toUtf8());
         } else if(contentType.compare("none") != 0) {
-            request.body.append(ui->reqBodyTextWidget->toPlainText().toUtf8());
-            request.headers.append(qMakePair("Content-Type", contentType.toUtf8()));
+            request->body.append(ui->reqBodyTextWidget->toPlainText().toUtf8());
+            request->headers.append(qMakePair("Content-Type", contentType.toUtf8()));
         }
     }
 }
 
-void RequestBuilder::addRequestHeaders(Request& request)
+void RequestBuilder::addRequestHeaders(std::unique_ptr<Request>& request)
 {
     for(const auto& propertyPair : ui->requestHeadersTableWidget->getProperties()) {
-        request.headers.append(qMakePair(propertyPair.first.toUtf8(), propertyPair.second.toUtf8()));
+        request->headers.append(qMakePair(propertyPair.first.toUtf8(), propertyPair.second.toUtf8()));
     }
 }
 

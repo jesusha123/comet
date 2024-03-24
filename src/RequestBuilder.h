@@ -11,11 +11,11 @@ class RequestBuilder
 {
 public:
     RequestBuilder(Ui::RequestWidget* ui);
-    Request buildRequest();
+    std::unique_ptr<Request> buildRequest();
     void restoreRequest(const Request& request);
 private:
-    void addBody(Request& request);
-    void addRequestHeaders(Request& request);
+    void addBody(std::unique_ptr<Request>& request);
+    void addRequestHeaders(std::unique_ptr<Request>& request);
 
     Ui::RequestWidget* ui;
 };

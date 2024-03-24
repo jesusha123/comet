@@ -9,13 +9,13 @@ class HttpClient : public QObject
 {
     Q_OBJECT
 public:
-    void sendRequest(Request& request);
+    void sendRequest(std::unique_ptr<Request> request);
 signals:
     void finished(const Response response);
 private:
-    void configureMethodAndBody(CURL* curl, Request& request, QDataStream& dataStream);
+    void configureMethodAndBody(CURL* curl, std::unique_ptr<Request>& request, QDataStream& dataStream);
     void enableDebugData(CURL* curl, const Response& response);
-    curl_slist* addRequestHeaders(CURL* curl, const Request& request);
+    curl_slist* addRequestHeaders(CURL* curl, const std::unique_ptr<Request>& request);
     void addSuccessInfo(CURL* curl, Info& info);
     void addInfoDouble(CURL* curl, CURLINFO curlInfo, const char* infoName, Info& info);
     void addInfoLong(CURL* curl, CURLINFO curlInfo, const char* infoName, Info& info);
