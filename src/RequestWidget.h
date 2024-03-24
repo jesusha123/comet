@@ -16,7 +16,7 @@ class RequestWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit RequestWidget(HttpClient* httpClient, QWidget* parent = nullptr);
+    explicit RequestWidget(std::shared_ptr<HttpClient> httpClient, QWidget* parent = nullptr);
     ~RequestWidget();
 
 private slots:
@@ -33,7 +33,7 @@ private:
     void initializeConnections();
 
     Ui::RequestWidget* ui;
-    HttpClient* httpClient;
+    std::shared_ptr<HttpClient> httpClient;
 };
 
 #endif

@@ -30,7 +30,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    HttpClient *httpClient;
+    std::shared_ptr<HttpClient> httpClient;
     QStringListModel requestModel;
 };
 

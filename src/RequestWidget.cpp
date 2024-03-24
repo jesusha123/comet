@@ -5,7 +5,7 @@
 #include <QDateTime>
 #include <QUrlQuery>
 
-RequestWidget::RequestWidget(HttpClient* httpClient, QWidget *parent)
+RequestWidget::RequestWidget(std::shared_ptr<HttpClient> httpClient, QWidget *parent)
     : httpClient(httpClient)
     , QWidget(parent)
     , ui(new Ui::RequestWidget)
@@ -134,7 +134,7 @@ void RequestWidget::processRequestBodyAllowed(Http::HasBody hasBody)
 void RequestWidget::initializeConnections()
 {
     connect(ui->sendButton, &QPushButton::clicked, this, &RequestWidget::sendRequest);
-    connect(httpClient, &HttpClient::finished, this, &RequestWidget::processResponse);
+    connect(httpClient.get(), &HttpClient::finished, this, &RequestWidget::processResponse);
     connect(ui->urlLineEdit, &QLineEdit::textEdited, this, &RequestWidget::processParams);
 
     connect(ui->reqContentTypeComboBox, &QComboBox::currentIndexChanged, this, &RequestWidget::processReqContentTypeChange);
