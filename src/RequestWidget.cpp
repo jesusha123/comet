@@ -11,6 +11,7 @@ RequestWidget::RequestWidget(HttpClient* httpClient, QWidget *parent)
     , ui(new Ui::RequestWidget)
 {
     ui->setupUi(this);
+    ui->saveButton->setIcon(style()->standardIcon(QStyle::SP_DialogSaveButton));
 
     auto fixedFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
     fixedFont.setPointSize(QApplication::font().pointSize());

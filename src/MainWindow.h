@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QStringListModel>
 #include "Response.h"
 #include "HttpMethod.h"
 
@@ -23,13 +24,14 @@ public:
     ~MainWindow();
 
 private slots:
-    void addRequest();
+    void createRequest();
     void closeTab(int index);
     void showAboutDialog();
 
 private:
     Ui::MainWindow *ui;
     HttpClient *httpClient;
+    QStringListModel requestModel;
 };
 
 #endif

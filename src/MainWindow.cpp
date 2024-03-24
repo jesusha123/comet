@@ -12,8 +12,9 @@ MainWindow::MainWindow(QWidget *parent)
     , httpClient(new HttpClient)
 {
     ui->setupUi(this);
+    ui->collectionView->setModel(&requestModel);
 
-    connect(ui->addRequestButton, &QToolButton::clicked, this, &MainWindow::addRequest);
+    connect(ui->createRequestButton, &QToolButton::clicked, this, &MainWindow::createRequest);
     connect(ui->tabWidget, &QTabWidget::tabCloseRequested, this, &MainWindow::closeTab);
     connect(ui->action_About, &QAction::triggered, this, &MainWindow::showAboutDialog);
 }
@@ -23,9 +24,9 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::addRequest()
+void MainWindow::createRequest()
 {
-    ui->tabWidget->addTab(new RequestWidget(httpClient, this), "Request");
+    ui->tabWidget->addTab(new RequestWidget(httpClient, this), "Untitled Request");
 }
 
 void MainWindow::closeTab(int index)

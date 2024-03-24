@@ -26,9 +26,9 @@
       <widget class="QWidget" name="verticalLayoutWidget">
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
-         <widget class="QToolButton" name="addRequestButton">
+         <widget class="QToolButton" name="createRequestButton">
           <property name="text">
-           <string>Add Request</string>
+           <string>Create Request</string>
           </property>
          </widget>
         </item>
