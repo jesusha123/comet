@@ -40,6 +40,8 @@ add_executable(Comet
         src/main.cpp
         src/MainWindow.h
         src/MainWindow.cpp
+        src/RequestWidget.cpp
+        src/RequestWidget.h
         src/view/MethodComboBox.cpp
         src/view/MethodComboBox.h
         src/view/PropertyTableWidget.cpp

@@ -23,20 +23,13 @@ public:
     ~MainWindow();
 
 private slots:
-    void sendRequest();
-    void processResponse(const Response& response);
-    void processParams(const QString& url);
-    void processParamsChanged(QTableWidgetItem *item);
-    void processParamsRemoved();
-    void processRequestBodyAllowed(Http::HasBody reqHasBody);
-    void processReqContentTypeChange(int index);
+    void addRequest();
+    void closeTab(int index);
     void showAboutDialog();
 
 private:
-    void initializeConnections();
-    void buildParamsLineEdit();
-
     Ui::MainWindow *ui;
     HttpClient *httpClient;
 };
-#endif // MAINWINDOW_H
+
+#endif

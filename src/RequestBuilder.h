@@ -4,20 +4,20 @@
 #include "Request.h"
 
 namespace Ui {
-class MainWindow;
+class RequestWidget;
 }
 
 class RequestBuilder
 {
 public:
-    RequestBuilder(Ui::MainWindow* ui);
+    RequestBuilder(Ui::RequestWidget* ui);
     Request buildRequest();
     void restoreRequest(const Request& request);
 private:
     void addBody(Request& request);
     void addRequestHeaders(Request& request);
 
-    Ui::MainWindow* ui;
+    Ui::RequestWidget* ui;
 };
 
 #endif // REQUESTBUILDER_H

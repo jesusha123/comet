@@ -1,8 +1,8 @@
 #include "RequestBuilder.h"
-#include "ui_main_window.h"
+#include "ui_requestwidget.h"
 #include <QUrlQuery>
 
-RequestBuilder::RequestBuilder(Ui::MainWindow* ui)
+RequestBuilder::RequestBuilder(Ui::RequestWidget* ui)
     : ui(ui)
 {
 }
