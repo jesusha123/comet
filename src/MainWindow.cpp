@@ -26,7 +26,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::createRequest()
 {
-    ui->tabWidget->addTab(new RequestWidget(httpClient, this), "Untitled Request");
+    ui->tabWidget->addTab(new RequestWidget(httpClient, ui->tabWidget), "Untitled Request");
 }
 
 void MainWindow::closeTab(int index)
