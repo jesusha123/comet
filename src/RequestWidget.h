@@ -20,7 +20,7 @@ public:
     ~RequestWidget();
 
 signals:
-    void saveRequest();
+    void saveRequestTriggered();
 
 private slots:
     void sendRequest();

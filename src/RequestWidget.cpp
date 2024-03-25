@@ -134,6 +134,7 @@ void RequestWidget::processRequestBodyAllowed(Http::HasBody hasBody)
 void RequestWidget::initializeConnections()
 {
     connect(ui->sendButton, &QPushButton::clicked, this, &RequestWidget::sendRequest);
+    connect(ui->saveButton, &QToolButton::clicked, this, &RequestWidget::saveRequestTriggered);
     connect(httpClient.get(), &HttpClient::finished, this, &RequestWidget::processResponse);
     connect(ui->urlLineEdit, &QLineEdit::textEdited, this, &RequestWidget::processParams);
 

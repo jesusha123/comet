@@ -27,6 +27,7 @@ private slots:
     void createRequest();
     void closeTab(int index);
     void showAboutDialog();
+    void saveActiveRequest();
 
 private:
     Ui::MainWindow *ui;

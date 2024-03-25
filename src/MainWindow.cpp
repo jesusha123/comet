@@ -26,7 +26,20 @@ MainWindow::~MainWindow()
 
 void MainWindow::createRequest()
 {
-    ui->tabWidget->addTab(new RequestWidget(httpClient, ui->tabWidget), "Untitled Request");
+    auto requestWidget = new RequestWidget(httpClient, ui->tabWidget);
+    ui->tabWidget->addTab(requestWidget, "Untitled Request");
+    connect(requestWidget, &RequestWidget::saveRequestTriggered, this, &MainWindow::saveActiveRequest);
+}
+
+void MainWindow::saveActiveRequest()
+{
+    int rowCount = requestModel.rowCount();
+    if(requestModel.insertRow(rowCount)) {
+        QModelIndex index = requestModel.index(rowCount, 0);
+        requestModel.setData(index, "Titled");
+    } else {
+        qWarning("Row could not be added");
+    }
 }
 
 void MainWindow::closeTab(int index)
