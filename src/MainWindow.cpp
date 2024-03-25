@@ -13,6 +13,10 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     ui->collectionView->setModel(&requestModel);
 
+    // Force left side to be smaller. There is probably a cleaner way...
+    ui->splitter->setStretchFactor(0, 1);
+    ui->splitter->setStretchFactor(1, 1000);
+
     connect(ui->createRequestButton, &QToolButton::clicked, this, &MainWindow::createRequest);
     connect(ui->tabWidget, &QTabWidget::tabCloseRequested, this, &MainWindow::closeTab);
     connect(ui->action_About, &QAction::triggered, this, &MainWindow::showAboutDialog);
