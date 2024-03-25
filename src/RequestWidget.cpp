@@ -1,5 +1,4 @@
 #include "RequestWidget.h"
-#include "ui_requestwidget.h"
 #include "DebugInfoFormatter.h"
 #include "RequestBuilder.h"
 #include <QDateTime>
@@ -26,15 +25,9 @@ RequestWidget::RequestWidget(std::shared_ptr<HttpClient> httpClient, QWidget *pa
     initializeConnections();
 }
 
-RequestWidget::~RequestWidget()
-{
-    delete ui;
-}
-
 void RequestWidget::sendRequest()
 {
-    RequestBuilder builder(ui);
-    auto request = builder.buildRequest();
+    auto request = RequestBuilder::buildRequest(ui);
     httpClient->sendRequest(std::move(request));
 }
 

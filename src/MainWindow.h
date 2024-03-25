@@ -3,17 +3,9 @@
 
 #include <QMainWindow>
 #include <QStringListModel>
-#include "Response.h"
-#include "HttpMethod.h"
+#include "ui_main_window.h"
 
 class HttpClient;
-class QTableWidgetItem;
-
-QT_BEGIN_NAMESPACE
-namespace Ui {
-class MainWindow;
-}
-QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
 {
@@ -21,7 +13,6 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
 
 private slots:
     void createRequest();
@@ -30,7 +21,7 @@ private slots:
     void saveActiveRequest();
 
 private:
-    Ui::MainWindow *ui;
+    std::unique_ptr<Ui::MainWindow> ui;
     std::shared_ptr<HttpClient> httpClient;
     QStringListModel requestModel;
 };

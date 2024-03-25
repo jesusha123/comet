@@ -6,10 +6,7 @@
 #include "Request.h"
 #include "HttpClient.h"
 #include "HttpMethod.h"
-
-namespace Ui {
-class RequestWidget;
-}
+#include "ui_requestwidget.h"
 
 class RequestWidget : public QWidget
 {
@@ -17,7 +14,6 @@ class RequestWidget : public QWidget
 
 public:
     explicit RequestWidget(std::shared_ptr<HttpClient> httpClient, QWidget* parent = nullptr);
-    ~RequestWidget();
 
 signals:
     void saveRequestTriggered();
@@ -35,7 +31,7 @@ private:
     void buildParamsLineEdit();
     void initializeConnections();
 
-    Ui::RequestWidget* ui;
+    std::unique_ptr<Ui::RequestWidget> ui;
     std::shared_ptr<HttpClient> httpClient;
 };
 

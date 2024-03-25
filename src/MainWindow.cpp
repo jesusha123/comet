@@ -1,5 +1,4 @@
 #include "MainWindow.h"
-#include "ui_main_window.h"
 #include <QDateTime>
 #include "HttpClient.h"
 #include "ContentTypeComboBox.h"
@@ -17,11 +16,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->createRequestButton, &QToolButton::clicked, this, &MainWindow::createRequest);
     connect(ui->tabWidget, &QTabWidget::tabCloseRequested, this, &MainWindow::closeTab);
     connect(ui->action_About, &QAction::triggered, this, &MainWindow::showAboutDialog);
-}
-
-MainWindow::~MainWindow()
-{
-    delete ui;
 }
 
 void MainWindow::createRequest()

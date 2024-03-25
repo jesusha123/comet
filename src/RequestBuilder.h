@@ -10,14 +10,10 @@ class RequestWidget;
 class RequestBuilder
 {
 public:
-    RequestBuilder(Ui::RequestWidget* ui);
-    std::unique_ptr<Request> buildRequest();
-    void restoreRequest(const Request& request);
+    static std::unique_ptr<Request> buildRequest(std::unique_ptr<Ui::RequestWidget>& ui);
 private:
-    void addBody(std::unique_ptr<Request>& request);
-    void addRequestHeaders(std::unique_ptr<Request>& request);
-
-    Ui::RequestWidget* ui;
+    static void addBody(std::unique_ptr<Ui::RequestWidget>& ui, std::unique_ptr<Request>& request);
+    static void addRequestHeaders(std::unique_ptr<Ui::RequestWidget>& ui, std::unique_ptr<Request>& request);
 };
 
-#endif // REQUESTBUILDER_H
+#endif
