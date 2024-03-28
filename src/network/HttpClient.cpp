@@ -6,7 +6,7 @@
 #include <QIODevice>
 #include "HttpMethod.h"
 
-void HttpClient::sendRequest(std::unique_ptr<Request> request)
+void HttpClient::sendRequest(Request request)
 {
     qInfo("Sending request");
     CURL *curl;
@@ -18,10 +18,10 @@ void HttpClient::sendRequest(std::unique_ptr<Request> request)
 
         enableDebugData(curl, response);
 
-        curl_easy_setopt(curl, CURLOPT_URL, request->url.toString().toUtf8().data());
+        curl_easy_setopt(curl, CURLOPT_URL, request.url.toString().toUtf8().data());
         curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
 
-        QDataStream bodyDataStream(request->body);
+        QDataStream bodyDataStream(request.body);
         configureMethodAndBody(curl, request, bodyDataStream);
 
         auto list = addRequestHeaders(curl, request);
@@ -58,9 +58,9 @@ void HttpClient::sendRequest(std::unique_ptr<Request> request)
  * This method combines both HTTP method and body because they go hand in hand. Setting the wrong body options
  * will make cURL send a different HTTP method than expected.
  */
-void HttpClient::configureMethodAndBody(CURL* curl, std::unique_ptr<Request>& request, QDataStream& dataStream)
+void HttpClient::configureMethodAndBody(CURL* curl, Request& request, QDataStream& dataStream)
 {
-    auto methodKey = Http::OfficialMethods.indexOf(request->method);
+    auto methodKey = Http::OfficialMethods.indexOf(request.method);
 
     switch(methodKey) {
     case Http::GET:
@@ -68,34 +68,34 @@ void HttpClient::configureMethodAndBody(CURL* curl, std::unique_ptr<Request>& re
         break;
     case Http::POST:
         curl_easy_setopt(curl, CURLOPT_POST, 1L);
-        curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, request->body.size());
-        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, request->body.constData());
+        curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, request.body.size());
+        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, request.body.constData());
         break;
     case Http::PUT:
         curl_easy_setopt(curl, CURLOPT_UPLOAD, 1L);
         curl_easy_setopt(curl, CURLOPT_READFUNCTION, readFunction);
         curl_easy_setopt(curl, CURLOPT_READDATA, &dataStream);
-        curl_easy_setopt(curl, CURLOPT_INFILESIZE_LARGE, request->body.size());
+        curl_easy_setopt(curl, CURLOPT_INFILESIZE_LARGE, request.body.size());
         break;
     case Http::PATCH:
-        curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, request->method.toUtf8().data());
+        curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, request.method.toUtf8().data());
         curl_easy_setopt(curl, CURLOPT_POST, 1L);
-        curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, request->body.size());
-        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, request->body.constData());
+        curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, request.body.size());
+        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, request.body.constData());
         break;
     case Http::DEL:
-        curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, request->method.toUtf8().data());
-        if(!request->body.isNull()) {
+        curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, request.method.toUtf8().data());
+        if(!request.body.isNull()) {
             curl_easy_setopt(curl, CURLOPT_POST, 1L);
-            curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, request->body.size());
-            curl_easy_setopt(curl, CURLOPT_POSTFIELDS, request->body.constData());
+            curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, request.body.size());
+            curl_easy_setopt(curl, CURLOPT_POSTFIELDS, request.body.constData());
         }
         break;
     case Http::HEAD:
         curl_easy_setopt(curl, CURLOPT_NOBODY, 1L);
         break;
     default:
-        curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, request->method.toUtf8().data());
+        curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, request.method.toUtf8().data());
         break;
     }
 }
@@ -107,11 +107,11 @@ void HttpClient::enableDebugData(CURL* curl, const Response& response)
     curl_easy_setopt(curl, CURLOPT_DEBUGDATA, &response);
 }
 
-curl_slist* HttpClient::addRequestHeaders(CURL* curl, const std::unique_ptr<Request>& request)
+curl_slist* HttpClient::addRequestHeaders(CURL* curl, const Request& request)
 {
     struct curl_slist *list = NULL;
 
-    for(const auto &header : request->headers) {
+    for(const auto &header : request.headers) {
         QByteArray joinedHeader(header.first);
         if(header.second.isEmpty()) {
             // cURL requires a semi-colon for key-only headers

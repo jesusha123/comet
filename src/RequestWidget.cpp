@@ -124,10 +124,15 @@ void RequestWidget::processRequestBodyAllowed(Http::HasBody hasBody)
     ui->requestTabWidget->setTabVisible(2, hasBody != Http::No);
 }
 
+void RequestWidget::saveButtonClicked()
+{
+    qInfo("Save button clicked");
+}
+
 void RequestWidget::initializeConnections()
 {
     connect(ui->sendButton, &QPushButton::clicked, this, &RequestWidget::sendRequest);
-    connect(ui->saveButton, &QToolButton::clicked, this, &RequestWidget::saveRequestTriggered);
+    connect(ui->saveButton, &QToolButton::clicked, this, &RequestWidget::saveButtonClicked);
     connect(httpClient.get(), &HttpClient::finished, this, &RequestWidget::processResponse);
     connect(ui->urlLineEdit, &QLineEdit::textEdited, this, &RequestWidget::processParams);
 
