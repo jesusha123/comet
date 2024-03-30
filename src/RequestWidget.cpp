@@ -25,10 +25,15 @@ RequestWidget::RequestWidget(std::shared_ptr<HttpClient> httpClient, QWidget *pa
     initializeConnections();
 }
 
+Request RequestWidget::getRequest()
+{
+    return RequestBuilder::buildRequest(ui);
+}
+
 void RequestWidget::sendRequest()
 {
     auto request = RequestBuilder::buildRequest(ui);
-    httpClient->sendRequest(std::move(request));
+    httpClient->sendRequest(request);
 }
 
 void RequestWidget::processResponse(const Response& response)
@@ -124,15 +129,10 @@ void RequestWidget::processRequestBodyAllowed(Http::HasBody hasBody)
     ui->requestTabWidget->setTabVisible(2, hasBody != Http::No);
 }
 
-void RequestWidget::saveButtonClicked()
-{
-    qInfo("Save button clicked");
-}
-
 void RequestWidget::initializeConnections()
 {
     connect(ui->sendButton, &QPushButton::clicked, this, &RequestWidget::sendRequest);
-    connect(ui->saveButton, &QToolButton::clicked, this, &RequestWidget::saveButtonClicked);
+    connect(ui->saveButton, &QToolButton::clicked, this, &RequestWidget::saveRequestTriggered);
     connect(httpClient.get(), &HttpClient::finished, this, &RequestWidget::processResponse);
     connect(ui->urlLineEdit, &QLineEdit::textEdited, this, &RequestWidget::processParams);
 

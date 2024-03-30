@@ -3,6 +3,7 @@
 #include "HttpClient.h"
 #include "ContentTypeComboBox.h"
 #include "RequestWidget.h"
+#include "RequestStorage.h"
 #include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent)
@@ -31,12 +32,25 @@ void MainWindow::createRequest()
 
 void MainWindow::saveActiveRequest()
 {
+    // Add new request to collection view
     int rowCount = requestModel.rowCount();
     if(requestModel.insertRow(rowCount)) {
         QModelIndex index = requestModel.index(rowCount, 0);
         requestModel.setData(index, "Titled");
     } else {
         qWarning("Row could not be added");
+    }
+
+    // Save to storage
+    RequestWidget* requestWidget = dynamic_cast<RequestWidget*>(ui->tabWidget->currentWidget());
+    if(requestWidget) {
+        auto request = requestWidget->getRequest();
+        RequestStorage requestStorage;
+        if(!requestStorage.save(request)) {
+            qWarning("Failure to save request");
+        }
+    } else {
+        qWarning("Failed cast");
     }
 }
 

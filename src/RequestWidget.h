@@ -14,6 +14,7 @@ class RequestWidget : public QWidget
 
 public:
     explicit RequestWidget(std::shared_ptr<HttpClient> httpClient, QWidget* parent = nullptr);
+    Request getRequest();
 
 signals:
     void saveRequestTriggered();
@@ -26,7 +27,6 @@ private slots:
     void processParamsRemoved();
     void processRequestBodyAllowed(Http::HasBody reqHasBody);
     void processReqContentTypeChange(int index);
-    void saveButtonClicked();
 
 private:
     void buildParamsLineEdit();
