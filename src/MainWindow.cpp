@@ -35,7 +35,9 @@ void MainWindow::collectionItemActivated(const QModelIndex &index)
     auto request = collection.at(index.row());
     auto requestWidget = new RequestWidget(httpClient, ui->tabWidget);
     requestWidget->restoreRequest(request);
+
     ui->tabWidget->addTab(requestWidget, request.name);
+    requestWidget->setName(request.name);
 }
 
 void MainWindow::loadCollection()
