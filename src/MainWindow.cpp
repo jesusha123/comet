@@ -20,7 +20,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->splitter->setStretchFactor(0, 1);
     ui->splitter->setStretchFactor(1, 1000);
 
-    connect(ui->actionClose, &QAction::triggered, this, &MainWindow::closeTab);
+    connect(ui->actionClose, &QAction::triggered, this, &MainWindow::closeActiveTab);
     connect(ui->actionNew, &QAction::triggered, this, &MainWindow::createRequest);
     connect(ui->actionSave, &QAction::triggered, this, &MainWindow::saveActiveRequest);
     connect(ui->tabWidget, &QTabWidget::tabCloseRequested, this, &MainWindow::closeTab);
