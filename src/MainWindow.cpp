@@ -77,6 +77,7 @@ void MainWindow::createRequest()
 {
     auto requestWidget = new RequestWidget(httpClient, ui->tabWidget);
     ui->tabWidget->addTab(requestWidget, "Untitled Request");
+    ui->tabWidget->setCurrentIndex(ui->tabWidget->count()-1);
 }
 
 void MainWindow::saveActiveRequest()
