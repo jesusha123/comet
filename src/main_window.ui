@@ -84,6 +84,7 @@
    </attribute>
    <addaction name="actionNew"/>
    <addaction name="actionSave"/>
+   <addaction name="actionClose"/>
   </widget>
   <action name="action_About">
    <property name="text">
@@ -118,6 +119,21 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionClose">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/close.svg</normaloff>:/icons/close.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Close</string>
+   </property>
+   <property name="toolTip">
+    <string>Close Request</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+W</string>
    </property>
   </action>
  </widget>

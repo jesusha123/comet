@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QStringListModel>
 #include "ui_main_window.h"
+#include "Request.h"
 
 class HttpClient;
 
@@ -16,14 +17,22 @@ public:
 
 private slots:
     void createRequest();
+    void closeActiveTab();
     void closeTab(int index);
     void showAboutDialog();
     void saveActiveRequest();
+    void addRequestToCollection(Request& request);
+    void addRequestToModel(Request& request);
+    void collectionItemActivated(const QModelIndex& index);
 
 private:
+    void loadCollection();
+    void ensureRequestHasName(Request& request);
+
     std::unique_ptr<Ui::MainWindow> ui;
     std::shared_ptr<HttpClient> httpClient;
     QStringListModel requestModel;
+    QList<Request> collection;
 };
 
 #endif

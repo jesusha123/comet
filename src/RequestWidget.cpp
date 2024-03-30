@@ -4,9 +4,8 @@
 #include <QDateTime>
 #include <QUrlQuery>
 
-RequestWidget::RequestWidget(std::shared_ptr<HttpClient> httpClient, QUuid uuid, QWidget *parent)
+RequestWidget::RequestWidget(std::shared_ptr<HttpClient> httpClient, QWidget *parent, QString name)
     : httpClient(httpClient)
-    , uuid(uuid)
     , QWidget(parent)
     , ui(new Ui::RequestWidget)
 {
@@ -27,7 +26,14 @@ RequestWidget::RequestWidget(std::shared_ptr<HttpClient> httpClient, QUuid uuid,
 
 Request RequestWidget::getRequest()
 {
-    return RequestBuilder::buildRequest(ui);
+    auto request = RequestBuilder::buildRequest(ui);
+    request.name = name;
+    return request;
+}
+
+void RequestWidget::restoreRequest(const Request& request)
+{
+    RequestBuilder::restoreRequest(ui, request);
 }
 
 void RequestWidget::sendRequest()

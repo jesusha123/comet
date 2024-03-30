@@ -14,9 +14,11 @@ class RequestWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit RequestWidget(std::shared_ptr<HttpClient> httpClient, QUuid uuid, QWidget* parent = nullptr);
+    explicit RequestWidget(std::shared_ptr<HttpClient> httpClient, QWidget* parent, QString name = QString());
     Request getRequest();
-    QUuid getUuid() { return uuid; }
+    void restoreRequest(const Request& request);
+    QString getName() { return name; }
+    void setName(QString newName) { name = newName; }
 
 private slots:
     void sendRequest();
@@ -33,7 +35,7 @@ private:
 
     std::unique_ptr<Ui::RequestWidget> ui;
     std::shared_ptr<HttpClient> httpClient;
-    QUuid uuid;
+    QString name;
 };
 
 #endif
