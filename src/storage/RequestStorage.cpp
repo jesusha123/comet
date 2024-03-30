@@ -14,10 +14,10 @@ RequestStorage::RequestStorage()
     }
 }
 
-bool RequestStorage::save(const Request& request)
+bool RequestStorage::save(const Request& request, QString fileName)
 {
     qInfo("Saving request started");
-    QFile saveFile(appDataDirectory + "/save.json");
+    QFile saveFile(appDataDirectory + "/" + fileName + ".json");
 
     if (!saveFile.open(QIODevice::WriteOnly)) {
         qWarning("Couldn't open save file.");

@@ -26,27 +26,19 @@ MainWindow::MainWindow(QWidget *parent)
 
 void MainWindow::createRequest()
 {
-    auto requestWidget = new RequestWidget(httpClient, ui->tabWidget);
+    auto requestWidget = new RequestWidget(httpClient, QUuid::createUuid(), ui->tabWidget);
     ui->tabWidget->addTab(requestWidget, "Untitled Request");
 }
 
 void MainWindow::saveActiveRequest()
 {
-    // Add new request to collection view
-    int rowCount = requestModel.rowCount();
-    if(requestModel.insertRow(rowCount)) {
-        QModelIndex index = requestModel.index(rowCount, 0);
-        requestModel.setData(index, "Titled");
-    } else {
-        qWarning("Row could not be added");
-    }
-
-    // Save to storage
     RequestWidget* requestWidget = dynamic_cast<RequestWidget*>(ui->tabWidget->currentWidget());
     if(requestWidget) {
-        auto request = requestWidget->getRequest();
         RequestStorage requestStorage;
-        if(!requestStorage.save(request)) {
+        QString uuid = requestWidget->getUuid().toString(QUuid::WithoutBraces);
+        if(requestStorage.save(requestWidget->getRequest(), uuid)) {
+            qInfo("Saved request with id %s", qPrintable(uuid));
+        } else {
             qWarning("Failure to save request");
         }
     } else {

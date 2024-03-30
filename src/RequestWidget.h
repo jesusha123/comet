@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QTableWidgetItem>
+#include <QUuid>
 #include "Request.h"
 #include "HttpClient.h"
 #include "HttpMethod.h"
@@ -13,8 +14,9 @@ class RequestWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit RequestWidget(std::shared_ptr<HttpClient> httpClient, QWidget* parent = nullptr);
+    explicit RequestWidget(std::shared_ptr<HttpClient> httpClient, QUuid uuid, QWidget* parent = nullptr);
     Request getRequest();
+    QUuid getUuid() { return uuid; }
 
 private slots:
     void sendRequest();
@@ -31,6 +33,7 @@ private:
 
     std::unique_ptr<Ui::RequestWidget> ui;
     std::shared_ptr<HttpClient> httpClient;
+    QUuid uuid;
 };
 
 #endif

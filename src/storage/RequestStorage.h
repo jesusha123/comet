@@ -8,7 +8,7 @@ class RequestStorage
 {
 public:
     RequestStorage();
-    bool save(const Request& request);
+    bool save(const Request& request, const QString fileName);
     Request* read();
 private:
     QJsonArray getJsonHeaders(const Request& request);
