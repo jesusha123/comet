@@ -78,30 +78,40 @@ void MainWindow::saveActiveRequest()
     RequestWidget* requestWidget = dynamic_cast<RequestWidget*>(ui->tabWidget->currentWidget());
     if(requestWidget) {
         auto request = requestWidget->getRequest();
-        ensureRequestHasName(request);
-        ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), request.name);
-        requestWidget->setName(request.name);
+        if(ensureRequestHasName(request)) {
+            ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), request.name);
+            requestWidget->setName(request.name);
 
-        RequestStorage requestStorage;
-        QString name = requestWidget->getName();
-        if(requestStorage.saveRequest(request, name)) {
-            addRequestToCollection(request);
-            qInfo("Saved request with id %s", qPrintable(name));
+            RequestStorage requestStorage;
+            QString name = requestWidget->getName();
+            if(requestStorage.saveRequest(request, name)) {
+                addRequestToCollection(request);
+                qInfo("Saved request with id %s", qPrintable(name));
+            } else {
+                qWarning("Failure to save request");
+            }
         } else {
-            qWarning("Failure to save request");
+            qInfo("Save process canceled");
         }
     } else {
         qWarning("Failed cast");
     }
 }
 
-void MainWindow::ensureRequestHasName(Request& request)
+bool MainWindow::ensureRequestHasName(Request& request)
 {
+    bool ok = true;
     if(request.name.isEmpty()) {
-        QString text = QInputDialog::getText(this, "Request Name", "Request Name");
-        qInfo("Request name is: %s", qPrintable(text));
+        QString text = QInputDialog::getText(
+                this,
+                "Request Name",
+                "Enter Request Name",
+                QLineEdit::Normal,
+                QString(),
+                &ok);
         request.name = text;
     }
+    return ok;
 }
 
 void MainWindow::closeActiveTab()

@@ -27,7 +27,7 @@ private slots:
 
 private:
     void loadCollection();
-    void ensureRequestHasName(Request& request);
+    bool ensureRequestHasName(Request& request);
 
     std::unique_ptr<Ui::MainWindow> ui;
     std::shared_ptr<HttpClient> httpClient;
