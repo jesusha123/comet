@@ -33,11 +33,17 @@ MainWindow::MainWindow(QWidget *parent)
 void MainWindow::collectionItemActivated(const QModelIndex &index)
 {
     auto request = collection.at(index.row());
-    auto requestWidget = new RequestWidget(httpClient, ui->tabWidget);
-    requestWidget->restoreRequest(request);
+    int tabIndex = findRequestTab(request.name);
+    if(tabIndex >= 0) {
+        ui->tabWidget->setCurrentIndex(tabIndex);
+    } else {
+        auto requestWidget = new RequestWidget(httpClient, ui->tabWidget);
+        requestWidget->restoreRequest(request);
 
-    ui->tabWidget->addTab(requestWidget, request.name);
-    requestWidget->setName(request.name);
+        ui->tabWidget->addTab(requestWidget, request.name);
+        requestWidget->setName(request.name);
+        ui->tabWidget->setCurrentIndex(ui->tabWidget->count()-1);
+    }
 }
 
 void MainWindow::loadCollection()
@@ -85,7 +91,9 @@ void MainWindow::saveActiveRequest()
             RequestStorage requestStorage;
             QString name = requestWidget->getName();
             if(requestStorage.saveRequest(request, name)) {
-                addRequestToCollection(request);
+                if(!requestExists(name)) {
+                    addRequestToCollection(request);
+                }
                 qInfo("Saved request with id %s", qPrintable(name));
             } else {
                 qWarning("Failure to save request");
@@ -96,6 +104,27 @@ void MainWindow::saveActiveRequest()
     } else {
         qWarning("Failed cast");
     }
+}
+
+bool MainWindow::requestExists(QString name)
+{
+    for(auto s : requestModel.stringList()) {
+        if(name == s) {
+            return true;
+        }
+    }
+    return false;
+}
+
+int MainWindow::findRequestTab(QString name)
+{
+    for (int i = 0; i < ui->tabWidget->count(); i++) {
+        RequestWidget* requestWidget = dynamic_cast<RequestWidget*>(ui->tabWidget->widget(i));
+        if(name == requestWidget->getName()) {
+            return i;
+        }
+    }
+    return -1;
 }
 
 bool MainWindow::ensureRequestHasName(Request& request)
