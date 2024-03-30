@@ -1,25 +1,20 @@
 #include "RequestBuilder.h"
-#include "ui_main_window.h"
+#include "ui_requestwidget.h"
 #include <QUrlQuery>
 
-RequestBuilder::RequestBuilder(Ui::MainWindow* ui)
-    : ui(ui)
-{
-}
-
-Request RequestBuilder::buildRequest()
+Request RequestBuilder::buildRequest(std::unique_ptr<Ui::RequestWidget>& ui)
 {
     Request request;
     request.url.setUrl(ui->urlLineEdit->text(), QUrl::StrictMode);
     request.method = ui->methodComboBox->currentText();
 
-    addBody(request);
-    addRequestHeaders(request);
+    addBody(ui, request);
+    addRequestHeaders(ui, request);
 
     return request;
 }
 
-void RequestBuilder::addBody(Request& request)
+void RequestBuilder::addBody(std::unique_ptr<Ui::RequestWidget>& ui, Request& request)
 {
     if(Http::hasRequestBody(static_cast<Http::Method>(ui->methodComboBox->currentIndex()))) {
         auto contentType = ui->reqContentTypeComboBox->currentText();
@@ -40,14 +35,14 @@ void RequestBuilder::addBody(Request& request)
     }
 }
 
-void RequestBuilder::addRequestHeaders(Request& request)
+void RequestBuilder::addRequestHeaders(std::unique_ptr<Ui::RequestWidget>& ui, Request& request)
 {
     for(const auto& propertyPair : ui->requestHeadersTableWidget->getProperties()) {
         request.headers.append(qMakePair(propertyPair.first.toUtf8(), propertyPair.second.toUtf8()));
     }
 }
 
-void RequestBuilder::restoreRequest(const Request& request)
+void RequestBuilder::restoreRequest(std::unique_ptr<Ui::RequestWidget>& ui, const Request& request)
 {
     ui->urlLineEdit->setText(request.url.toString());
 

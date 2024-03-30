@@ -4,20 +4,17 @@
 #include "Request.h"
 
 namespace Ui {
-class MainWindow;
+class RequestWidget;
 }
 
 class RequestBuilder
 {
 public:
-    RequestBuilder(Ui::MainWindow* ui);
-    Request buildRequest();
-    void restoreRequest(const Request& request);
+    static Request buildRequest(std::unique_ptr<Ui::RequestWidget>& ui);
+    static void restoreRequest(std::unique_ptr<Ui::RequestWidget>& ui, const Request& request);
 private:
-    void addBody(Request& request);
-    void addRequestHeaders(Request& request);
-
-    Ui::MainWindow* ui;
+    static void addBody(std::unique_ptr<Ui::RequestWidget>& ui, Request& request);
+    static void addRequestHeaders(std::unique_ptr<Ui::RequestWidget>& ui, Request& request);
 };
 
-#endif // REQUESTBUILDER_H
+#endif

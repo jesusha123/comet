@@ -9,7 +9,7 @@ class HttpClient : public QObject
 {
     Q_OBJECT
 public:
-    void sendRequest(Request& request);
+    void sendRequest(Request request);
 signals:
     void finished(const Response response);
 private:

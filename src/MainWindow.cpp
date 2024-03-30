@@ -1,12 +1,12 @@
 #include "MainWindow.h"
-#include "ui_main_window.h"
 #include <QDateTime>
 #include "HttpClient.h"
-#include "DebugInfoFormatter.h"
-#include <QUrlQuery>
-#include "RequestBuilder.h"
 #include "ContentTypeComboBox.h"
+#include "RequestWidget.h"
+#include "RequestStorage.h"
 #include <QMessageBox>
+#include <QInputDialog>
+#include <QAbstractItemView>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -14,150 +14,148 @@ MainWindow::MainWindow(QWidget *parent)
     , httpClient(new HttpClient)
 {
     ui->setupUi(this);
+    ui->collectionView->setModel(&requestModel);
 
-    auto fixedFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
-    fixedFont.setPointSize(QApplication::font().pointSize());
-    ui->debugPlainTextEdit->setFont(fixedFont);
+    // Force left side to be smaller. There is probably a cleaner way...
+    ui->splitter->setStretchFactor(0, 1);
+    ui->splitter->setStretchFactor(1, 1000);
 
-    ui->responseHeadersTableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    ui->infoTableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
-
-    initializeConnections();
-
-    ui->statusBar->showMessage("Ready");
-
-    // Initial method is GET, so hide body tab.
-    ui->requestTabWidget->setTabVisible(2, false);
-}
-
-MainWindow::~MainWindow()
-{
-    delete ui;
-}
-
-void MainWindow::sendRequest()
-{
-    RequestBuilder builder(ui);
-    auto request = builder.buildRequest();
-    httpClient->sendRequest(request);
-}
-
-void MainWindow::processResponse(const Response& response)
-{
-    qInfo("Processing response");
-    ui->responseBodyPlainTextEdit->setPlainText(response.body.data());
-
-    auto headerCount = response.headers.count();
-    auto headersTableWidget = ui->responseHeadersTableWidget;
-    headersTableWidget->clearContents();
-    headersTableWidget->setRowCount(headerCount);
-
-    for(int rowIndex=0; rowIndex<headerCount; rowIndex++) {
-        auto header = response.headers.at(rowIndex);
-        headersTableWidget->setItem(rowIndex, 0, new QTableWidgetItem(header.first));
-        headersTableWidget->setItem(rowIndex, 1, new QTableWidgetItem(header.second));
-    }
-
-    DebugInfoFormatter formatter(response.debugInfo);
-    ui->debugPlainTextEdit->setPlainText(formatter.toString());
-
-    auto statusMessage = QString("%1%2 [%3]").arg(response.statusLine, response.error, QDateTime::currentDateTime().toString());
-    ui->statusBar->showMessage(statusMessage);
-
-    ui->infoTableWidget->setRowCount(response.info.size());
-    int row = 0;
-    for(const auto& pair : response.info) {
-        ui->infoTableWidget->setProperty(row++, pair.first, pair.second);
-    }
-}
-
-void MainWindow::processParams(const QString& url)
-{
-    auto urlObject = QUrl(url);
-    if(urlObject.hasQuery()) {
-        auto queryItems = QUrlQuery(urlObject).queryItems();
-        ui->requestParamsTableWidget->setRowCount(queryItems.count());
-
-        ui->requestParamsTableWidget->blockSignals(true);
-        for(int i=0; i<queryItems.count(); i++) {
-            auto queryItem = queryItems.at(i);
-            ui->requestParamsTableWidget->setProperty(i, queryItem.first, queryItem.second);
-        }
-        ui->requestParamsTableWidget->blockSignals(false);
-
-    } else {
-        ui->requestParamsTableWidget->setRowCount(0);
-    }
-}
-
-void MainWindow::processParamsChanged(QTableWidgetItem *)
-{
-    buildParamsLineEdit();
-}
-
-void MainWindow::processParamsRemoved()
-{
-    buildParamsLineEdit();
-}
-
-void MainWindow::buildParamsLineEdit()
-{
-    auto url = QUrl(ui->urlLineEdit->text());
-    auto urlQuery = QUrlQuery();
-
-    for(int rowIndex=0; rowIndex < ui->requestParamsTableWidget->rowCount(); rowIndex++) {
-        auto keyItem = ui->requestParamsTableWidget->item(rowIndex, 0);
-        auto keyText = keyItem ? keyItem->text() : QString();
-
-        auto valueItem = ui->requestParamsTableWidget->item(rowIndex, 1);
-        auto valueText = valueItem ? valueItem->text() : QString();
-
-        urlQuery.addQueryItem(keyText, valueText);
-    }
-
-    url.setQuery(urlQuery);
-    ui->urlLineEdit->setText(url.toString());
-}
-
-void MainWindow::initializeConnections()
-{
-    connect(ui->sendButton, &QPushButton::clicked, this, &MainWindow::sendRequest);
-    connect(httpClient, &HttpClient::finished, this, &MainWindow::processResponse);
-    connect(ui->urlLineEdit, &QLineEdit::textEdited, this, &MainWindow::processParams);
-
-    connect(ui->reqContentTypeComboBox, &QComboBox::currentIndexChanged, this, &MainWindow::processReqContentTypeChange);
-
-    connect(ui->addReqParamButton, &QToolButton::clicked, ui->requestParamsTableWidget, &PropertyTableWidget::appendRow);
-    connect(ui->removeReqParamButton, &QToolButton::clicked, ui->requestParamsTableWidget, &PropertyTableWidget::removeSelectedRows);
-    connect(ui->requestParamsTableWidget, &QTableWidget::itemChanged, this, &MainWindow::processParamsChanged);
-    connect(ui->requestParamsTableWidget, &PropertyTableWidget::rowsRemoved, this, &MainWindow::processParamsRemoved);
-
-    connect(ui->addReqHeaderButton, &QToolButton::clicked, ui->requestHeadersTableWidget, &PropertyTableWidget::appendRow);
-    connect(ui->removeReqHeaderButton, &QToolButton::clicked, ui->requestHeadersTableWidget, &PropertyTableWidget::removeSelectedRows);
-
-    connect(ui->addReqBodyPropButton, &QToolButton::clicked, ui->reqBodyTableWidget, &PropertyTableWidget::appendRow);
-    connect(ui->removeReqBodyPropButton, &QToolButton::clicked, ui->reqBodyTableWidget, &PropertyTableWidget::removeSelectedRows);
-
-    connect(ui->methodComboBox, &MethodComboBox::requestBodyAllowed, this, &MainWindow::processRequestBodyAllowed);
-
+    connect(ui->actionClose, &QAction::triggered, this, &MainWindow::closeActiveTab);
+    connect(ui->actionNew, &QAction::triggered, this, &MainWindow::createRequest);
+    connect(ui->actionSave, &QAction::triggered, this, &MainWindow::saveActiveRequest);
+    connect(ui->tabWidget, &QTabWidget::tabCloseRequested, this, &MainWindow::closeTab);
+    connect(ui->collectionView, &QAbstractItemView::clicked, this, &MainWindow::collectionItemActivated);
     connect(ui->action_About, &QAction::triggered, this, &MainWindow::showAboutDialog);
+
+    loadCollection();
 }
 
-void MainWindow::processReqContentTypeChange(int)
+void MainWindow::collectionItemActivated(const QModelIndex &index)
 {
-    auto contentType = ui->reqContentTypeComboBox->currentText();
-    if(contentType.compare("none") == 0) {
-        ui->reqBodyStackedWidget->setCurrentIndex(0);
-    } else if(contentType.compare("application/x-www-form-urlencoded") == 0 || contentType.compare("multipart/form-data") == 0) {
-        ui->reqBodyStackedWidget->setCurrentIndex(2);
+    auto request = collection.at(index.row());
+    int tabIndex = findRequestTab(request.name);
+    if(tabIndex >= 0) {
+        ui->tabWidget->setCurrentIndex(tabIndex);
     } else {
-        ui->reqBodyStackedWidget->setCurrentIndex(1);
+        auto requestWidget = new RequestWidget(httpClient, ui->tabWidget);
+        requestWidget->restoreRequest(request);
+
+        ui->tabWidget->addTab(requestWidget, request.name);
+        requestWidget->setName(request.name);
+        ui->tabWidget->setCurrentIndex(ui->tabWidget->count()-1);
     }
 }
 
-void MainWindow::processRequestBodyAllowed(Http::HasBody hasBody)
+void MainWindow::loadCollection()
 {
-    ui->requestTabWidget->setTabVisible(2, hasBody != Http::No);
+    collection = RequestStorage().readCollection();
+
+    for(auto request : collection) {
+        addRequestToModel(request);
+    }
+}
+
+void MainWindow::addRequestToCollection(Request &request)
+{
+    qInfo("addRequestToCollection: %s", qPrintable(request.name));
+    collection.append(request);
+    addRequestToModel(request);
+}
+
+void MainWindow::addRequestToModel(Request& request)
+{
+    int rowCount = requestModel.rowCount();
+    if(requestModel.insertRow(rowCount)) {
+        QModelIndex index = requestModel.index(rowCount, 0);
+        requestModel.setData(index, request.name);
+    } else {
+        qWarning("Request could not be added to request model");
+    }
+}
+
+void MainWindow::createRequest()
+{
+    auto requestWidget = new RequestWidget(httpClient, ui->tabWidget);
+    ui->tabWidget->addTab(requestWidget, "Untitled Request");
+}
+
+void MainWindow::saveActiveRequest()
+{
+    RequestWidget* requestWidget = dynamic_cast<RequestWidget*>(ui->tabWidget->currentWidget());
+    if(requestWidget) {
+        auto request = requestWidget->getRequest();
+        if(ensureRequestHasName(request)) {
+            ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), request.name);
+            requestWidget->setName(request.name);
+
+            RequestStorage requestStorage;
+            QString name = requestWidget->getName();
+            if(requestStorage.saveRequest(request, name)) {
+                if(!requestExists(name)) {
+                    addRequestToCollection(request);
+                }
+                qInfo("Saved request with id %s", qPrintable(name));
+            } else {
+                qWarning("Failure to save request");
+            }
+        } else {
+            qInfo("Save process canceled");
+        }
+    } else {
+        qWarning("Failed cast");
+    }
+}
+
+bool MainWindow::requestExists(QString name)
+{
+    for(auto s : requestModel.stringList()) {
+        if(name == s) {
+            return true;
+        }
+    }
+    return false;
+}
+
+int MainWindow::findRequestTab(QString name)
+{
+    for (int i = 0; i < ui->tabWidget->count(); i++) {
+        RequestWidget* requestWidget = dynamic_cast<RequestWidget*>(ui->tabWidget->widget(i));
+        if(name == requestWidget->getName()) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+bool MainWindow::ensureRequestHasName(Request& request)
+{
+    bool ok = true;
+    if(request.name.isEmpty()) {
+        QString text = QInputDialog::getText(
+                this,
+                "Request Name",
+                "Enter Request Name",
+                QLineEdit::Normal,
+                QString(),
+                &ok);
+        request.name = text;
+    }
+    return ok;
+}
+
+void MainWindow::closeActiveTab()
+{
+    auto index = ui->tabWidget->currentIndex();
+    if(index >= 0) {
+        closeTab(index);
+    }
+}
+
+void MainWindow::closeTab(int index)
+{
+    auto widget = ui->tabWidget->widget(index);
+    ui->tabWidget->removeTab(index);
+    delete widget;
 }
 
 void MainWindow::showAboutDialog()

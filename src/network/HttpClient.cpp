@@ -6,7 +6,7 @@
 #include <QIODevice>
 #include "HttpMethod.h"
 
-void HttpClient::sendRequest(Request& request)
+void HttpClient::sendRequest(Request request)
 {
     qInfo("Sending request");
     CURL *curl;

@@ -14,10 +14,10 @@ RequestStorage::RequestStorage()
     }
 }
 
-bool RequestStorage::save(const Request& request)
+bool RequestStorage::saveRequest(const Request& request, QString name)
 {
     qInfo("Saving request started");
-    QFile saveFile(appDataDirectory + "/save.json");
+    QFile saveFile(appDataDirectory + "/" + name + ".json");
 
     if (!saveFile.open(QIODevice::WriteOnly)) {
         qWarning("Couldn't open save file.");
@@ -53,34 +53,43 @@ QJsonArray RequestStorage::getJsonHeaders(const Request& request)
     return arr;
 }
 
-Request* RequestStorage::read()
+QList<Request> RequestStorage::readCollection()
 {
-    Request* request = nullptr;
+    QList<Request> list;
 
-    qInfo("Reading request started");
-    QFile readFile(appDataDirectory + "/save.json");
+    qInfo("Reading collection started");
+    QDir directory(appDataDirectory);
+    QStringList requestFileNames = directory.entryList(QStringList() << "*.json", QDir::Files);
 
-    if (readFile.open(QIODevice::ReadOnly)) {
-        qInfo("File opened successfully");
+    foreach(QString requestFileName, requestFileNames) {
+        qInfo("Loading request: %s", qPrintable(requestFileName));
 
-        QByteArray data = readFile.readAll();
-        QJsonDocument jsonDoc(QJsonDocument::fromJson(data));
+        QFile readFile(appDataDirectory + "/" + requestFileName);
 
-        request = new Request();
+        if (readFile.open(QIODevice::ReadOnly)) {
+            QByteArray data = readFile.readAll();
+            QJsonDocument jsonDoc(QJsonDocument::fromJson(data));
 
-        auto root = jsonDoc.object();
-        request->url.setUrl(root["url"].toString());
-        request->method = root["method"].toString();
-        request->body = root["body"].toString().toUtf8();
-        auto headerArray = root["headers"].toArray();
-        for(auto header : headerArray) {
-            auto key = header.toObject()["key"].toString().toUtf8();
-            auto value = header.toObject()["value"].toString().toUtf8();
-            request->headers.append(qMakePair(key, value));
+            Request request;
+
+            auto root = jsonDoc.object();
+            request.name = QFileInfo(requestFileName).baseName();
+            request.url.setUrl(root["url"].toString());
+            request.method = root["method"].toString();
+            request.body = root["body"].toString().toUtf8();
+            auto headerArray = root["headers"].toArray();
+
+            for(auto header : headerArray) {
+                auto key = header.toObject()["key"].toString().toUtf8();
+                auto value = header.toObject()["value"].toString().toUtf8();
+                request.headers.append(qMakePair(key, value));
+            }
+
+            list.append(request);
+        } else {
+            qWarning("Couldn't open read file: %s", qPrintable(requestFileName));
         }
-    } else {
-        qWarning("Couldn't open read file.");
     }
 
-    return request;
+    return list;
 }

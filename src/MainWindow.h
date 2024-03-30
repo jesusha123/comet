@@ -2,17 +2,11 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "Response.h"
-#include "HttpMethod.h"
+#include <QStringListModel>
+#include "ui_main_window.h"
+#include "Request.h"
 
 class HttpClient;
-class QTableWidgetItem;
-
-QT_BEGIN_NAMESPACE
-namespace Ui {
-class MainWindow;
-}
-QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
 {
@@ -20,23 +14,27 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
 
 private slots:
-    void sendRequest();
-    void processResponse(const Response& response);
-    void processParams(const QString& url);
-    void processParamsChanged(QTableWidgetItem *item);
-    void processParamsRemoved();
-    void processRequestBodyAllowed(Http::HasBody reqHasBody);
-    void processReqContentTypeChange(int index);
+    void createRequest();
+    void closeActiveTab();
+    void closeTab(int index);
     void showAboutDialog();
+    void saveActiveRequest();
+    void addRequestToCollection(Request& request);
+    void addRequestToModel(Request& request);
+    void collectionItemActivated(const QModelIndex& index);
 
 private:
-    void initializeConnections();
-    void buildParamsLineEdit();
+    void loadCollection();
+    bool ensureRequestHasName(Request& request);
+    bool requestExists(QString name);
+    int findRequestTab(QString name);
 
-    Ui::MainWindow *ui;
-    HttpClient *httpClient;
+    std::unique_ptr<Ui::MainWindow> ui;
+    std::shared_ptr<HttpClient> httpClient;
+    QStringListModel requestModel;
+    QList<Request> collection;
 };
-#endif // MAINWINDOW_H
+
+#endif
