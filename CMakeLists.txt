@@ -23,6 +23,7 @@ find_package(CURL REQUIRED)
 # set(CMAKE_CXX_CLANG_TIDY clang-tidy -checks=-*,cppcoreguidelines-*)
 
 add_executable(Comet
+        src/icons.qrc
         src/view/ContentTypeComboBox.h
         src/view/ContentTypeComboBox.cpp
         src/network/curl_utils.cpp

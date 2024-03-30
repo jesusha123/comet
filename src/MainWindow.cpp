@@ -18,7 +18,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->splitter->setStretchFactor(0, 1);
     ui->splitter->setStretchFactor(1, 1000);
 
-    connect(ui->createRequestButton, &QToolButton::clicked, this, &MainWindow::createRequest);
+    connect(ui->actionNew, &QAction::triggered, this, &MainWindow::createRequest);
+    connect(ui->actionSave, &QAction::triggered, this, &MainWindow::saveActiveRequest);
     connect(ui->tabWidget, &QTabWidget::tabCloseRequested, this, &MainWindow::closeTab);
     connect(ui->action_About, &QAction::triggered, this, &MainWindow::showAboutDialog);
 }
@@ -27,7 +28,6 @@ void MainWindow::createRequest()
 {
     auto requestWidget = new RequestWidget(httpClient, ui->tabWidget);
     ui->tabWidget->addTab(requestWidget, "Untitled Request");
-    connect(requestWidget, &RequestWidget::saveRequestTriggered, this, &MainWindow::saveActiveRequest);
 }
 
 void MainWindow::saveActiveRequest()
