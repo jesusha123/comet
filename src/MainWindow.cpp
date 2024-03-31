@@ -26,10 +26,23 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->actionRename, &QAction::triggered, this, &MainWindow::renameRequest);
     connect(ui->actionSave, &QAction::triggered, this, &MainWindow::saveActiveRequest);
     connect(ui->tabWidget, &QTabWidget::tabCloseRequested, this, &MainWindow::closeTab);
+    connect(ui->tabWidget, &QTabWidget::currentChanged, this, &MainWindow::tabChanged);
     connect(ui->collectionView, &QAbstractItemView::clicked, this, &MainWindow::collectionItemActivated);
     connect(ui->action_About, &QAction::triggered, this, &MainWindow::showAboutDialog);
 
     loadCollection();
+}
+
+void MainWindow::tabChanged(int tabIndex)
+{
+    RequestWidget* requestWidget = dynamic_cast<RequestWidget*>(ui->tabWidget->currentWidget());
+    if(requestWidget) {
+        int viewIndex = findCollectionRequest(requestWidget->getName());
+        if (viewIndex >= 0) {
+            auto modelIndex = requestModel.index(viewIndex);
+            ui->collectionView->setCurrentIndex(modelIndex);
+        }
+    }
 }
 
 void MainWindow::collectionItemActivated(const QModelIndex &index)

@@ -21,6 +21,7 @@ private slots:
     void renameRequest();
     void closeActiveTab();
     void closeTab(int index);
+    void tabChanged(int tabIndex);
     void showAboutDialog();
     void saveActiveRequest();
     void addRequestToCollection(Request& request);
