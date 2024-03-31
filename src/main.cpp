@@ -9,6 +9,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     a.setApplicationName("Comet");
     a.setOrganizationDomain("comet.rest");
+    a.setStyle("fusion");
     MainWindow w;
     w.show();
     return a.exec();
