@@ -90,6 +90,7 @@
    <addaction name="actionSave"/>
    <addaction name="actionClose"/>
    <addaction name="actionDelete"/>
+   <addaction name="actionRename"/>
   </widget>
   <action name="action_About">
    <property name="text">
@@ -154,6 +155,21 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Backspace</string>
+   </property>
+  </action>
+  <action name="actionRename">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/rename.svg</normaloff>:/icons/rename.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Rename</string>
+   </property>
+   <property name="toolTip">
+    <string>Rename Request</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+R</string>
    </property>
   </action>
  </widget>

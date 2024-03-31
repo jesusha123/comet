@@ -23,6 +23,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->actionClose, &QAction::triggered, this, &MainWindow::closeActiveTab);
     connect(ui->actionDelete, &QAction::triggered, this, &MainWindow::deleteRequest);
     connect(ui->actionNew, &QAction::triggered, this, &MainWindow::createRequest);
+    connect(ui->actionRename, &QAction::triggered, this, &MainWindow::renameRequest);
     connect(ui->actionSave, &QAction::triggered, this, &MainWindow::saveActiveRequest);
     connect(ui->tabWidget, &QTabWidget::tabCloseRequested, this, &MainWindow::closeTab);
     connect(ui->collectionView, &QAbstractItemView::clicked, this, &MainWindow::collectionItemActivated);
@@ -167,18 +168,49 @@ void MainWindow::closeTab(int index)
 
 void MainWindow::deleteRequest()
 {
-    // Delete from: 1. File, 1. Tabs, 2. requestModel, 3. collection
+    // Delete from: 1. File, 2. Tabs, 3. requestModel, 4. collection
     auto list = ui->collectionView->selectionModel()->selectedRows();
     for(auto index : list) {
         int row = index.row();
-        if(RequestStorage().deleteRequest(collection.at(row))) {
+        if(RequestStorage().deleteRequest(collection.at(row))) { // 1. File
             QString name = requestModel.stringList().at(row);
             int tabIndex = findRequestTab(name);
             if(tabIndex >= 0) {
-                closeTab(tabIndex);
+                closeTab(tabIndex); // 2. Tabs
             }
-            requestModel.removeRows(row, 1);
-            collection.remove(row);
+            requestModel.removeRows(row, 1); // 3. requestModel
+            collection.remove(row); // 4. collection
+        }
+    }
+}
+
+void MainWindow::renameRequest()
+{
+    // Rename here: 1. File, 2. Tab title, 3. RequestWidget, 4. requestModel, 5. collection
+    auto list = ui->collectionView->selectionModel()->selectedRows();
+    for(auto index : list) {
+        int row = index.row();
+        bool ok = true;
+        QString newName = QInputDialog::getText(
+                this,
+                "Request Rename",
+                "Enter new request name",
+                QLineEdit::Normal,
+                QString(),
+                &ok);
+        if(ok && RequestStorage().renameRequest(collection.at(row), newName)) {
+            QString name = requestModel.stringList().at(row);
+            int tabIndex = findRequestTab(name);
+            if(tabIndex >= 0) {
+                ui->tabWidget->tabBar()->setTabText(tabIndex, newName); // 2. Tab title
+                RequestWidget* requestWidget = dynamic_cast<RequestWidget*>(ui->tabWidget->currentWidget());
+                requestWidget->setName(newName); // RequestWidget
+            }
+            QModelIndex index = requestModel.index(row, 0);
+            requestModel.setData(index, newName); // 4. requestModel
+            collection[row].name = newName; // 5. collection
+        } else {
+            qWarning("Failure to rename file");
         }
     }
 }

@@ -59,6 +59,12 @@ bool RequestStorage::deleteRequest(const Request &request)
     return file.remove();
 }
 
+bool RequestStorage::renameRequest(const Request &request, const QString newName)
+{
+    QFile file (appDataDirectory + "/" + request.name + ".json");
+    return file.rename(appDataDirectory + "/" + newName + ".json");
+}
+
 QList<Request> RequestStorage::readCollection()
 {
     QList<Request> list;

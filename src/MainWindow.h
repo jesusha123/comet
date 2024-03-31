@@ -18,6 +18,7 @@ public:
 private slots:
     void createRequest();
     void deleteRequest();
+    void renameRequest();
     void closeActiveTab();
     void closeTab(int index);
     void showAboutDialog();

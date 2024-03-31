@@ -10,6 +10,7 @@ public:
     RequestStorage();
     bool saveRequest(const Request& request, const QString name);
     bool deleteRequest(const Request& request);
+    bool renameRequest(const Request& request, const QString newName);
     QList<Request> readCollection();
 private:
     QJsonArray getJsonHeaders(const Request& request);
