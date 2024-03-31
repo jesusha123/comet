@@ -53,6 +53,12 @@ QJsonArray RequestStorage::getJsonHeaders(const Request& request)
     return arr;
 }
 
+bool RequestStorage::deleteRequest(const Request &request)
+{
+    QFile file (appDataDirectory + "/" + request.name + ".json");
+    return file.remove();
+}
+
 QList<Request> RequestStorage::readCollection()
 {
     QList<Request> list;

@@ -17,6 +17,7 @@ public:
 
 private slots:
     void createRequest();
+    void deleteRequest();
     void closeActiveTab();
     void closeTab(int index);
     void showAboutDialog();
@@ -29,6 +30,7 @@ private:
     void loadCollection();
     bool ensureRequestHasName(Request& request);
     bool requestExists(QString name);
+    int findCollectionRequest(QString name);
     int findRequestTab(QString name);
 
     std::unique_ptr<Ui::MainWindow> ui;

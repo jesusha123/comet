@@ -21,6 +21,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->splitter->setStretchFactor(1, 1000);
 
     connect(ui->actionClose, &QAction::triggered, this, &MainWindow::closeActiveTab);
+    connect(ui->actionDelete, &QAction::triggered, this, &MainWindow::deleteRequest);
     connect(ui->actionNew, &QAction::triggered, this, &MainWindow::createRequest);
     connect(ui->actionSave, &QAction::triggered, this, &MainWindow::saveActiveRequest);
     connect(ui->tabWidget, &QTabWidget::tabCloseRequested, this, &MainWindow::closeTab);
@@ -109,12 +110,17 @@ void MainWindow::saveActiveRequest()
 
 bool MainWindow::requestExists(QString name)
 {
-    for(auto s : requestModel.stringList()) {
-        if(name == s) {
-            return true;
+    return findCollectionRequest(name)>=0;
+}
+
+int MainWindow::findCollectionRequest(QString name)
+{
+    for(int i=0; i<requestModel.stringList().count(); i++) {
+        if(name == requestModel.stringList().at(i)) {
+            return i;
         }
     }
-    return false;
+    return -1;
 }
 
 int MainWindow::findRequestTab(QString name)
@@ -157,6 +163,24 @@ void MainWindow::closeTab(int index)
     auto widget = ui->tabWidget->widget(index);
     ui->tabWidget->removeTab(index);
     delete widget;
+}
+
+void MainWindow::deleteRequest()
+{
+    // Delete from: 1. File, 1. Tabs, 2. requestModel, 3. collection
+    auto list = ui->collectionView->selectionModel()->selectedRows();
+    for(auto index : list) {
+        int row = index.row();
+        if(RequestStorage().deleteRequest(collection.at(row))) {
+            QString name = requestModel.stringList().at(row);
+            int tabIndex = findRequestTab(name);
+            if(tabIndex >= 0) {
+                closeTab(tabIndex);
+            }
+            requestModel.removeRows(row, 1);
+            collection.remove(row);
+        }
+    }
 }
 
 void MainWindow::showAboutDialog()
