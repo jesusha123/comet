@@ -106,7 +106,10 @@ void MainWindow::saveActiveRequest()
             RequestStorage requestStorage;
             QString name = requestWidget->getName();
             if(requestStorage.saveRequest(request, name)) {
-                if(!requestExists(name)) {
+                int collectionIndex = findCollectionRequest(name);
+                if(collectionIndex>=0) {
+                    collection.replace(collectionIndex, request);
+                } else {
                     addRequestToCollection(request);
                 }
                 qInfo("Saved request with id %s", qPrintable(name));
@@ -119,11 +122,6 @@ void MainWindow::saveActiveRequest()
     } else {
         qWarning("Failed cast");
     }
-}
-
-bool MainWindow::requestExists(QString name)
-{
-    return findCollectionRequest(name)>=0;
 }
 
 int MainWindow::findCollectionRequest(QString name)

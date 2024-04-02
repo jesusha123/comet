@@ -31,7 +31,6 @@ private slots:
 private:
     void loadCollection();
     bool ensureRequestHasName(Request& request);
-    bool requestExists(QString name);
     int findCollectionRequest(QString name);
     int findRequestTab(QString name);
 
