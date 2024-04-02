@@ -7,6 +7,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/action)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/dataobject)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/network)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/storage)
@@ -23,6 +24,7 @@ find_package(CURL REQUIRED)
 # set(CMAKE_CXX_CLANG_TIDY clang-tidy -checks=-*,cppcoreguidelines-*)
 
 add_executable(Comet
+        src/action/Command.h
         src/icons.qrc
         src/view/ContentTypeComboBox.h
         src/view/ContentTypeComboBox.cpp
@@ -47,7 +49,9 @@ add_executable(Comet
         src/view/MethodComboBox.h
         src/view/PropertyTableWidget.cpp
         src/view/PropertyTableWidget.h
-        src/RequestBuilder.cpp)
+        src/RequestBuilder.cpp
+        src/action/ShowAboutCommand.cpp
+        src/action/ShowAboutCommand.h)
 
 target_link_libraries(Comet
         Qt::Core
