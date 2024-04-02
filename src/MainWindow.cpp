@@ -11,7 +11,6 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
-    , httpClient(new HttpClient)
 {
     ui->setupUi(this);
     ui->collectionView->setModel(&requestModel);
@@ -52,7 +51,7 @@ void MainWindow::collectionItemActivated(const QModelIndex &index)
     if(tabIndex >= 0) {
         ui->tabWidget->setCurrentIndex(tabIndex);
     } else {
-        auto requestWidget = new RequestWidget(httpClient, ui->tabWidget);
+        auto requestWidget = new RequestWidget(ui->tabWidget);
         requestWidget->restoreRequest(request);
 
         ui->tabWidget->addTab(requestWidget, request.name);
@@ -90,7 +89,7 @@ void MainWindow::addRequestToModel(Request& request)
 
 void MainWindow::createRequest()
 {
-    auto requestWidget = new RequestWidget(httpClient, ui->tabWidget);
+    auto requestWidget = new RequestWidget(ui->tabWidget);
     ui->tabWidget->addTab(requestWidget, "Untitled Request");
     ui->tabWidget->setCurrentIndex(ui->tabWidget->count()-1);
 }

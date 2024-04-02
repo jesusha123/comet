@@ -4,9 +4,8 @@
 #include <QDateTime>
 #include <QUrlQuery>
 
-RequestWidget::RequestWidget(std::shared_ptr<HttpClient> httpClient, QWidget *parent, QString name)
-    : httpClient(httpClient)
-    , QWidget(parent)
+RequestWidget::RequestWidget(QWidget *parent, QString name)
+    : QWidget(parent)
     , ui(new Ui::RequestWidget)
 {
     ui->setupUi(this);
@@ -39,7 +38,7 @@ void RequestWidget::restoreRequest(const Request& request)
 void RequestWidget::sendRequest()
 {
     auto request = RequestBuilder::buildRequest(ui);
-    httpClient->sendRequest(request);
+    httpClient.sendRequest(request);
 }
 
 void RequestWidget::processResponse(const Response& response)
@@ -138,7 +137,7 @@ void RequestWidget::processRequestBodyAllowed(Http::HasBody hasBody)
 void RequestWidget::initializeConnections()
 {
     connect(ui->sendButton, &QPushButton::clicked, this, &RequestWidget::sendRequest);
-    connect(httpClient.get(), &HttpClient::finished, this, &RequestWidget::processResponse);
+    connect(&httpClient, &HttpClient::finished, this, &RequestWidget::processResponse);
     connect(ui->urlLineEdit, &QLineEdit::textEdited, this, &RequestWidget::processParams);
 
     connect(ui->reqContentTypeComboBox, &QComboBox::currentIndexChanged, this, &RequestWidget::processReqContentTypeChange);

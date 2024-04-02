@@ -36,7 +36,6 @@ private:
     int findRequestTab(QString name);
 
     std::unique_ptr<Ui::MainWindow> ui;
-    std::shared_ptr<HttpClient> httpClient;
     QStringListModel requestModel;
     QList<Request> collection;
 };

@@ -14,7 +14,7 @@ class RequestWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit RequestWidget(std::shared_ptr<HttpClient> httpClient, QWidget* parent, QString name = QString());
+    explicit RequestWidget(QWidget* parent, QString name = QString());
     Request getRequest();
     void restoreRequest(const Request& request);
     QString getName() { return name; }
@@ -34,7 +34,7 @@ private:
     void initializeConnections();
 
     std::unique_ptr<Ui::RequestWidget> ui;
-    std::shared_ptr<HttpClient> httpClient;
+    HttpClient httpClient;
     QString name;
 };
 
