@@ -1,6 +1,7 @@
 #include "RequestWidget.h"
 #include "DebugInfoFormatter.h"
 #include "RequestBuilder.h"
+#include "RequestThread.h"
 #include <QDateTime>
 #include <QUrlQuery>
 
@@ -38,10 +39,14 @@ void RequestWidget::restoreRequest(const Request& request)
 void RequestWidget::sendRequest()
 {
     auto request = RequestBuilder::buildRequest(ui);
-    httpClient.sendRequest(request);
+
+    RequestThread *requestThread = new RequestThread(request, this);
+    connect(requestThread, &RequestThread::responseReady, this, &RequestWidget::processResponse);
+    connect(requestThread, &RequestThread::finished, requestThread, &QObject::deleteLater);
+    requestThread->start();
 }
 
-void RequestWidget::processResponse(const Response& response)
+void RequestWidget::processResponse(const Response response)
 {
     qInfo("Processing response");
     ui->responseBodyPlainTextEdit->setPlainText(response.body.data());
@@ -69,7 +74,7 @@ void RequestWidget::processResponse(const Response& response)
     }
 }
 
-void RequestWidget::processParams(const QString& url)
+void RequestWidget::processParams(const QString url)
 {
     auto urlObject = QUrl(url);
     if(urlObject.hasQuery()) {
@@ -137,7 +142,6 @@ void RequestWidget::processRequestBodyAllowed(Http::HasBody hasBody)
 void RequestWidget::initializeConnections()
 {
     connect(ui->sendButton, &QPushButton::clicked, this, &RequestWidget::sendRequest);
-    connect(&httpClient, &HttpClient::finished, this, &RequestWidget::processResponse);
     connect(ui->urlLineEdit, &QLineEdit::textEdited, this, &RequestWidget::processParams);
 
     connect(ui->reqContentTypeComboBox, &QComboBox::currentIndexChanged, this, &RequestWidget::processReqContentTypeChange);

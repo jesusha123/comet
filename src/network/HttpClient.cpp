@@ -6,15 +6,15 @@
 #include <QIODevice>
 #include "HttpMethod.h"
 
-void HttpClient::sendRequest(Request request)
+Response HttpClient::sendRequest(Request& request)
 {
     qInfo("Sending request");
+    Response response;
     CURL *curl;
 
     curl = curl_easy_init();
     if(curl) {
         CURLcode res;
-        Response response;
 
         enableDebugData(curl, response);
 
@@ -45,11 +45,10 @@ void HttpClient::sendRequest(Request request)
         // Clean up
         curl_easy_cleanup(curl);
         curl_slist_free_all(list);
-
-        emit finished(response);
     } else {
         qCritical("Could not create a curl easy handle");
     }
+    return response;
 }
 
 /**

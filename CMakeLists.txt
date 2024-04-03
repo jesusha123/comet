@@ -51,7 +51,9 @@ add_executable(Comet
         src/view/PropertyTableWidget.h
         src/RequestBuilder.cpp
         src/action/ShowAboutCommand.cpp
-        src/action/ShowAboutCommand.h)
+        src/action/ShowAboutCommand.h
+        src/network/RequestThread.cpp
+        src/network/RequestThread.h)
 
 target_link_libraries(Comet
         Qt::Core

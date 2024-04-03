@@ -22,8 +22,8 @@ public:
 
 private slots:
     void sendRequest();
-    void processResponse(const Response& response);
-    void processParams(const QString& url);
+    void processResponse(const Response response);
+    void processParams(const QString url);
     void processParamsChanged(QTableWidgetItem *item);
     void processParamsRemoved();
     void processRequestBodyAllowed(Http::HasBody reqHasBody);
@@ -34,7 +34,6 @@ private:
     void initializeConnections();
 
     std::unique_ptr<Ui::RequestWidget> ui;
-    HttpClient httpClient;
     QString name;
 };
 
