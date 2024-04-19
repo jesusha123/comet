@@ -27,3 +27,9 @@ jobs:
         run: cmake . -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_OSX_ARCHITECTURES="x86_64" -DVCPKG_TARGET_TRIPLET=x64-windows-release
       - name: msbuild
         run: msbuild Comet.sln /property:Configuration=Release
+      - name: List files
+        run: dir /s
+      - name: windeployqt
+        run: windeployqt Release\Comet.exe
+      - name: List files
+        run: dir /s
