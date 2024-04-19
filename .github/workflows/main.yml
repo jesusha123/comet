@@ -23,3 +23,5 @@ jobs:
           arch: win64_msvc2019_64
       - name: CMake
         run: cmake . -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_OSX_ARCHITECTURES="x86_64" -DVCPKG_TARGET_TRIPLET=x64-windows-release
+      - name: msbuild
+        run: msbuild Comet.sln /property:Configuration=Release
