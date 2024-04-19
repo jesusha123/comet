@@ -1,10 +1,17 @@
-name: Build Comet
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+name: Build Comet for Windows
+run-name: ${{ github.actor }} is building Comet for Windows
 on: [push]
 jobs:
   build:
     runs-on: windows-latest
     steps:
+      - id: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: 6.7.0
+          host: windows
+          target: desktop
+          arch: win64_msvc2019_64
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
       - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
       - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
