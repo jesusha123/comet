@@ -13,6 +13,7 @@ jobs:
           manifest-dir: ${{ github.workspace }} 
           triplet: x64-windows-release
           token: ${{ github.token }}
+          fetch-depth: '0'
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
         with:
