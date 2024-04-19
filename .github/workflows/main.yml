@@ -5,6 +5,8 @@ jobs:
   build:
     runs-on: windows-latest
     steps:
+      - name: vcpkg-action
+        uses: johnwason/vcpkg-action@6
       - id: install-qt
         uses: jurplel/install-qt-action@v3
         with:
@@ -15,4 +17,4 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v4
       - name: CMake
-        run: cmake . -DCMAKE_TOOLCHAIN_FILE="C:\Users\chuy_\dev\vcpkg\scripts\buildsystems\vcpkg.cmake" -DCMAKE_OSX_ARCHITECTURES="x86_64" -DVCPKG_TARGET_TRIPLET=x64-windows-release
+        run: cmake . -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_OSX_ARCHITECTURES="x86_64" -DVCPKG_TARGET_TRIPLET=x64-windows-release
