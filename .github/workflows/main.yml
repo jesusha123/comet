@@ -9,6 +9,8 @@ jobs:
         uses: microsoft/setup-msbuild@v2
       - name: Check out repository code
         uses: actions/checkout@v4
+      - name: List files
+        run: Get-ChildItem -Recurse
       - name: vcpkg-action
         uses: johnwason/vcpkg-action@v6
         with:
@@ -28,8 +30,8 @@ jobs:
       - name: msbuild
         run: msbuild Comet.sln /property:Configuration=Release
       - name: List files
-        run: dir /s
+        run: Get-ChildItem -Recurse
       - name: windeployqt
         run: windeployqt Release\Comet.exe
       - name: List files
-        run: dir /s
+        run: Get-ChildItem -Recurse
