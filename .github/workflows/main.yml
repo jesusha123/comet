@@ -8,6 +8,7 @@ jobs:
       - name: vcpkg-action
         uses: johnwason/vcpkg-action@v6
         with:
+          triplet: x64-windows-release
           token: ${{ github.token }}
       - id: install-qt
         uses: jurplel/install-qt-action@v3
