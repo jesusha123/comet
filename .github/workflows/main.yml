@@ -6,7 +6,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: vcpkg-action
-        uses: johnwason/vcpkg-action@6
+        uses: johnwason/vcpkg-action@v6
       - id: install-qt
         uses: jurplel/install-qt-action@v3
         with:
