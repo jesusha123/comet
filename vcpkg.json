@@ -1,7 +1,7 @@
 {
   "name" : "comet",
   "version-string" : "0.0.1",
-  "builtin-baseline" : "215a2535590f1f63788ac9bd2ed58ad15e6afdff",
+  "builtin-baseline" : "6c87aab05cb2ebd1c9e382167edf3b15a7718e70",
   "dependencies" : [ {
     "name" : "curl",
     "version>=" : "8.6.0"
