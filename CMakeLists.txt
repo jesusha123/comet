@@ -64,4 +64,5 @@ target_link_libraries(Comet
 
 set_target_properties(Comet PROPERTIES
         MACOSX_BUNDLE TRUE
+        WIN32_EXECUTABLE TRUE
 )
