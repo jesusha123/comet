@@ -1,5 +1,5 @@
 name: PR build
-run-name: ${{ github.actor }} is building Comet for Windows
+run-name: ${{ github.actor }} PR build
 on:
   pull_request:
     branches:
@@ -13,8 +13,6 @@ jobs:
 
       - name: Install vcpkg dependencies
         uses: lukka/run-vcpkg@v11
-        # with:
-        #   vcpkgJsonGlob: 'vcpkg.json'
 
       - name: Add msbuild to PATH
         uses: microsoft/setup-msbuild@v2
@@ -30,17 +28,17 @@ jobs:
       - name: CMake
         run: cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}\vcpkg\scripts\buildsystems\vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows-release
 
-      - name: List files
-        run: Get-ChildItem -Recurse
-
       - name: msbuild
         run: msbuild build\Comet.sln /property:Configuration=Release
 
-      - name: List files
-        run: Get-ChildItem -Recurse
-
       - name: windeployqt
-        run: windeployqt build\Release\Comet.exe
+        run: windeployqt --release build\Release\Comet.exe
 
-      - name: List files
-        run: Get-ChildItem -Recurse
+      - name: Zip the build output
+        run: Compress-Archive -Path build\Release\* -DestinationPath build\Release\Comet-Windows-x64.zip
+
+      - name: Upload build as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: Comet-Windows-x64
+          path: Comet-Windows-x64.zip
