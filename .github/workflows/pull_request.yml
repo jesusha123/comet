@@ -10,23 +10,18 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
+
       - name: Install vcpkg dependencies
         uses: lukka/run-vcpkg@v11
         with:
           vcpkgJsonGlob: 'vcpkg.json'
-      - name: Install Qt
-        uses: jurplel/install-qt-action@v3
-        with:
-          version: 6.7.0
-          host: windows
-          target: desktop
-          arch: win64_msvc2019_64
+
       - name: Add msbuild to PATH
         uses: microsoft/setup-msbuild@v2
-      - name: Check out repository code
-        uses: actions/checkout@v4
+
       - name: List files
         run: Get-ChildItem -Recurse
+
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
         with:
@@ -34,13 +29,18 @@ jobs:
           host: windows
           target: desktop
           arch: win64_msvc2019_64
+
       - name: CMake
-        run: cmake . -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_OSX_ARCHITECTURES="x86_64" -DVCPKG_TARGET_TRIPLET=x64-windows-release
+        run: cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=%VCPKG_ROOT%/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows-release
+
       - name: msbuild
         run: msbuild Comet.sln /property:Configuration=Release
+
       - name: List files
         run: Get-ChildItem -Recurse
+
       - name: windeployqt
         run: windeployqt Release\Comet.exe
+
       - name: List files
         run: Get-ChildItem -Recurse
