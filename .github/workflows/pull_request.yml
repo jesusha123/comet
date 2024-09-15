@@ -13,7 +13,7 @@ jobs:
       - name: Install vcpkg dependencies
         uses: lukka/run-vcpkg@v11
         with:
-          vcpkgJsonGlob: '**/vcpkg.json'
+          vcpkgJsonGlob: 'vcpkg.json'
       # - name: Add msbuild to PATH
       #   uses: microsoft/setup-msbuild@v2
       # - name: Check out repository code
