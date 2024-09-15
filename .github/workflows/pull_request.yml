@@ -28,19 +28,19 @@ jobs:
           arch: win64_msvc2019_64
 
       - name: CMake
-        run: cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows-release
+        run: cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}\vcpkg\scripts\buildsystems\vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows-release
 
       - name: List files
         run: Get-ChildItem -Recurse
 
       - name: msbuild
-        run: msbuild Comet.sln /property:Configuration=Release
+        run: msbuild build\Comet.sln /property:Configuration=Release
 
       - name: List files
         run: Get-ChildItem -Recurse
 
       - name: windeployqt
-        run: windeployqt Release\Comet.exe
+        run: windeployqt build\Release\Comet.exe
 
       - name: List files
         run: Get-ChildItem -Recurse
