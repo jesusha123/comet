@@ -22,16 +22,16 @@ jobs:
       - name: List files
         run: Get-ChildItem -Recurse
 
-      # - name: Install Qt
-      #   uses: jurplel/install-qt-action@v3
-      #   with:
-      #     version: 6.7.0
-      #     host: windows
-      #     target: desktop
-      #     arch: win64_msvc2019_64
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: 6.7.0
+          host: windows
+          target: desktop
+          arch: win64_msvc2019_64
 
-      # - name: CMake
-      #   run: cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows-release
+      - name: CMake
+        run: cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=vcpkg/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows-release
 
       # - name: msbuild
       #   run: msbuild Comet.sln /property:Configuration=Release
