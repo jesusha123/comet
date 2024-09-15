@@ -19,9 +19,6 @@ jobs:
       - name: Add msbuild to PATH
         uses: microsoft/setup-msbuild@v2
 
-      - name: List files
-        run: Get-ChildItem -Recurse
-
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
         with:
@@ -33,14 +30,17 @@ jobs:
       - name: CMake
         run: cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows-release
 
-      # - name: msbuild
-      #   run: msbuild Comet.sln /property:Configuration=Release
+      - name: List files
+        run: Get-ChildItem -Recurse
 
-      # - name: List files
-      #   run: Get-ChildItem -Recurse
+      - name: msbuild
+        run: msbuild Comet.sln /property:Configuration=Release
 
-      # - name: windeployqt
-      #   run: windeployqt Release\Comet.exe
+      - name: List files
+        run: Get-ChildItem -Recurse
 
-      # - name: List files
-      #   run: Get-ChildItem -Recurse
+      - name: windeployqt
+        run: windeployqt Release\Comet.exe
+
+      - name: List files
+        run: Get-ChildItem -Recurse
