@@ -30,6 +30,9 @@ jobs:
           target: desktop
           arch: win64_msvc2019_64
 
+      - name: Print all environment variables
+        run: Get-ChildItem Env:
+
       - name: CMake
         run: cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows-release
 
