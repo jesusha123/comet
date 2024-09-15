@@ -34,11 +34,8 @@ jobs:
       - name: windeployqt
         run: windeployqt --release build\Release\Comet.exe
 
-      - name: Zip the build output
-        run: Compress-Archive -Path build\Release\* -DestinationPath build\Release\Comet-Windows-x64.zip
-
       - name: Upload build as artifact
         uses: actions/upload-artifact@v4
         with:
           name: Comet-Windows-x64
-          path: build\Release\Comet-Windows-x64.zip
+          path: build\Release
