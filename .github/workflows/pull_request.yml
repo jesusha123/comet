@@ -10,6 +10,10 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
+      - name: Install vcpkg dependencies
+        uses: lukka/run-vcpkg@v11
+        with:
+          vcpkgJson: ${{ github.workspace }}/vcpkg.json  # Use this if you have a vcpkg.json file
       # - name: Add msbuild to PATH
       #   uses: microsoft/setup-msbuild@v2
       # - name: Check out repository code
