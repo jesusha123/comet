@@ -13,8 +13,8 @@ jobs:
 
       - name: Install vcpkg dependencies
         uses: lukka/run-vcpkg@v11
-        with:
-          vcpkgJsonGlob: 'vcpkg.json'
+        # with:
+        #   vcpkgJsonGlob: 'vcpkg.json'
 
       - name: Add msbuild to PATH
         uses: microsoft/setup-msbuild@v2
@@ -22,29 +22,25 @@ jobs:
       - name: List files
         run: Get-ChildItem -Recurse
 
-      - name: Install Qt
-        uses: jurplel/install-qt-action@v3
-        with:
-          version: 6.7.0
-          host: windows
-          target: desktop
-          arch: win64_msvc2019_64
+      # - name: Install Qt
+      #   uses: jurplel/install-qt-action@v3
+      #   with:
+      #     version: 6.7.0
+      #     host: windows
+      #     target: desktop
+      #     arch: win64_msvc2019_64
 
-      - name: Print all environment variables
-        run: 
-          Get-ChildItem Env: | ForEach-Object { "$($_.Name)=$($_.Value)" }
+      # - name: CMake
+      #   run: cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows-release
 
-      - name: CMake
-        run: cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows-release
+      # - name: msbuild
+      #   run: msbuild Comet.sln /property:Configuration=Release
 
-      - name: msbuild
-        run: msbuild Comet.sln /property:Configuration=Release
+      # - name: List files
+      #   run: Get-ChildItem -Recurse
 
-      - name: List files
-        run: Get-ChildItem -Recurse
+      # - name: windeployqt
+      #   run: windeployqt Release\Comet.exe
 
-      - name: windeployqt
-        run: windeployqt Release\Comet.exe
-
-      - name: List files
-        run: Get-ChildItem -Recurse
+      # - name: List files
+      #   run: Get-ChildItem -Recurse
