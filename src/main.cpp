@@ -6,11 +6,12 @@ int main(int argc, char *argv[])
 {
     curl_global_init(CURL_GLOBAL_DEFAULT);
 
-    QApplication a(argc, argv);
-    a.setApplicationName("Comet");
-    a.setOrganizationDomain("comet.rest");
-    a.setStyle("fusion");
-    MainWindow w;
-    w.show();
-    return a.exec();
+    QApplication app(argc, argv);
+    application.setApplicationName("Comet");
+    application.setOrganizationDomain("comet.rest");
+    application.setStyle("fusion");
+    application.setWindowIcon(QIcon(":/icons/comet.ico"));
+    MainWindow mainWindow;
+    mainWindow.show();
+    return application.exec();
 }
