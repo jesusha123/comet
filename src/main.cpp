@@ -6,7 +6,7 @@ int main(int argc, char *argv[])
 {
     curl_global_init(CURL_GLOBAL_DEFAULT);
 
-    QApplication app(argc, argv);
+    QApplication application(argc, argv);
     application.setApplicationName("Comet");
     application.setOrganizationDomain("comet.rest");
     application.setStyle("fusion");
