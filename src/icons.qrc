@@ -1,9 +1,10 @@
-<!DOCTYPE RCC><RCC version="1.0">
-    <qresource>
+<RCC>
+    <qresource prefix="/">
         <file>icons/close.svg</file>
         <file>icons/delete.svg</file>
         <file>icons/new.svg</file>
         <file>icons/rename.svg</file>
         <file>icons/save.svg</file>
+        <file>icons/comet.ico</file>
     </qresource>
 </RCC>

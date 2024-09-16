@@ -53,7 +53,8 @@ add_executable(Comet
         src/action/ShowAboutCommand.cpp
         src/action/ShowAboutCommand.h
         src/network/RequestThread.cpp
-        src/network/RequestThread.h)
+        src/network/RequestThread.h
+    )
 
 target_link_libraries(Comet
         Qt::Core
