@@ -1,7 +1,5 @@
 #include "MainWindow.h"
 #include <QDateTime>
-#include "HttpClient.h"
-#include "ContentTypeComboBox.h"
 #include "RequestWidget.h"
 #include "RequestStorage.h"
 #include "ShowAboutCommand.h"
@@ -28,7 +26,11 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->tabWidget, &QTabWidget::currentChanged, this, &MainWindow::tabChanged);
     connect(ui->collectionView, &QAbstractItemView::clicked, this, &MainWindow::collectionItemActivated);
     connect(ui->action_About, &QAction::triggered, this, &MainWindow::showAboutDialog);
+}
 
+void MainWindow::activateWorkspace(QString workspace)
+{
+    this->workspacePath = workspace;
     loadCollection();
 }
 
@@ -62,7 +64,7 @@ void MainWindow::collectionItemActivated(const QModelIndex &index)
 
 void MainWindow::loadCollection()
 {
-    collection = RequestStorage().readCollection();
+    collection = RequestStorage().readCollection(this->workspacePath);
 
     for(auto request : collection) {
         addRequestToModel(request);

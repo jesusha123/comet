@@ -19,6 +19,7 @@ find_package(Qt6 COMPONENTS
         Widgets
         REQUIRED)
 find_package(CURL REQUIRED)
+find_package(yaml-cpp REQUIRED)
 
 # TODO: Re-enable clang-tidy
 # set(CMAKE_CXX_CLANG_TIDY clang-tidy -checks=-*,cppcoreguidelines-*)
@@ -62,6 +63,7 @@ target_link_libraries(Comet
         Qt::Gui
         Qt::Widgets
         CURL::libcurl
+        yaml-cpp::yaml-cpp
 )
 
 set_target_properties(Comet PROPERTIES

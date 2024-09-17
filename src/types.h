@@ -6,7 +6,7 @@
 #include <curl/curl.h>
 
 typedef QList<QPair<curl_infotype, QByteArray>> DebugInfo;
-typedef QList<QPair<QByteArray, QByteArray>> Headers;
+typedef QList<QPair<QString, QString>> Headers;
 typedef QList<QPair<QString, QString>> Info;
 
 #endif // TYPES_H
