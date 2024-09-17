@@ -15,6 +15,8 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
 
+    void activateWorkspace(QString workspacePath);
+
 private slots:
     void createRequest();
     void deleteRequest();
@@ -34,6 +36,7 @@ private:
     int findCollectionRequest(QString name);
     int findRequestTab(QString name);
 
+    QString workspacePath;
     std::unique_ptr<Ui::MainWindow> ui;
     QStringListModel requestModel;
     QList<Request> collection;

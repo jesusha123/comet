@@ -111,13 +111,13 @@ curl_slist* HttpClient::addRequestHeaders(CURL* curl, const Request& request)
     struct curl_slist *list = NULL;
 
     for(const auto &header : request.headers) {
-        QByteArray joinedHeader(header.first);
+        QByteArray joinedHeader(header.first.toUtf8());
         if(header.second.isEmpty()) {
             // cURL requires a semi-colon for key-only headers
             joinedHeader.append(";");
         } else {
             joinedHeader.append(": ");
-            joinedHeader.append(header.second);
+            joinedHeader.append(header.second.toUtf8());
         }
         list = curl_slist_append(list, joinedHeader.data());
     }

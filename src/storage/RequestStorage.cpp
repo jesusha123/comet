@@ -4,6 +4,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QStandardPaths>
+#include <yaml-cpp/yaml.h>
 
 RequestStorage::RequestStorage()
 {
@@ -65,43 +66,74 @@ bool RequestStorage::renameRequest(const Request &request, const QString newName
     return file.rename(appDataDirectory + "/" + newName + ".json");
 }
 
-QList<Request> RequestStorage::readCollection()
+QList<Request> RequestStorage::readCollection(QString workspacePath)
 {
+    qInfo() << "Reading collection from workspace: " << workspacePath;
     QList<Request> list;
+    QStringList yamlFiles = getYamlFiles(workspacePath);
+    qInfo() << "Found yaml files: " << yamlFiles;
 
-    qInfo("Reading collection started");
-    QDir directory(appDataDirectory);
-    QStringList requestFileNames = directory.entryList(QStringList() << "*.json", QDir::Files);
-
-    foreach(QString requestFileName, requestFileNames) {
-        qInfo("Loading request: %s", qPrintable(requestFileName));
-
-        QFile readFile(appDataDirectory + "/" + requestFileName);
-
-        if (readFile.open(QIODevice::ReadOnly)) {
-            QByteArray data = readFile.readAll();
-            QJsonDocument jsonDoc(QJsonDocument::fromJson(data));
-
-            Request request;
-
-            auto root = jsonDoc.object();
-            request.name = QFileInfo(requestFileName).baseName();
-            request.url.setUrl(root["url"].toString());
-            request.method = root["method"].toString();
-            request.body = root["body"].toString().toUtf8();
-            auto headerArray = root["headers"].toArray();
-
-            for(auto header : headerArray) {
-                auto key = header.toObject()["key"].toString().toUtf8();
-                auto value = header.toObject()["value"].toString().toUtf8();
-                request.headers.append(qMakePair(key, value));
-            }
-
-            list.append(request);
-        } else {
-            qWarning("Couldn't open read file: %s", qPrintable(requestFileName));
-        }
+    for (const QString &yamlFile : yamlFiles) {
+        qInfo() << "Loading yaml file: " << yamlFile;
+        Request request = loadRequest(yamlFile);
+        list.append(request);
     }
 
     return list;
+}
+
+QStringList RequestStorage::getYamlFiles(const QString &directoryPath)
+{
+    QDir directory(directoryPath);
+    directory.setFilter(QDir::Files);
+
+    QStringList nameFilters;
+    nameFilters << "*.yaml" << "*.yml";
+
+    QStringList yamlFiles = directory.entryList(nameFilters, QDir::Files);
+
+    QStringList fullPaths;
+    for (const QString &file : yamlFiles) {
+        fullPaths << directory.absoluteFilePath(file);
+    }
+
+    return fullPaths;
+}
+
+Request RequestStorage::loadRequest(const QString &filePath)
+{
+    Request request;
+
+    // Load the YAML file
+    YAML::Node yamlNode = YAML::LoadFile(filePath.toStdString());
+
+    // Map YAML content to the Request class
+    QFileInfo fileInfo(filePath);
+    request.name = fileInfo.baseName();
+
+    if (yamlNode["url"]) {
+        request.url = QUrl(QString::fromStdString(yamlNode["url"].as<std::string>()));
+        qInfo() << "url: " << request.url;
+    }
+
+    if (yamlNode["method"]) {
+        request.method = QString::fromStdString(yamlNode["method"].as<std::string>());
+        qInfo() << "method: " << request.method;
+    }
+
+    if (yamlNode["body"]) {
+        request.body = QByteArray::fromStdString(yamlNode["body"].as<std::string>());
+        qInfo() << "body: " << request.body;
+    }
+
+    if (yamlNode["headers"]) {
+        YAML::Node headersNode = yamlNode["headers"];
+        for (YAML::const_iterator it = headersNode.begin(); it != headersNode.end(); ++it) {
+            QString key = QString::fromStdString(it->first.as<std::string>());
+            QString value = QString::fromStdString(it->second.as<std::string>());
+            request.headers.append(qMakePair(key, value));
+        }
+    }
+
+    return request;
 }
