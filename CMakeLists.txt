@@ -54,6 +54,7 @@ add_executable(Comet
         src/action/ShowAboutCommand.h
         src/network/RequestThread.cpp
         src/network/RequestThread.h
+        src/winapp.rc
     )
 
 target_link_libraries(Comet
