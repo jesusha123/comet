@@ -17,6 +17,17 @@ MainWindow::MainWindow(QWidget *parent)
     ui->splitter->setStretchFactor(0, 1);
     ui->splitter->setStretchFactor(1, 1000);
 
+    // Set up model
+    QString workspace("C:/Users/Jesus/comet");
+    requestModel.setRootPath(workspace);
+    requestModel.setFilter(QDir::NoDotAndDotDot | QDir::AllDirs | QDir::Files);
+    QStringList nameFilters;
+    nameFilters << "*.yaml" << "*.yml";
+    requestModel.setNameFilters(nameFilters);
+    requestModel.setNameFilterDisables(false);
+
+    ui->collectionView->setRootIndex(requestModel.index(workspace));
+
     connect(ui->actionClose, &QAction::triggered, this, &MainWindow::closeActiveTab);
     connect(ui->actionDelete, &QAction::triggered, this, &MainWindow::deleteRequest);
     connect(ui->actionNew, &QAction::triggered, this, &MainWindow::createRequest);
@@ -28,54 +39,49 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->action_About, &QAction::triggered, this, &MainWindow::showAboutDialog);
 }
 
-void MainWindow::activateWorkspace(QString workspace)
-{
-    this->workspacePath = workspace;
-    loadCollection();
-}
-
 void MainWindow::tabChanged(int tabIndex)
 {
-    RequestWidget* requestWidget = dynamic_cast<RequestWidget*>(ui->tabWidget->currentWidget());
-    if(requestWidget) {
-        int viewIndex = findCollectionRequest(requestWidget->getName());
-        if (viewIndex >= 0) {
-            auto modelIndex = requestModel.index(viewIndex);
-            ui->collectionView->setCurrentIndex(modelIndex);
-        }
-    }
+    // RequestWidget* requestWidget = dynamic_cast<RequestWidget*>(ui->tabWidget->currentWidget());
+    // if(requestWidget) {
+    //     int viewIndex = findCollectionRequest(requestWidget->getName());
+    //     if (viewIndex >= 0) {
+    //         auto modelIndex = requestModel.index(viewIndex);
+    //         ui->collectionView->setCurrentIndex(modelIndex);
+    //     }
+    // }
 }
 
 void MainWindow::collectionItemActivated(const QModelIndex &index)
 {
-    auto request = collection.at(index.row());
-    int tabIndex = findRequestTab(request.name);
-    if(tabIndex >= 0) {
-        ui->tabWidget->setCurrentIndex(tabIndex);
-    } else {
-        auto requestWidget = new RequestWidget(ui->tabWidget);
-        requestWidget->restoreRequest(request);
+    QFileInfo fileInfo = requestModel.fileInfo(index);
 
-        ui->tabWidget->addTab(requestWidget, request.name);
-        requestWidget->setName(request.name);
-        ui->tabWidget->setCurrentIndex(ui->tabWidget->count()-1);
-    }
-}
+    if (fileInfo.isFile()) {
+        qDebug() << "Selected file:" << fileInfo.fileName();
 
-void MainWindow::loadCollection()
-{
-    collection = RequestStorage().readCollection(this->workspacePath);
+        QString filePath = fileInfo.absoluteFilePath(); // Get the full file path
+        Request request = RequestStorage().loadRequest(filePath);
 
-    for(auto request : collection) {
-        addRequestToModel(request);
+        int tabIndex = findRequestTab(request.name);
+        if(tabIndex >= 0) {
+            ui->tabWidget->setCurrentIndex(tabIndex);
+        } else {
+            auto requestWidget = new RequestWidget(ui->tabWidget);
+            requestWidget->restoreRequest(request);
+
+            ui->tabWidget->addTab(requestWidget, request.name);
+            requestWidget->setName(request.name);
+            ui->tabWidget->setCurrentIndex(ui->tabWidget->count()-1);
+        }
+    } else if (fileInfo.isDir()) {
+        qInfo() << "Selected directory:" << fileInfo.fileName();
     }
 }
 
 void MainWindow::addRequestToCollection(Request &request)
 {
-    qInfo("addRequestToCollection: %s", qPrintable(request.name));
-    collection.append(request);
-    addRequestToModel(request);
+    // qInfo("addRequestToCollection: %s", qPrintable(request.name));
+    // collection.append(request);
+    // addRequestToModel(request);
 }
 
 void MainWindow::addRequestToModel(Request& request)
@@ -98,41 +104,41 @@ void MainWindow::createRequest()
 
 void MainWindow::saveActiveRequest()
 {
-    RequestWidget* requestWidget = dynamic_cast<RequestWidget*>(ui->tabWidget->currentWidget());
-    if(requestWidget) {
-        auto request = requestWidget->getRequest();
-        if(ensureRequestHasName(request)) {
-            ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), request.name);
-            requestWidget->setName(request.name);
+    // RequestWidget* requestWidget = dynamic_cast<RequestWidget*>(ui->tabWidget->currentWidget());
+    // if(requestWidget) {
+    //     auto request = requestWidget->getRequest();
+    //     if(ensureRequestHasName(request)) {
+    //         ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), request.name);
+    //         requestWidget->setName(request.name);
 
-            RequestStorage requestStorage;
-            QString name = requestWidget->getName();
-            if(requestStorage.saveRequest(request, name)) {
-                int collectionIndex = findCollectionRequest(name);
-                if(collectionIndex>=0) {
-                    collection.replace(collectionIndex, request);
-                } else {
-                    addRequestToCollection(request);
-                }
-                qInfo("Saved request with id %s", qPrintable(name));
-            } else {
-                qWarning("Failure to save request");
-            }
-        } else {
-            qInfo("Save process canceled");
-        }
-    } else {
-        qWarning("Failed cast");
-    }
+    //         RequestStorage requestStorage;
+    //         QString name = requestWidget->getName();
+    //         if(requestStorage.saveRequest(request, name)) {
+    //             int collectionIndex = findCollectionRequest(name);
+    //             if(collectionIndex>=0) {
+    //                 collection.replace(collectionIndex, request);
+    //             } else {
+    //                 addRequestToCollection(request);
+    //             }
+    //             qInfo("Saved request with id %s", qPrintable(name));
+    //         } else {
+    //             qWarning("Failure to save request");
+    //         }
+    //     } else {
+    //         qInfo("Save process canceled");
+    //     }
+    // } else {
+    //     qWarning("Failed cast");
+    // }
 }
 
 int MainWindow::findCollectionRequest(QString name)
 {
-    for(int i=0; i<requestModel.stringList().count(); i++) {
-        if(name == requestModel.stringList().at(i)) {
-            return i;
-        }
-    }
+    // for(int i=0; i<requestModel.stringList().count(); i++) {
+    //     if(name == requestModel.stringList().at(i)) {
+    //         return i;
+    //     }
+    // }
     return -1;
 }
 
@@ -181,50 +187,50 @@ void MainWindow::closeTab(int index)
 void MainWindow::deleteRequest()
 {
     // Delete from: 1. File, 2. Tabs, 3. requestModel, 4. collection
-    auto list = ui->collectionView->selectionModel()->selectedRows();
-    for(auto index : list) {
-        int row = index.row();
-        if(RequestStorage().deleteRequest(collection.at(row))) { // 1. File
-            QString name = requestModel.stringList().at(row);
-            int tabIndex = findRequestTab(name);
-            if(tabIndex >= 0) {
-                closeTab(tabIndex); // 2. Tabs
-            }
-            requestModel.removeRows(row, 1); // 3. requestModel
-            collection.remove(row); // 4. collection
-        }
-    }
+    // auto list = ui->collectionView->selectionModel()->selectedRows();
+    // for(auto index : list) {
+    //     int row = index.row();
+    //     if(RequestStorage().deleteRequest(collection.at(row))) { // 1. File
+    //         QString name = requestModel.stringList().at(row);
+    //         int tabIndex = findRequestTab(name);
+    //         if(tabIndex >= 0) {
+    //             closeTab(tabIndex); // 2. Tabs
+    //         }
+    //         requestModel.removeRows(row, 1); // 3. requestModel
+    //         collection.remove(row); // 4. collection
+    //     }
+    // }
 }
 
 void MainWindow::renameRequest()
 {
     // Rename here: 1. File, 2. Tab title, 3. RequestWidget, 4. requestModel, 5. collection
-    auto list = ui->collectionView->selectionModel()->selectedRows();
-    for(auto index : list) {
-        int row = index.row();
-        bool ok = true;
-        QString newName = QInputDialog::getText(
-                this,
-                "Request Rename",
-                "Enter new request name",
-                QLineEdit::Normal,
-                QString(),
-                &ok);
-        if(ok && RequestStorage().renameRequest(collection.at(row), newName)) {
-            QString name = requestModel.stringList().at(row);
-            int tabIndex = findRequestTab(name);
-            if(tabIndex >= 0) {
-                ui->tabWidget->tabBar()->setTabText(tabIndex, newName); // 2. Tab title
-                RequestWidget* requestWidget = dynamic_cast<RequestWidget*>(ui->tabWidget->currentWidget());
-                requestWidget->setName(newName); // RequestWidget
-            }
-            QModelIndex index = requestModel.index(row, 0);
-            requestModel.setData(index, newName); // 4. requestModel
-            collection[row].name = newName; // 5. collection
-        } else {
-            qWarning("Failure to rename file");
-        }
-    }
+    // auto list = ui->collectionView->selectionModel()->selectedRows();
+    // for(auto index : list) {
+    //     int row = index.row();
+    //     bool ok = true;
+    //     QString newName = QInputDialog::getText(
+    //             this,
+    //             "Request Rename",
+    //             "Enter new request name",
+    //             QLineEdit::Normal,
+    //             QString(),
+    //             &ok);
+    //     if(ok && RequestStorage().renameRequest(collection.at(row), newName)) {
+    //         QString name = requestModel.stringList().at(row);
+    //         int tabIndex = findRequestTab(name);
+    //         if(tabIndex >= 0) {
+    //             ui->tabWidget->tabBar()->setTabText(tabIndex, newName); // 2. Tab title
+    //             RequestWidget* requestWidget = dynamic_cast<RequestWidget*>(ui->tabWidget->currentWidget());
+    //             requestWidget->setName(newName); // RequestWidget
+    //         }
+    //         QModelIndex index = requestModel.index(row, 0);
+    //         requestModel.setData(index, newName); // 4. requestModel
+    //         collection[row].name = newName; // 5. collection
+    //     } else {
+    //         qWarning("Failure to rename file");
+    //     }
+    // }
 }
 
 void MainWindow::showAboutDialog()

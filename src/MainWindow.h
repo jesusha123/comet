@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QStringListModel>
+#include <QFileSystemModel>
 #include "ui_main_window.h"
 #include "Request.h"
 
@@ -14,8 +14,6 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow(QWidget *parent = nullptr);
-
-    void activateWorkspace(QString workspacePath);
 
 private slots:
     void createRequest();
@@ -31,15 +29,12 @@ private slots:
     void collectionItemActivated(const QModelIndex& index);
 
 private:
-    void loadCollection();
     bool ensureRequestHasName(Request& request);
     int findCollectionRequest(QString name);
     int findRequestTab(QString name);
 
-    QString workspacePath;
     std::unique_ptr<Ui::MainWindow> ui;
-    QStringListModel requestModel;
-    QList<Request> collection;
+    QFileSystemModel requestModel;
 };
 
 #endif
