@@ -16,10 +16,5 @@ int main(int argc, char *argv[])
     MainWindow mainWindow;
     mainWindow.show();
 
-    // QString workspacePath = QFileDialog::getExistingDirectory(&mainWindow,
-    //                                                           "Select Workspace Folder",
-    //                                                           QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
-    mainWindow.activateWorkspace("C:/Users/Jesus/comet");
-
     return application.exec();
 }

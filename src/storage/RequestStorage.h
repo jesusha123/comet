@@ -8,14 +8,13 @@ class RequestStorage
 {
 public:
     RequestStorage();
+
+    Request loadRequest(const QString &filePath);
     bool saveRequest(const Request& request, const QString name);
     bool deleteRequest(const Request& request);
     bool renameRequest(const Request& request, const QString newName);
-    QList<Request> readCollection(QString workspacePath);
 private:
     QJsonArray getJsonHeaders(const Request& request);
-    QStringList getYamlFiles(const QString &directoryPath);
-    Request loadRequest(const QString &filePath);
 
     QString appDataDirectory;
 };
