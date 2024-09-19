@@ -9,7 +9,7 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
-    , workspace("C:/Users/Jesus/comet")
+    , workspace("C:/temp/comet")
 {
     ui->setupUi(this);
     ui->collectionView->setModel(&requestModel);
