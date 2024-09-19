@@ -38,7 +38,7 @@ bool RequestStorage::loadRequest(Request &request)
 
 bool RequestStorage::saveRequest(const Request &request)
 {
-    qInfo("Saving request");
+    qInfo() << "Saving request: " << request.filePath;
     std::string path = request.filePath.toStdString();
 
     try
