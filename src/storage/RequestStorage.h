@@ -7,16 +7,12 @@
 class RequestStorage
 {
 public:
-    RequestStorage();
+    RequestStorage() = delete;
 
-    Request loadRequest(const QString &filePath);
-    bool saveRequest(const Request& request, const QString name);
-    bool deleteRequest(const Request& request);
-    bool renameRequest(const Request& request, const QString newName);
-private:
-    QJsonArray getJsonHeaders(const Request& request);
-
-    QString appDataDirectory;
+    static bool loadRequest(Request &request);
+    static bool saveRequest(const Request &request);
+    static bool deleteRequest(const Request &request);
+    static bool renameRequest(const Request &request, const QString newName);
 };
 
 #endif // REQUESTSTORAGE_H

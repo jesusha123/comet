@@ -9,6 +9,7 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+    , workspace("C:/Users/Jesus/comet")
 {
     ui->setupUi(this);
     ui->collectionView->setModel(&requestModel);
@@ -17,8 +18,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->splitter->setStretchFactor(0, 1);
     ui->splitter->setStretchFactor(1, 1000);
 
-    // Set up model
-    QString workspace("C:/Users/Jesus/comet");
+    // Set up collection model and view
     requestModel.setRootPath(workspace);
     requestModel.setFilter(QDir::NoDotAndDotDot | QDir::AllDirs | QDir::Files);
     QStringList nameFilters;
@@ -26,7 +26,11 @@ MainWindow::MainWindow(QWidget *parent)
     requestModel.setNameFilters(nameFilters);
     requestModel.setNameFilterDisables(false);
 
+    // Set up collection view
     ui->collectionView->setRootIndex(requestModel.index(workspace));
+    ui->collectionView->setColumnHidden(1, true); // Hide Size
+    ui->collectionView->setColumnHidden(2, true); // Hide Type
+    ui->collectionView->setColumnHidden(3, true); // Hide Date Modified
 
     connect(ui->actionClose, &QAction::triggered, this, &MainWindow::closeActiveTab);
     connect(ui->actionDelete, &QAction::triggered, this, &MainWindow::deleteRequest);
@@ -58,40 +62,25 @@ void MainWindow::collectionItemActivated(const QModelIndex &index)
     if (fileInfo.isFile()) {
         qDebug() << "Selected file:" << fileInfo.fileName();
 
-        QString filePath = fileInfo.absoluteFilePath(); // Get the full file path
-        Request request = RequestStorage().loadRequest(filePath);
+        Request request;
+        request.filePath = fileInfo.absoluteFilePath();
+        if (RequestStorage::loadRequest(request)) {
+            int tabIndex = findRequestTab(request.filePath);
+            if(tabIndex >= 0) {
+                ui->tabWidget->setCurrentIndex(tabIndex);
+            } else {
+                auto requestWidget = new RequestWidget(ui->tabWidget);
+                requestWidget->restoreRequest(request);
 
-        int tabIndex = findRequestTab(request.name);
-        if(tabIndex >= 0) {
-            ui->tabWidget->setCurrentIndex(tabIndex);
+                ui->tabWidget->addTab(requestWidget, request.filePath);
+                requestWidget->setRequestFilePath(request.filePath);
+                ui->tabWidget->setCurrentIndex(ui->tabWidget->count()-1);
+            }
         } else {
-            auto requestWidget = new RequestWidget(ui->tabWidget);
-            requestWidget->restoreRequest(request);
-
-            ui->tabWidget->addTab(requestWidget, request.name);
-            requestWidget->setName(request.name);
-            ui->tabWidget->setCurrentIndex(ui->tabWidget->count()-1);
+            qWarning() << "Error loading request";
         }
     } else if (fileInfo.isDir()) {
         qInfo() << "Selected directory:" << fileInfo.fileName();
-    }
-}
-
-void MainWindow::addRequestToCollection(Request &request)
-{
-    // qInfo("addRequestToCollection: %s", qPrintable(request.name));
-    // collection.append(request);
-    // addRequestToModel(request);
-}
-
-void MainWindow::addRequestToModel(Request& request)
-{
-    int rowCount = requestModel.rowCount();
-    if(requestModel.insertRow(rowCount)) {
-        QModelIndex index = requestModel.index(rowCount, 0);
-        requestModel.setData(index, request.name);
-    } else {
-        qWarning("Request could not be added to request model");
     }
 }
 
@@ -104,32 +93,24 @@ void MainWindow::createRequest()
 
 void MainWindow::saveActiveRequest()
 {
-    // RequestWidget* requestWidget = dynamic_cast<RequestWidget*>(ui->tabWidget->currentWidget());
-    // if(requestWidget) {
-    //     auto request = requestWidget->getRequest();
-    //     if(ensureRequestHasName(request)) {
-    //         ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), request.name);
-    //         requestWidget->setName(request.name);
+    RequestWidget* requestWidget = dynamic_cast<RequestWidget*>(ui->tabWidget->currentWidget());
+    if(requestWidget) {
+        Request request = requestWidget->getRequest();
+        if(ensureRequestHasName(request)) {
+            ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), request.filePath);
+            requestWidget->setRequestFilePath(request.filePath);
 
-    //         RequestStorage requestStorage;
-    //         QString name = requestWidget->getName();
-    //         if(requestStorage.saveRequest(request, name)) {
-    //             int collectionIndex = findCollectionRequest(name);
-    //             if(collectionIndex>=0) {
-    //                 collection.replace(collectionIndex, request);
-    //             } else {
-    //                 addRequestToCollection(request);
-    //             }
-    //             qInfo("Saved request with id %s", qPrintable(name));
-    //         } else {
-    //             qWarning("Failure to save request");
-    //         }
-    //     } else {
-    //         qInfo("Save process canceled");
-    //     }
-    // } else {
-    //     qWarning("Failed cast");
-    // }
+            if(RequestStorage::saveRequest(request)) {
+                qInfo() << "Request saved successfully";
+            } else {
+                qWarning() << "Error saving request";
+            }
+        } else {
+            qInfo("Save process canceled");
+        }
+    } else {
+        qWarning("Failed cast");
+    }
 }
 
 int MainWindow::findCollectionRequest(QString name)
@@ -146,7 +127,7 @@ int MainWindow::findRequestTab(QString name)
 {
     for (int i = 0; i < ui->tabWidget->count(); i++) {
         RequestWidget* requestWidget = dynamic_cast<RequestWidget*>(ui->tabWidget->widget(i));
-        if(name == requestWidget->getName()) {
+        if(name == requestWidget->getRequestFilePath()) {
             return i;
         }
     }
@@ -156,7 +137,7 @@ int MainWindow::findRequestTab(QString name)
 bool MainWindow::ensureRequestHasName(Request& request)
 {
     bool ok = true;
-    if(request.name.isEmpty()) {
+    if(request.filePath.isEmpty()) {
         QString text = QInputDialog::getText(
                 this,
                 "Request Name",
@@ -164,7 +145,7 @@ bool MainWindow::ensureRequestHasName(Request& request)
                 QLineEdit::Normal,
                 QString(),
                 &ok);
-        request.name = text;
+        request.filePath = text;
     }
     return ok;
 }
