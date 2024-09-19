@@ -27,7 +27,7 @@ private slots:
     void collectionItemActivated(const QModelIndex& index);
 
 private:
-    bool ensureRequestHasName(Request& request);
+    bool ensureRequestHasFilePath(Request& request);
     int findCollectionRequest(QString name);
     int findRequestTab(QString name);
 

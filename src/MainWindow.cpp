@@ -96,7 +96,7 @@ void MainWindow::saveActiveRequest()
     RequestWidget* requestWidget = dynamic_cast<RequestWidget*>(ui->tabWidget->currentWidget());
     if(requestWidget) {
         Request request = requestWidget->getRequest();
-        if(ensureRequestHasName(request)) {
+        if(ensureRequestHasFilePath(request)) {
             ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), request.filePath);
             requestWidget->setRequestFilePath(request.filePath);
 
@@ -134,7 +134,7 @@ int MainWindow::findRequestTab(QString name)
     return -1;
 }
 
-bool MainWindow::ensureRequestHasName(Request& request)
+bool MainWindow::ensureRequestHasFilePath(Request& request)
 {
     bool ok = true;
     if(request.filePath.isEmpty()) {
@@ -145,7 +145,8 @@ bool MainWindow::ensureRequestHasName(Request& request)
                 QLineEdit::Normal,
                 QString(),
                 &ok);
-        request.filePath = text;
+        QDir dir(workspace);
+        request.filePath = dir.absoluteFilePath(text+".yaml");
     }
     return ok;
 }
