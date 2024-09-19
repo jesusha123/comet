@@ -17,8 +17,8 @@ public:
     explicit RequestWidget(QWidget* parent, QString name = QString());
     Request getRequest();
     void restoreRequest(const Request& request);
-    QString getName() { return name; }
-    void setName(QString newName) { name = newName; }
+    QString getRequestFilePath() { return requestFilePath; }
+    void setRequestFilePath(QString requestFilePath) { this->requestFilePath = requestFilePath; }
 
 private slots:
     void sendRequest();
@@ -34,7 +34,7 @@ private:
     void initializeConnections();
 
     std::unique_ptr<Ui::RequestWidget> ui;
-    QString name;
+    QString requestFilePath;
 };
 
 #endif

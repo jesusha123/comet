@@ -26,8 +26,8 @@ RequestWidget::RequestWidget(QWidget *parent, QString name)
 
 Request RequestWidget::getRequest()
 {
-    auto request = RequestBuilder::buildRequest(ui);
-    request.name = name;
+    Request request = RequestBuilder::buildRequest(ui);
+    request.filePath = requestFilePath;
     return request;
 }
 

@@ -24,8 +24,6 @@ private slots:
     void tabChanged(int tabIndex);
     void showAboutDialog();
     void saveActiveRequest();
-    void addRequestToCollection(Request& request);
-    void addRequestToModel(Request& request);
     void collectionItemActivated(const QModelIndex& index);
 
 private:
@@ -34,6 +32,7 @@ private:
     int findRequestTab(QString name);
 
     std::unique_ptr<Ui::MainWindow> ui;
+    QString workspace;
     QFileSystemModel requestModel;
 };
 

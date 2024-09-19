@@ -56,6 +56,7 @@ add_executable(Comet
         src/network/RequestThread.cpp
         src/network/RequestThread.h
         src/winapp.rc
+        src/YamlConversions.h
     )
 
 target_link_libraries(Comet
