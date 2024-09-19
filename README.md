@@ -42,3 +42,4 @@ Comet is an API client for sending HTTP requests
 ## Build
 
 See [BUILD.md](/BUILD.md)
+bld
