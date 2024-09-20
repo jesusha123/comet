@@ -61,22 +61,22 @@ void MainWindow::collectionItemActivated(const QModelIndex &index)
     if (fileInfo.isFile()) {
         qDebug() << "Selected file:" << fileInfo.fileName();
 
-        Request request;
-        request.filePath = fileInfo.absoluteFilePath();
-        if (RequestStorage::loadRequest(request)) {
-            int tabIndex = findRequestTab(request.filePath);
-            if(tabIndex >= 0) {
-                ui->tabWidget->setCurrentIndex(tabIndex);
-            } else {
+        int tabIndex = findRequestTab(fileInfo.absoluteFilePath());
+        if(tabIndex >= 0) {
+            ui->tabWidget->setCurrentIndex(tabIndex);
+        } else {
+            Request request;
+            request.filePath = fileInfo.absoluteFilePath();
+            if (RequestStorage::loadRequest(request)) {
                 auto requestWidget = new RequestWidget(ui->tabWidget);
                 requestWidget->restoreRequest(request);
 
                 ui->tabWidget->addTab(requestWidget, request.filePath);
                 requestWidget->setRequestFilePath(request.filePath);
                 ui->tabWidget->setCurrentIndex(ui->tabWidget->count()-1);
+            } else {
+                qWarning() << "Error loading request";
             }
-        } else {
-            qWarning() << "Error loading request";
         }
     } else if (fileInfo.isDir()) {
         qInfo() << "Selected directory:" << fileInfo.fileName();
