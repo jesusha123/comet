@@ -167,6 +167,11 @@ void MainWindow::deleteRequest()
             qInfo() << "Attempting to delete file: " << filePath;
             if(RequestStorage::deleteRequest(filePath)) {
                 qInfo() << "File deleted: " << filePath;
+
+                int tabIndex = findRequestTab(fileInfo.absoluteFilePath());
+                if(tabIndex>=0) {
+                    closeTab(tabIndex);
+                }
             }
         }
     }
