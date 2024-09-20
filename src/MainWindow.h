@@ -7,6 +7,7 @@
 #include "Request.h"
 
 class HttpClient;
+class RequestWidget;
 
 class MainWindow : public QMainWindow
 {
@@ -19,16 +20,12 @@ private slots:
     void createRequest();
     void deleteRequest();
     void renameRequest();
-    void closeActiveTab();
-    void closeTab(int index);
-    void tabChanged(int tabIndex);
     void showAboutDialog();
     void saveActiveRequest();
-    void collectionItemActivated(const QModelIndex& index);
+    void collectionItemActivated(const QString &filePath);
 
 private:
     bool ensureRequestHasFilePath(Request& request);
-    int findRequestTab(QString name);
 
     std::unique_ptr<Ui::MainWindow> ui;
     QString workspace;
