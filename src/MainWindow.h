@@ -28,7 +28,6 @@ private slots:
 
 private:
     bool ensureRequestHasFilePath(Request& request);
-    int findCollectionRequest(QString name);
     int findRequestTab(QString name);
 
     std::unique_ptr<Ui::MainWindow> ui;
