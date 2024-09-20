@@ -168,20 +168,19 @@ void MainWindow::closeTab(int index)
 
 void MainWindow::deleteRequest()
 {
-    // Delete from: 1. File, 2. Tabs, 3. requestModel, 4. collection
-    // auto list = ui->collectionView->selectionModel()->selectedRows();
-    // for(auto index : list) {
-    //     int row = index.row();
-    //     if(RequestStorage().deleteRequest(collection.at(row))) { // 1. File
-    //         QString name = requestModel.stringList().at(row);
-    //         int tabIndex = findRequestTab(name);
-    //         if(tabIndex >= 0) {
-    //             closeTab(tabIndex); // 2. Tabs
-    //         }
-    //         requestModel.removeRows(row, 1); // 3. requestModel
-    //         collection.remove(row); // 4. collection
-    //     }
-    // }
+    qInfo() << "Deleting request";
+    QModelIndexList selectedRows = ui->collectionView->selectionModel()->selectedRows();
+    for(auto index : selectedRows) {
+        qInfo() << "Processing row for deletion";
+        QFileInfo fileInfo = requestModel.fileInfo(index);
+        if(fileInfo.isFile()) {
+            QString filePath = fileInfo.absoluteFilePath();
+            qInfo() << "Attempting to delete file: " << filePath;
+            if(RequestStorage::deleteRequest(filePath)) {
+                qInfo() << "File deleted: " << filePath;
+            }
+        }
+    }
 }
 
 void MainWindow::renameRequest()

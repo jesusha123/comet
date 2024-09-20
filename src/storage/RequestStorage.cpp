@@ -66,9 +66,15 @@ bool RequestStorage::saveRequest(const Request &request)
     }
 }
 
-bool RequestStorage::deleteRequest(const Request &request)
+bool RequestStorage::deleteRequest(const QString &filePath)
 {
-    return true;
+    if (QFile::remove(filePath)) {
+        qDebug() << "File deleted successfully:" << filePath;
+        return true;
+    } else {
+        qWarning() << "Failed to delete file:" << filePath;
+        return false;
+    }
 }
 
 bool RequestStorage::renameRequest(const Request &request, const QString newName)
