@@ -45,14 +45,13 @@ MainWindow::MainWindow(QWidget *parent)
 
 void MainWindow::tabChanged(int tabIndex)
 {
-    // RequestWidget* requestWidget = dynamic_cast<RequestWidget*>(ui->tabWidget->currentWidget());
-    // if(requestWidget) {
-    //     int viewIndex = findCollectionRequest(requestWidget->getName());
-    //     if (viewIndex >= 0) {
-    //         auto modelIndex = requestModel.index(viewIndex);
-    //         ui->collectionView->setCurrentIndex(modelIndex);
-    //     }
-    // }
+    RequestWidget* requestWidget = dynamic_cast<RequestWidget*>(ui->tabWidget->currentWidget());
+    if(requestWidget) {
+        QModelIndex index = requestModel.index(requestWidget->getRequestFilePath());
+        if(index.isValid()) {
+            ui->collectionView->setCurrentIndex(index);
+        }
+    }
 }
 
 void MainWindow::collectionItemActivated(const QModelIndex &index)
@@ -111,16 +110,6 @@ void MainWindow::saveActiveRequest()
     } else {
         qWarning("Failed cast");
     }
-}
-
-int MainWindow::findCollectionRequest(QString name)
-{
-    // for(int i=0; i<requestModel.stringList().count(); i++) {
-    //     if(name == requestModel.stringList().at(i)) {
-    //         return i;
-    //     }
-    // }
-    return -1;
 }
 
 int MainWindow::findRequestTab(QString name)
