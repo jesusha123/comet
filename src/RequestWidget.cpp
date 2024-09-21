@@ -5,7 +5,7 @@
 #include <QDateTime>
 #include <QUrlQuery>
 
-RequestWidget::RequestWidget(QWidget *parent, QString name)
+RequestWidget::RequestWidget(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::RequestWidget)
 {

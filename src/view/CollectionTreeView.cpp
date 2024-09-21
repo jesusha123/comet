@@ -1,30 +1,38 @@
 #include "CollectionTreeView.h"
-#include <QFileSystemModel>
 
 CollectionTreeView::CollectionTreeView(QWidget *parent)
     : QTreeView(parent)
 {
+    setModel(&fileSystemModel);
     connect(this, &QTreeView::clicked, this, &CollectionTreeView::onItemClicked);
+}
+
+void CollectionTreeView::loadWorkspace(const QString& workspacePath)
+{
+    fileSystemModel.setRootPath(workspacePath);
+    setRootIndex(fileSystemModel.index(workspacePath));
+    setColumnHidden(1, true); // Hide Size
+    setColumnHidden(2, true); // Hide Type
+    setColumnHidden(3, true); // Hide Date Modified
 }
 
 void CollectionTreeView::selectFile(const QString &filePath)
 {
-    QModelIndex index = fileSystemModel->index(filePath);
+    QModelIndex index = fileSystemModel.index(filePath);
     if (index.isValid()) {
         setCurrentIndex(index);
     }
 }
 
-void CollectionTreeView::setFileSystemModel(QFileSystemModel* fileSystemModel)
+FileSystemModel* CollectionTreeView::getFileSystemModel()
 {
-    setModel(fileSystemModel);
-    this->fileSystemModel = fileSystemModel;
+    return &fileSystemModel;
 }
 
 void CollectionTreeView::onItemClicked(const QModelIndex &index)
 {
     qInfo() << "Item clicked";
-    QFileInfo fileInfo = fileSystemModel->fileInfo(index);
+    QFileInfo fileInfo = fileSystemModel.fileInfo(index);
 
     if (fileInfo.isFile()) {
         QString absoluteFilePath = fileInfo.absoluteFilePath();
