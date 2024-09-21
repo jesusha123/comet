@@ -12,7 +12,6 @@ MainWindow::MainWindow(QWidget *parent)
     , workspace("C:/temp/comet")
 {
     ui->setupUi(this);
-    ui->collectionView->setModel(&requestModel);
 
     // Force left side to be smaller. There is probably a cleaner way...
     ui->splitter->setStretchFactor(0, 1);
@@ -27,59 +26,44 @@ MainWindow::MainWindow(QWidget *parent)
     requestModel.setNameFilterDisables(false);
 
     // Set up collection view
+    ui->collectionView->setFileSystemModel(&requestModel);
     ui->collectionView->setRootIndex(requestModel.index(workspace));
     ui->collectionView->setColumnHidden(1, true); // Hide Size
     ui->collectionView->setColumnHidden(2, true); // Hide Type
     ui->collectionView->setColumnHidden(3, true); // Hide Date Modified
 
-    connect(ui->actionClose, &QAction::triggered, this, &MainWindow::closeActiveTab);
+    connect(ui->actionClose, &QAction::triggered, ui->tabWidget, &RequestTabWidget::closeActiveTab);
     connect(ui->actionDelete, &QAction::triggered, this, &MainWindow::deleteRequest);
     connect(ui->actionNew, &QAction::triggered, this, &MainWindow::createRequest);
     connect(ui->actionRename, &QAction::triggered, this, &MainWindow::renameRequest);
     connect(ui->actionSave, &QAction::triggered, this, &MainWindow::saveActiveRequest);
-    connect(ui->tabWidget, &QTabWidget::tabCloseRequested, this, &MainWindow::closeTab);
-    connect(ui->tabWidget, &QTabWidget::currentChanged, this, &MainWindow::tabChanged);
-    connect(ui->collectionView, &QAbstractItemView::clicked, this, &MainWindow::collectionItemActivated);
+    connect(ui->tabWidget, &RequestTabWidget::tabChanged, ui->collectionView, &CollectionTreeView::selectFile);
+    connect(ui->collectionView, &CollectionTreeView::fileClicked, this, &MainWindow::collectionItemActivated);
     connect(ui->action_About, &QAction::triggered, this, &MainWindow::showAboutDialog);
 }
 
-void MainWindow::tabChanged(int tabIndex)
+void MainWindow::collectionItemActivated(const QString &filePath)
 {
-    RequestWidget* requestWidget = dynamic_cast<RequestWidget*>(ui->tabWidget->currentWidget());
-    if(requestWidget) {
-        QModelIndex index = requestModel.index(requestWidget->getRequestFilePath());
-        if(index.isValid()) {
-            ui->collectionView->setCurrentIndex(index);
-        }
-    }
-}
+    qInfo() << "Selected file:" << filePath;
+    int tabIndex = ui->tabWidget->findRequestTab(filePath);
 
-void MainWindow::collectionItemActivated(const QModelIndex &index)
-{
-    QFileInfo fileInfo = requestModel.fileInfo(index);
+    if(tabIndex >= 0) {
+        ui->tabWidget->setCurrentIndex(tabIndex);
+    } else {
+        Request request;
+        request.filePath = filePath;
+        if (RequestStorage::loadRequest(request)) {
+            auto requestWidget = new RequestWidget(ui->tabWidget);
+            requestWidget->restoreRequest(request);
 
-    if (fileInfo.isFile()) {
-        qDebug() << "Selected file:" << fileInfo.fileName();
+            QFileInfo fileInfo(request.filePath);
 
-        int tabIndex = findRequestTab(fileInfo.absoluteFilePath());
-        if(tabIndex >= 0) {
-            ui->tabWidget->setCurrentIndex(tabIndex);
+            ui->tabWidget->addTab(requestWidget, fileInfo.completeBaseName());
+            requestWidget->setRequestFilePath(request.filePath);
+            ui->tabWidget->setCurrentIndex(ui->tabWidget->count()-1);
         } else {
-            Request request;
-            request.filePath = fileInfo.absoluteFilePath();
-            if (RequestStorage::loadRequest(request)) {
-                auto requestWidget = new RequestWidget(ui->tabWidget);
-                requestWidget->restoreRequest(request);
-
-                ui->tabWidget->addTab(requestWidget, request.filePath);
-                requestWidget->setRequestFilePath(request.filePath);
-                ui->tabWidget->setCurrentIndex(ui->tabWidget->count()-1);
-            } else {
-                qWarning() << "Error loading request";
-            }
+            qWarning() << "Error loading request";
         }
-    } else if (fileInfo.isDir()) {
-        qInfo() << "Selected directory:" << fileInfo.fileName();
     }
 }
 
@@ -112,17 +96,6 @@ void MainWindow::saveActiveRequest()
     }
 }
 
-int MainWindow::findRequestTab(QString name)
-{
-    for (int i = 0; i < ui->tabWidget->count(); i++) {
-        RequestWidget* requestWidget = dynamic_cast<RequestWidget*>(ui->tabWidget->widget(i));
-        if(name == requestWidget->getRequestFilePath()) {
-            return i;
-        }
-    }
-    return -1;
-}
-
 bool MainWindow::ensureRequestHasFilePath(Request& request)
 {
     bool ok = true;
@@ -140,21 +113,6 @@ bool MainWindow::ensureRequestHasFilePath(Request& request)
     return ok;
 }
 
-void MainWindow::closeActiveTab()
-{
-    auto index = ui->tabWidget->currentIndex();
-    if(index >= 0) {
-        closeTab(index);
-    }
-}
-
-void MainWindow::closeTab(int index)
-{
-    auto widget = ui->tabWidget->widget(index);
-    ui->tabWidget->removeTab(index);
-    delete widget;
-}
-
 void MainWindow::deleteRequest()
 {
     qInfo() << "Deleting request";
@@ -168,9 +126,9 @@ void MainWindow::deleteRequest()
             if(RequestStorage::deleteRequest(filePath)) {
                 qInfo() << "File deleted: " << filePath;
 
-                int tabIndex = findRequestTab(fileInfo.absoluteFilePath());
+                int tabIndex = ui->tabWidget->findRequestTab(fileInfo.absoluteFilePath());
                 if(tabIndex>=0) {
-                    closeTab(tabIndex);
+                    ui->tabWidget->closeTab(tabIndex);
                 }
             }
         }
@@ -179,33 +137,37 @@ void MainWindow::deleteRequest()
 
 void MainWindow::renameRequest()
 {
-    // Rename here: 1. File, 2. Tab title, 3. RequestWidget, 4. requestModel, 5. collection
-    // auto list = ui->collectionView->selectionModel()->selectedRows();
-    // for(auto index : list) {
-    //     int row = index.row();
-    //     bool ok = true;
-    //     QString newName = QInputDialog::getText(
-    //             this,
-    //             "Request Rename",
-    //             "Enter new request name",
-    //             QLineEdit::Normal,
-    //             QString(),
-    //             &ok);
-    //     if(ok && RequestStorage().renameRequest(collection.at(row), newName)) {
-    //         QString name = requestModel.stringList().at(row);
-    //         int tabIndex = findRequestTab(name);
-    //         if(tabIndex >= 0) {
-    //             ui->tabWidget->tabBar()->setTabText(tabIndex, newName); // 2. Tab title
-    //             RequestWidget* requestWidget = dynamic_cast<RequestWidget*>(ui->tabWidget->currentWidget());
-    //             requestWidget->setName(newName); // RequestWidget
-    //         }
-    //         QModelIndex index = requestModel.index(row, 0);
-    //         requestModel.setData(index, newName); // 4. requestModel
-    //         collection[row].name = newName; // 5. collection
-    //     } else {
-    //         qWarning("Failure to rename file");
-    //     }
-    // }
+    auto list = ui->collectionView->selectionModel()->selectedRows();
+    for(auto index : list) {
+        QFileInfo fileInfo = requestModel.fileInfo(index);
+        if(fileInfo.isFile()) {
+            bool ok = true;
+            QString newName = QInputDialog::getText(
+                this,
+                "Request Rename",
+                "Enter new request name",
+                QLineEdit::Normal,
+                QString(),
+                &ok);
+
+            if(ok) {
+                QDir dir(workspace);
+                QString prevFilePath = fileInfo.absoluteFilePath();
+                QString newFilePath = dir.absoluteFilePath(newName+".yaml");
+                RequestStorage::renameRequest(prevFilePath, newFilePath);
+
+                int index = ui->tabWidget->findRequestTab(prevFilePath);
+                if(index>=0) {
+                    QFileInfo fileInfo(newFilePath);
+                    ui->tabWidget->setTabText(index, fileInfo.completeBaseName());
+                    RequestWidget* requestWidget = dynamic_cast<RequestWidget*>(ui->tabWidget->widget(index));
+                    requestWidget->setRequestFilePath(newFilePath);
+                }
+            } else {
+                qInfo() << "Rename canceled";
+            }
+        }
+    }
 }
 
 void MainWindow::showAboutDialog()

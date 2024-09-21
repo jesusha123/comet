@@ -55,6 +55,12 @@ add_executable(Comet
         src/action/ShowAboutCommand.h
         src/network/RequestThread.cpp
         src/network/RequestThread.h
+        src/view/CollectionTreeView.h
+        src/view/CollectionTreeView.cpp
+        src/view/RequestTabBar.h
+        src/view/RequestTabBar.cpp
+        src/view/RequestTabWidget.h
+        src/view/RequestTabWidget.cpp
         src/winapp.rc
         src/YamlConversions.h
     )

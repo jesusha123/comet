@@ -12,7 +12,7 @@ public:
     static bool loadRequest(Request &request);
     static bool saveRequest(const Request &request);
     static bool deleteRequest(const QString &filePath);
-    static bool renameRequest(const Request &request, const QString newName);
+    static bool renameRequest(const QString &prevFilePath, const QString &newFilePath);
 };
 
 #endif // REQUESTSTORAGE_H
