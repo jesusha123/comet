@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>icons/close.svg</file>
         <file>icons/delete.svg</file>
         <file>icons/new.svg</file>
         <file>icons/rename.svg</file>
