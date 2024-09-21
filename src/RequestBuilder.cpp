@@ -47,7 +47,7 @@ void RequestBuilder::restoreRequest(std::unique_ptr<Ui::RequestWidget>& ui, cons
     ui->urlLineEdit->setText(request.url.toString());
     ui->methodComboBox->setCurrentText(request.method);
 
-    ui->requestHeadersTableWidget->setRowCount(request.headers.count());
+    ui->requestHeadersTableWidget->setRowCount(request.headers.count()+1); // +1 for the new empty row
     int i = 0;
     for(const auto &header : request.headers) {
         ui->requestHeadersTableWidget->setProperty(i++, header.first, header.second);
