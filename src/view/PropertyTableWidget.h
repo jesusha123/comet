@@ -2,22 +2,13 @@
 #define PROPERTYTABLEWIDGET_H
 
 #include <QTableWidget>
-#include <QErrorMessage>
 
 class PropertyTableWidget : public QTableWidget
 {
-    Q_OBJECT
 public:
-    PropertyTableWidget(QWidget *parent = nullptr);
+    explicit PropertyTableWidget(QWidget *parent = nullptr);
     void setProperty(int row, const QString& key, const QString& value);
     QList<QPair<QString, QString>> getProperties();
-public slots:
-    void appendRow();
-    void removeSelectedRows();
-signals:
-    void rowsRemoved();
-private:
-    QErrorMessage errorMessage;
 };
 
 #endif // PROPERTYTABLEWIDGET_H

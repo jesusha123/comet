@@ -64,41 +64,7 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="PropertyTableWidget" name="requestHeadersTableWidget"/>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="reqHeaderButtonLayout">
-         <property name="spacing">
-          <number>0</number>
-         </property>
-         <item>
-          <widget class="QToolButton" name="addReqHeaderButton">
-           <property name="text">
-            <string>+</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QToolButton" name="removeReqHeaderButton">
-           <property name="text">
-            <string>-</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer name="horizontalSpacer">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
+        <widget class="RequestInfoTableWidget" name="requestHeadersTableWidget"/>
        </item>
       </layout>
      </widget>
@@ -123,41 +89,7 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="PropertyTableWidget" name="requestParamsTableWidget"/>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_2">
-         <property name="spacing">
-          <number>0</number>
-         </property>
-         <item>
-          <widget class="QToolButton" name="addReqParamButton">
-           <property name="text">
-            <string>+</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QToolButton" name="removeReqParamButton">
-           <property name="text">
-            <string>-</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer name="horizontalSpacer_2">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
+        <widget class="RequestInfoTableWidget" name="requestParamsTableWidget"/>
        </item>
       </layout>
      </widget>
@@ -189,7 +121,7 @@
          <item>
           <spacer name="horizontalSpacer_3">
            <property name="orientation">
-            <enum>Qt::Horizontal</enum>
+            <enum>Qt::Orientation::Horizontal</enum>
            </property>
            <property name="sizeHint" stdset="0">
             <size>
@@ -247,41 +179,7 @@
             <number>0</number>
            </property>
            <item>
-            <widget class="PropertyTableWidget" name="reqBodyTableWidget"/>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_4">
-             <property name="spacing">
-              <number>0</number>
-             </property>
-             <item>
-              <widget class="QToolButton" name="addReqBodyPropButton">
-               <property name="text">
-                <string>+</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QToolButton" name="removeReqBodyPropButton">
-               <property name="text">
-                <string>-</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer name="reqBodySpacer">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-            </layout>
+            <widget class="RequestInfoTableWidget" name="reqBodyTableWidget"/>
            </item>
           </layout>
          </widget>
@@ -341,6 +239,11 @@
    <class>ContentTypeComboBox</class>
    <extends>QComboBox</extends>
    <header>ContentTypeComboBox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>RequestInfoTableWidget</class>
+   <extends>QTableWidget</extends>
+   <header>RequestInfoTableWidget.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -17,12 +17,12 @@ public:
     MainWindow(QWidget *parent = nullptr);
 
 private slots:
+    void loadRequest(const QString &filePath);
     void createRequest();
     void deleteRequest();
     void renameRequest();
-    void showAboutDialog();
     void saveActiveRequest();
-    void collectionItemActivated(const QString &filePath);
+    void showAboutDialog();
 
 private:
     bool ensureRequestHasFilePath(Request& request);

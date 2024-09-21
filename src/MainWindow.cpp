@@ -38,11 +38,11 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->actionRename, &QAction::triggered, this, &MainWindow::renameRequest);
     connect(ui->actionSave, &QAction::triggered, this, &MainWindow::saveActiveRequest);
     connect(ui->tabWidget, &RequestTabWidget::tabChanged, ui->collectionView, &CollectionTreeView::selectFile);
-    connect(ui->collectionView, &CollectionTreeView::fileClicked, this, &MainWindow::collectionItemActivated);
+    connect(ui->collectionView, &CollectionTreeView::fileClicked, this, &MainWindow::loadRequest);
     connect(ui->action_About, &QAction::triggered, this, &MainWindow::showAboutDialog);
 }
 
-void MainWindow::collectionItemActivated(const QString &filePath)
+void MainWindow::loadRequest(const QString &filePath)
 {
     qInfo() << "Selected file:" << filePath;
     int tabIndex = ui->tabWidget->findRequestTab(filePath);

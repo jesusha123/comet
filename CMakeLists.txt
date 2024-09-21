@@ -57,6 +57,8 @@ add_executable(Comet
         src/network/RequestThread.h
         src/view/CollectionTreeView.h
         src/view/CollectionTreeView.cpp
+        src/view/RequestInfoTableWidget.h
+        src/view/RequestInfoTableWidget.cpp
         src/view/RequestTabBar.h
         src/view/RequestTabBar.cpp
         src/view/RequestTabWidget.h

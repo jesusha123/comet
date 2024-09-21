@@ -146,16 +146,8 @@ void RequestWidget::initializeConnections()
 
     connect(ui->reqContentTypeComboBox, &QComboBox::currentIndexChanged, this, &RequestWidget::processReqContentTypeChange);
 
-    connect(ui->addReqParamButton, &QToolButton::clicked, ui->requestParamsTableWidget, &PropertyTableWidget::appendRow);
-    connect(ui->removeReqParamButton, &QToolButton::clicked, ui->requestParamsTableWidget, &PropertyTableWidget::removeSelectedRows);
     connect(ui->requestParamsTableWidget, &QTableWidget::itemChanged, this, &RequestWidget::processParamsChanged);
-    connect(ui->requestParamsTableWidget, &PropertyTableWidget::rowsRemoved, this, &RequestWidget::processParamsRemoved);
-
-    connect(ui->addReqHeaderButton, &QToolButton::clicked, ui->requestHeadersTableWidget, &PropertyTableWidget::appendRow);
-    connect(ui->removeReqHeaderButton, &QToolButton::clicked, ui->requestHeadersTableWidget, &PropertyTableWidget::removeSelectedRows);
-
-    connect(ui->addReqBodyPropButton, &QToolButton::clicked, ui->reqBodyTableWidget, &PropertyTableWidget::appendRow);
-    connect(ui->removeReqBodyPropButton, &QToolButton::clicked, ui->reqBodyTableWidget, &PropertyTableWidget::removeSelectedRows);
+    // TODO, handle scenario where removing rows should trigger RequestWidget::processParamsRemoved
 
     connect(ui->methodComboBox, &MethodComboBox::requestBodyAllowed, this, &RequestWidget::processRequestBodyAllowed);
 }
