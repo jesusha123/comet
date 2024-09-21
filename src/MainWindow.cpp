@@ -32,7 +32,6 @@ MainWindow::MainWindow(QWidget *parent)
     ui->collectionView->setColumnHidden(2, true); // Hide Type
     ui->collectionView->setColumnHidden(3, true); // Hide Date Modified
 
-    connect(ui->actionClose, &QAction::triggered, ui->tabWidget, &RequestTabWidget::closeActiveTab);
     connect(ui->actionDelete, &QAction::triggered, this, &MainWindow::deleteRequest);
     connect(ui->actionNew, &QAction::triggered, this, &MainWindow::createRequest);
     connect(ui->actionRename, &QAction::triggered, this, &MainWindow::renameRequest);

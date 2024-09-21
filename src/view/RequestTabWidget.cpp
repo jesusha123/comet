@@ -22,14 +22,6 @@ int RequestTabWidget::findRequestTab(const QString &filePath)
     return -1;
 }
 
-void RequestTabWidget::closeActiveTab()
-{
-    int index = currentIndex();
-    if(index >= 0) {
-        closeTab(index);
-    }
-}
-
 void RequestTabWidget::closeTab(int tabIndex)
 {
     QWidget *w = widget(tabIndex);
