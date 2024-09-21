@@ -15,7 +15,6 @@ signals:
     void tabChanged(const QString &filePath);
 
 public slots:
-    void closeActiveTab();
     void closeTab(int tabIndex);
 
 private slots:
