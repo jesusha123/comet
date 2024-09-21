@@ -14,7 +14,7 @@ class RequestWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit RequestWidget(QWidget* parent, QString name = QString());
+    explicit RequestWidget(QWidget* parent);
     Request getRequest();
     void restoreRequest(const Request& request);
     QString getRequestFilePath() { return requestFilePath; }

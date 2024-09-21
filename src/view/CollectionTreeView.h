@@ -1,9 +1,8 @@
 #ifndef COLLECTIONTREEVIEW_H
 #define COLLECTIONTREEVIEW_H
 
+#include "FileSystemModel.h"
 #include <QTreeView>
-
-class QFileSystemModel;
 
 class CollectionTreeView : public QTreeView
 {
@@ -11,7 +10,8 @@ class CollectionTreeView : public QTreeView
 public:
     explicit CollectionTreeView(QWidget *parent = nullptr);
 
-    void setFileSystemModel(QFileSystemModel* model);
+    void loadWorkspace(const QString& workspacePath);
+    FileSystemModel* getFileSystemModel();
 
 public slots:
     void selectFile(const QString &filePath);
@@ -20,7 +20,7 @@ signals:
     void fileClicked(const QString &absoluteFilePath);
 
 private:
-    QFileSystemModel* fileSystemModel;
+    FileSystemModel fileSystemModel;
 
 private slots:
     void onItemClicked(const QModelIndex &index);
