@@ -10,7 +10,7 @@ class CollectionTreeView : public QTreeView
 public:
     explicit CollectionTreeView(QWidget *parent = nullptr);
 
-    void loadWorkspace(const QString& workspacePath);
+    void loadFolder(const QString& folderPath);
     FileSystemModel* getFileSystemModel();
 
 public slots:

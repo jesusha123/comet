@@ -46,7 +46,7 @@ bool SaveRequestCommand::ensureRequestHasFilePath(Request& request)
             QLineEdit::Normal,
             QString(),
             &ok);
-        QDir dir(mainWindow->getWorkspace());
+        QDir dir(mainWindow->getFolder());
         request.filePath = dir.absoluteFilePath(text+".yaml");
     }
     return ok;

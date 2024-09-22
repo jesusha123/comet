@@ -31,7 +31,7 @@ void RenameRequestCommand::execute()
                 &ok);
 
             if(ok) {
-                QDir dir(mainWindow->getWorkspace());
+                QDir dir(mainWindow->getFolder());
                 QString prevFilePath = fileInfo.absoluteFilePath();
                 QString newFilePath = dir.absoluteFilePath(newName+".yaml");
                 RequestStorage::renameRequest(prevFilePath, newFilePath);
