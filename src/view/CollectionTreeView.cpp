@@ -7,10 +7,10 @@ CollectionTreeView::CollectionTreeView(QWidget *parent)
     connect(this, &QTreeView::clicked, this, &CollectionTreeView::onItemClicked);
 }
 
-void CollectionTreeView::loadWorkspace(const QString& workspacePath)
+void CollectionTreeView::loadFolder(const QString& folderPath)
 {
-    fileSystemModel.setRootPath(workspacePath);
-    setRootIndex(fileSystemModel.index(workspacePath));
+    fileSystemModel.setRootPath(folderPath);
+    setRootIndex(fileSystemModel.index(folderPath));
     setColumnHidden(1, true); // Hide Size
     setColumnHidden(2, true); // Hide Type
     setColumnHidden(3, true); // Hide Date Modified

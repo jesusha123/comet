@@ -14,9 +14,11 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
 
-    QString getWorkspace();
+    void loadFolder();
+    QString getFolder();
 
 private slots:
+    void selectFolder();
     void loadRequest(const QString &filePath);
     void createRequest();
     void deleteRequest();
@@ -25,8 +27,10 @@ private slots:
     void showAboutDialog();
 
 private:
+    void setFolder(const QString& folder);
+
     std::unique_ptr<Ui::MainWindow> ui;
-    QString workspace;
+    QString folder;
 };
 
 #endif
