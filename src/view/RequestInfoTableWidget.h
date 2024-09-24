@@ -9,9 +9,12 @@ class RequestInfoTableWidget : public PropertyTableWidget
 public:
     explicit RequestInfoTableWidget(QWidget *parent = nullptr);
 private:
+    void addDeleteButtonToRow(int row);
     bool ignoreItemChanged;
 private slots:
     void maintainBlankRowOnChange(QTableWidgetItem *item);
+    void onRowsInserted(const QModelIndex &parent, int first, int last);
+    void onDeleteButtonClicked();
 };
 
 #endif // REQUESTINFOTABLEWIDGET_H
