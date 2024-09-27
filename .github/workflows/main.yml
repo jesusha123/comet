@@ -20,9 +20,6 @@ jobs:
       - name: Install vcpkg dependencies
         uses: lukka/run-vcpkg@v11
 
-      # - name: Add msbuild to PATH
-      #   uses: microsoft/setup-msbuild@v2
-
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
         with:
@@ -38,13 +35,18 @@ jobs:
         run: find .
 
       - name: Build
-        run: make -f build/Makefile
+        run: make
+        working-directory: build
 
       - name: List all files using find
         run: find .
 
       - name: macdeployqt
-        run: macdeployqt --release build/Comet.app
+        run: macdeployqt --release Comet.app
+        working-directory: build
+
+      - name: List all files using find
+        run: find .
 
       - name: Upload build as artifact
         if: github.event_name == 'pull_request'
