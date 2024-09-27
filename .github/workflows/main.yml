@@ -42,7 +42,7 @@ jobs:
         run: find .
 
       - name: macdeployqt
-        run: macdeployqt --release Comet.app
+        run: macdeployqt Comet.app
         working-directory: build
 
       - name: List all files using find
