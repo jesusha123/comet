@@ -14,6 +14,9 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v4
 
+      - name: Install CMake
+      - uses: lukka/get-cmake@latest
+
       - name: Install vcpkg dependencies
         uses: lukka/run-vcpkg@v11
 
