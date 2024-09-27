@@ -20,16 +20,19 @@ jobs:
       # - name: Add msbuild to PATH
       #   uses: microsoft/setup-msbuild@v2
 
-      - name: Install Qt
-        uses: jurplel/install-qt-action@v3
-        with:
-          version: 6.7.0
-          host: windows
-          target: desktop
-          arch: win64_msvc2019_64
+      # - name: Install Qt
+      #   uses: jurplel/install-qt-action@v3
+      #   with:
+      #     version: 6.7.0
+      #     host: windows
+      #     target: desktop
+      #     arch: win64_msvc2019_64
+
+      - name: List files
+        run: ls -R
 
       - name: CMake
-        run: cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}\vcpkg\scripts\buildsystems\vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows-release
+        run: cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=arm64-osx-release
 
       - name: msbuild
         run: msbuild build\Comet.sln /property:Configuration=Release
