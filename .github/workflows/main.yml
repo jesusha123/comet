@@ -9,7 +9,7 @@ on:
       - '*'
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: macos-latest
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
@@ -17,8 +17,8 @@ jobs:
       - name: Install vcpkg dependencies
         uses: lukka/run-vcpkg@v11
 
-      - name: Add msbuild to PATH
-        uses: microsoft/setup-msbuild@v2
+      # - name: Add msbuild to PATH
+      #   uses: microsoft/setup-msbuild@v2
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
