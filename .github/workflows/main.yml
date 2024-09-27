@@ -38,14 +38,17 @@ jobs:
         run: find .
 
       - name: Build
-        run: make
+        run: make -f build/Makefile
+
+      - name: List all files using find
+        run: find .
 
       - name: macdeployqt
-        run: macdeployqt --release build/Release/Comet.app
+        run: macdeployqt --release build/Comet.app
 
       - name: Upload build as artifact
         if: github.event_name == 'pull_request'
         uses: actions/upload-artifact@v4
         with:
           name: Comet-macOS-arm64
-          path: build/Release/Comet.app
+          path: build/Comet.app
