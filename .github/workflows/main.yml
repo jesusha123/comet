@@ -31,33 +31,18 @@ jobs:
           target: desktop
           arch: clang_64
 
-      - name: List files
-        run: find .
-
       - name: CMake
         run: cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=arm64-osx
 
-      - name: msbuild
-        run: msbuild build\Comet.sln /property:Configuration=Release
+      - name: Build
+        run: make
 
-      - name: windeployqt
-        run: windeployqt --release build\Release\Comet.exe
+      - name: macdeployqt
+        run: macdeployqt --release build/Release/Comet.app
 
       - name: Upload build as artifact
         if: github.event_name == 'pull_request'
         uses: actions/upload-artifact@v4
         with:
-          name: Comet-Windows-x64
-          path: build\Release
-
-      - name: Zip build artifacts
-        if: startsWith(github.ref, 'refs/tags/')
-        shell: powershell
-        run: |
-          Compress-Archive -Path build\Release\* -DestinationPath build\Comet.zip
-
-      - name: Create GitHub Release
-        if: startsWith(github.ref, 'refs/tags/')
-        uses: ncipollo/release-action@v1
-        with:
-          artifacts: build\Comet.zip
+          name: Comet-macOS-arm64
+          path: build/Release/Comet.app
