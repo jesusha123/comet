@@ -42,16 +42,8 @@ jobs:
         run: find .
 
       - name: macdeployqt
-        run: macdeployqt Comet.app
+        run: macdeployqt Comet.app -dmg
         working-directory: build
-
-      - name: List all files using find
-        run: find .
-
-      - name: Prepare artifact
-        run: |
-          mkdir -p artifact/Comet.app
-          ditto build/Comet.app artifact/Comet.app
 
       - name: List all files using find
         run: find .
@@ -61,4 +53,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Comet-macOS-arm64
-          path: artifact/
+          path: build/Comet.dmg
