@@ -17,8 +17,8 @@ jobs:
       - name: Install vcpkg dependencies
         uses: lukka/run-vcpkg@v11
 
-      - name: Add msbuild to PATH
-        uses: microsoft/setup-msbuild@v2
+      # - name: Add msbuild to PATH
+      #   uses: microsoft/setup-msbuild@v2
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
@@ -29,13 +29,16 @@ jobs:
           arch: win64_msvc2019_64
 
       - name: CMake
-        run: cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}\vcpkg\scripts\buildsystems\vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows-release
+        run: cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows -DVCPKG_BUILD_TYPE=release
 
-      - name: msbuild
-        run: msbuild build\Comet.sln /property:Configuration=Release
+      - name: Build
+        run: cmake --build build --config Release
+
+      # - name: msbuild
+      #   run: msbuild build\Comet.sln /property:Configuration=Release
 
       - name: windeployqt
-        run: windeployqt --release build\Release\Comet.exe
+        run: windeployqt --release build/Release/Comet.exe
 
       - name: Upload build as artifact
         if: github.event_name == 'pull_request'
