@@ -1,5 +1,5 @@
-name: PR build
-run-name: ${{ github.actor }} PR build
+name: Windows build
+run-name: Windows build
 on:
   pull_request:
     branches:
@@ -17,9 +17,6 @@ jobs:
       - name: Install vcpkg dependencies
         uses: lukka/run-vcpkg@v11
 
-      # - name: Add msbuild to PATH
-      #   uses: microsoft/setup-msbuild@v2
-
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
         with:
@@ -33,9 +30,6 @@ jobs:
 
       - name: Build
         run: cmake --build build --config Release
-
-      # - name: msbuild
-      #   run: msbuild build\Comet.sln /property:Configuration=Release
 
       - name: windeployqt
         run: windeployqt --release build/Release/Comet.exe
