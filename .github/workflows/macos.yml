@@ -1,0 +1,46 @@
+name: macOS build
+run-name: macOS build
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    tags:
+      - '*'
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - name: Install CMake
+        uses: lukka/get-cmake@latest
+
+      - name: Install vcpkg dependencies
+        uses: lukka/run-vcpkg@v11
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: 6.7.0
+          host: mac
+          target: desktop
+          arch: clang_64
+
+      - name: CMake
+        run: cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=arm64-osx -DVCPKG_BUILD_TYPE=release
+
+      - name: Build
+        run: cmake --build build --config Release
+
+      - name: macdeployqt
+        run: macdeployqt Comet.app -dmg
+        working-directory: build
+
+      - name: Upload build as artifact
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: Comet-macOS-arm64
+          path: build/Comet.dmg
