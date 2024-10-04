@@ -16,46 +16,46 @@ jobs:
           MACOS_CERTIFICATE: ${{ secrets.MACOS_CERTIFICATE }}
           MACOS_CERTIFICATE_PWD: ${{ secrets.MACOS_CERTIFICATE_PWD }}
           MACOS_KEYCHAIN_PWD: ${{ secrets.MACOS_KEYCHAIN_PWD }}
+          MACOS_SIGNING_IDENTITY: ${{ secrets.MACOS_SIGNING_IDENTITY }}
         run: |
-          echo $MACOS_CERTIFICATE | base64 --decode > certificate.p12
-          security create-keychain -p $MACOS_KEYCHAIN_PWD build.keychain
+          set -e
+          echo "$MACOS_CERTIFICATE" | base64 --decode > certificate.p12
+          security create-keychain -p "$MACOS_KEYCHAIN_PWD" build.keychain
           security default-keychain -s build.keychain
-          security unlock-keychain -p $MACOS_KEYCHAIN_PWD build.keychain
-          security import certificate.p12 -k build.keychain -P $MACOS_CERTIFICATE_PWD -T /usr/bin/codesign
-          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k $MACOS_KEYCHAIN_PWD build.keychain
-          security find-identity -v -p codesigning
-          # /usr/bin/codesign --force -s <identity-id> ./path/to/you/app -v
+          security unlock-keychain -p "$MACOS_KEYCHAIN_PWD" build.keychain
+          security import certificate.p12 -k build.keychain -P "$MACOS_CERTIFICATE_PWD" -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$MACOS_KEYCHAIN_PWD" build.keychain
 
-      # - name: Check out repository code
-      #   uses: actions/checkout@v4
+      - name: Check out repository code
+        uses: actions/checkout@v4
 
-      # - name: Install CMake
-      #   uses: lukka/get-cmake@latest
+      - name: Install CMake
+        uses: lukka/get-cmake@latest
 
-      # - name: Install vcpkg dependencies
-      #   uses: lukka/run-vcpkg@v11
+      - name: Install vcpkg dependencies
+        uses: lukka/run-vcpkg@v11
 
-      # - name: Install Qt
-      #   uses: jurplel/install-qt-action@v3
-      #   with:
-      #     version: 6.7.0
-      #     host: mac
-      #     target: desktop
-      #     arch: clang_64
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: 6.7.0
+          host: mac
+          target: desktop
+          arch: clang_64
 
-      # - name: CMake
-      #   run: cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=arm64-osx -DVCPKG_BUILD_TYPE=release
+      - name: CMake
+        run: cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=arm64-osx -DVCPKG_BUILD_TYPE=release
 
-      # - name: Build
-      #   run: cmake --build build --config Release
+      - name: Build
+        run: cmake --build build --config Release
 
-      # - name: macdeployqt
-      #   run: macdeployqt Comet.app -dmg
-      #   working-directory: build
+      - name: macdeployqt
+        run: macdeployqt Comet.app -sign-for-notarization="$MACOS_SIGNING_IDENTITY" -dmg 
+        working-directory: build
 
-      # - name: Upload build as artifact
-      #   if: github.event_name == 'pull_request'
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: Comet-macOS-arm64
-      #     path: build/Comet.dmg
+      - name: Upload build as artifact
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: Comet-macOS-arm64
+          path: build/Comet.dmg
