@@ -56,6 +56,11 @@ jobs:
         run: macdeployqt Comet.app -sign-for-notarization="$MACOS_SIGNING_IDENTITY" -dmg 
         working-directory: build
 
+      - name: List all files recursively
+        run: |
+          echo "Listing all files recursively"
+          find $(pwd)
+
       - name: Notarize DMG
         env:
           APPLE_NOTARY_API_KEY_ID: ${{ secrets.APPLE_NOTARY_API_KEY_ID }}
