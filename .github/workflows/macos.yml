@@ -15,14 +15,12 @@ jobs:
     steps:
       - name: Prep notarization
         env: 
-          APPLE_NOTARY_API_KEY: ${{ secrets.APPLE_NOTARY_API_KEY }}
           MACOS_CERTIFICATE: ${{ secrets.MACOS_CERTIFICATE }}
           MACOS_CERTIFICATE_PWD: ${{ secrets.MACOS_CERTIFICATE_PWD }}
           MACOS_KEYCHAIN_PWD: ${{ secrets.MACOS_KEYCHAIN_PWD }}
         run: |
           set -e
           echo "$MACOS_CERTIFICATE" | base64 --decode > certificate.p12
-          echo "$APPLE_NOTARY_API_KEY" | base64 --decode > notary_api_key.p8
           security create-keychain -p "$MACOS_KEYCHAIN_PWD" build.keychain
           security default-keychain -s build.keychain
           security unlock-keychain -p "$MACOS_KEYCHAIN_PWD" build.keychain
@@ -56,16 +54,14 @@ jobs:
         run: macdeployqt Comet.app -sign-for-notarization="$MACOS_SIGNING_IDENTITY" -dmg 
         working-directory: build
 
-      - name: List all files recursively
-        run: |
-          echo "Listing all files recursively"
-          find $(pwd)
-
       - name: Notarize DMG
         env:
+          APPLE_NOTARY_API_KEY: ${{ secrets.APPLE_NOTARY_API_KEY }}
           APPLE_NOTARY_API_KEY_ID: ${{ secrets.APPLE_NOTARY_API_KEY_ID }}
           APPLE_NOTARY_API_ISSUER_ID: ${{ secrets.APPLE_NOTARY_API_ISSUER_ID }}
         run: |
+          set -e
+          echo "$APPLE_NOTARY_API_KEY" | base64 --decode > notary_api_key.p8
           xcrun notarytool submit build/Comet.dmg \
             --key notary_api_key.p8 \
             --key-id "$APPLE_NOTARY_API_KEY_ID" \
