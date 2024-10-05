@@ -72,9 +72,8 @@ jobs:
         run: |
           xcrun stapler validate build/Comet.dmg
 
-      - name: Upload build as artifact
-        if: github.event_name == 'pull_request'
-        uses: actions/upload-artifact@v4
+      - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: ncipollo/release-action@v1
         with:
-          name: Comet-macOS-arm64
-          path: build/Comet.dmg
+          artifacts: build/Comet.dmg
