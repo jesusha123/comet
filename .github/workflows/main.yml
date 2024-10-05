@@ -20,18 +20,18 @@ jobs:
             qt_host: mac
             qt_arch: clang_64
             vcpkg_triplet: arm64-osx
-            build_dir: build
-            artifact_name: Comet.dmg
-            deployqt_command: macdeployqt Comet.app -sign-for-notarization="${{ secrets.MACOS_SIGNING_IDENTITY }}" -dmg
+            # build_dir: build
+            # artifact_name: Comet.dmg
+            # deployqt_command: macdeployqt Comet.app -sign-for-notarization="${{ secrets.MACOS_SIGNING_IDENTITY }}" -dmg
           - os: windows-latest
             qt_host: windows
             qt_arch: win64_msvc2019_64
             vcpkg_triplet: x64-windows
-            build_dir: build\Release
-            artifact_name: Comet.zip
-            deployqt_command: |
-              windeployqt --release build\Release\Comet.exe
-              Compress-Archive -Path build\Release\* -DestinationPath build\Comet.zip
+            # build_dir: build\Release
+            # artifact_name: Comet.zip
+            # deployqt_command: |
+            #   windeployqt --release build\Release\Comet.exe
+            #   Compress-Archive -Path build\Release\* -DestinationPath build\Comet.zip
 
     steps:
       - name: Check out repository code
@@ -61,6 +61,6 @@ jobs:
       - name: Build
         run: cmake --build build --config Release
 
-      - name: Deploy Qt
-        run: ${{ matrix.deployqt_command }}
-        working-directory: ${{ matrix.build_dir }}
+      # - name: Deploy Qt
+      #   run: ${{ matrix.deployqt_command }}
+      #   working-directory: ${{ matrix.build_dir }}
