@@ -1,9 +1,6 @@
 name: macOS build
 run-name: macOS build
 on:
-  pull_request:
-    branches:
-      - main
   push:
     tags:
       - '*'
@@ -11,6 +8,20 @@ jobs:
   build:
     runs-on: macos-latest
     steps:
+      - name: Prep notarization
+        env: 
+          MACOS_CERTIFICATE: ${{ secrets.MACOS_CERTIFICATE }}
+          MACOS_CERTIFICATE_PWD: ${{ secrets.MACOS_CERTIFICATE_PWD }}
+          MACOS_KEYCHAIN_PWD: ${{ secrets.MACOS_KEYCHAIN_PWD }}
+        run: |
+          set -e
+          echo "$MACOS_CERTIFICATE" | base64 --decode > certificate.p12
+          security create-keychain -p "$MACOS_KEYCHAIN_PWD" build.keychain
+          security default-keychain -s build.keychain
+          security unlock-keychain -p "$MACOS_KEYCHAIN_PWD" build.keychain
+          security import certificate.p12 -k build.keychain -P "$MACOS_CERTIFICATE_PWD" -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$MACOS_KEYCHAIN_PWD" build.keychain
+
       - name: Check out repository code
         uses: actions/checkout@v4
 
@@ -35,8 +46,31 @@ jobs:
         run: cmake --build build --config Release
 
       - name: macdeployqt
-        run: macdeployqt Comet.app -dmg
+        env:
+          MACOS_SIGNING_IDENTITY: ${{ secrets.MACOS_SIGNING_IDENTITY }}
+        run: macdeployqt Comet.app -sign-for-notarization="$MACOS_SIGNING_IDENTITY" -dmg 
         working-directory: build
+
+      - name: Notarize DMG
+        env:
+          APPLE_NOTARY_API_KEY: ${{ secrets.APPLE_NOTARY_API_KEY }}
+          APPLE_NOTARY_API_KEY_ID: ${{ secrets.APPLE_NOTARY_API_KEY_ID }}
+          APPLE_NOTARY_API_ISSUER_ID: ${{ secrets.APPLE_NOTARY_API_ISSUER_ID }}
+        run: |
+          set -e
+          echo "$APPLE_NOTARY_API_KEY" | base64 --decode > notary_api_key.p8
+          xcrun notarytool submit build/Comet.dmg \
+            --key notary_api_key.p8 \
+            --key-id "$APPLE_NOTARY_API_KEY_ID" \
+            --issuer "$APPLE_NOTARY_API_ISSUER_ID" \
+            --wait
+
+      - name: Staple Notarization Ticket
+        run: xcrun stapler staple build/Comet.dmg
+
+      - name: Verify Stapling
+        run: |
+          xcrun stapler validate build/Comet.dmg
 
       - name: Upload build as artifact
         if: github.event_name == 'pull_request'
