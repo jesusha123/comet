@@ -63,7 +63,6 @@ jobs:
           MACOS_SIGNING_IDENTITY: ${{ secrets.MACOS_SIGNING_IDENTITY }}
         run: ${{ matrix.deployqt_command }}
         working-directory: ${{ matrix.build_dir }}
-        shell: bash
 
       - name: Notarize DMG (macOS only)
         if: matrix.is_macos && startsWith(github.ref, 'refs/tags/')
