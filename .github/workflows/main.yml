@@ -1,0 +1,66 @@
+name: Build
+on:
+  push:
+    tags:
+      - '*'
+  pull_request:
+    branches:
+      - main
+jobs:
+  build:
+    name: Build on ${{ matrix.os }}
+
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [macos-latest, windows-latest]
+        include:
+          - os: macos-latest
+            qt_host: mac
+            qt_arch: clang_64
+            vcpkg_triplet: arm64-osx
+            build_dir: build
+            artifact_name: Comet.dmg
+            deployqt_command: macdeployqt Comet.app -sign-for-notarization="${{ secrets.MACOS_SIGNING_IDENTITY }}" -dmg
+          - os: windows-latest
+            qt_host: windows
+            qt_arch: win64_msvc2019_64
+            vcpkg_triplet: x64-windows
+            build_dir: build\Release
+            artifact_name: Comet.zip
+            deployqt_command: |
+              windeployqt --release build\Release\Comet.exe
+              Compress-Archive -Path build\Release\* -DestinationPath build\Comet.zip
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - name: Install CMake
+        uses: lukka/get-cmake@latest
+
+      - name: Install vcpkg dependencies
+        uses: lukka/run-vcpkg@v11
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: 6.7.0
+          host: ${{ matrix.qt_host }}
+          target: desktop
+          arch: ${{ matrix.qt_arch }}
+
+      - name: Configure CMake
+        run: |
+          cmake -B build -S . \
+                -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake \
+                -DVCPKG_TARGET_TRIPLET=${{ matrix.vcpkg_triplet }} \
+                -DVCPKG_BUILD_TYPE=release
+
+      - name: Build
+        run: cmake --build build --config Release
+
+      - name: Deploy Qt
+        run: ${{ matrix.deployqt_command }}
+        working-directory: ${{ matrix.build_dir }}
