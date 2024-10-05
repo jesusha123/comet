@@ -31,7 +31,7 @@ jobs:
             artifact_name: Comet.zip
             deployqt_command: |
               windeployqt --release Comet.exe
-              Compress-Archive -Path build\Release\* -DestinationPath build\Comet.zip
+              Compress-Archive -Path * -DestinationPath ..\Comet.zip
 
     steps:
       - name: Check out repository code
