@@ -32,6 +32,7 @@ jobs:
             deployqt_command: |
               windeployqt --release Comet.exe
               Compress-Archive -Path * -DestinationPath ..\Comet.zip
+              Move-Item -Path ..\Comet.zip .\Comet.zip
 
     steps:
       - name: Check out repository code
