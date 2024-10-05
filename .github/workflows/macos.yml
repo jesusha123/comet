@@ -7,8 +7,6 @@ on:
 jobs:
   build:
     runs-on: macos-latest
-    env:
-      MACOS_SIGNING_IDENTITY: ${{ secrets.MACOS_SIGNING_IDENTITY }}
     steps:
       - name: Prep notarization
         env: 
@@ -48,6 +46,8 @@ jobs:
         run: cmake --build build --config Release
 
       - name: macdeployqt
+        env:
+          MACOS_SIGNING_IDENTITY: ${{ secrets.MACOS_SIGNING_IDENTITY }}
         run: macdeployqt Comet.app -sign-for-notarization="$MACOS_SIGNING_IDENTITY" -dmg 
         working-directory: build
 
