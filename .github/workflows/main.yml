@@ -20,18 +20,18 @@ jobs:
             qt_host: mac
             qt_arch: clang_64
             vcpkg_triplet: arm64-osx
-            # build_dir: build
-            # artifact_name: Comet.dmg
-            # deployqt_command: macdeployqt Comet.app -sign-for-notarization="${{ secrets.MACOS_SIGNING_IDENTITY }}" -dmg
+            build_dir: build
+            artifact_name: Comet.dmg
+            deployqt_command: macdeployqt Comet.app -sign-for-notarization="$MACOS_SIGNING_IDENTITY" -dmg
           - os: windows-latest
             qt_host: windows
             qt_arch: win64_msvc2019_64
             vcpkg_triplet: x64-windows
-            # build_dir: build\Release
-            # artifact_name: Comet.zip
-            # deployqt_command: |
-            #   windeployqt --release build\Release\Comet.exe
-            #   Compress-Archive -Path build\Release\* -DestinationPath build\Comet.zip
+            build_dir: build\Release
+            artifact_name: Comet.zip
+            deployqt_command: |
+              windeployqt --release build\Release\Comet.exe
+              Compress-Archive -Path build\Release\* -DestinationPath build\Comet.zip
 
     steps:
       - name: Check out repository code
@@ -58,6 +58,59 @@ jobs:
       - name: Build
         run: cmake --build build --config Release
 
-      # - name: Deploy Qt
-      #   run: ${{ matrix.deployqt_command }}
-      #   working-directory: ${{ matrix.build_dir }}
+      - name: Deploy Qt
+        env:
+          MACOS_SIGNING_IDENTITY: ${{ secrets.MACOS_SIGNING_IDENTITY }}
+        run: ${{ matrix.deployqt_command }}
+        working-directory: ${{ matrix.build_dir }}
+        shell: bash
+
+      - name: Notarize DMG (macOS only)
+        if: matrix.is_macos && startsWith(github.ref, 'refs/tags/')
+        env:
+          APPLE_NOTARY_API_KEY: ${{ secrets.APPLE_NOTARY_API_KEY }}
+          APPLE_NOTARY_API_KEY_ID: ${{ secrets.APPLE_NOTARY_API_KEY_ID }}
+          APPLE_NOTARY_API_ISSUER_ID: ${{ secrets.APPLE_NOTARY_API_ISSUER_ID }}
+        run: |
+          set -e
+          echo "$APPLE_NOTARY_API_KEY" | base64 --decode > notary_api_key.p8
+          xcrun notarytool submit ${{ matrix.build_dir }}/${{ matrix.artifact_name }} \
+            --key notary_api_key.p8 \
+            --key-id "$APPLE_NOTARY_API_KEY_ID" \
+            --issuer "$APPLE_NOTARY_API_ISSUER_ID" \
+            --wait
+          xcrun stapler staple ${{ matrix.build_dir }}/${{ matrix.artifact_name }}
+          xcrun stapler validate ${{ matrix.build_dir }}/${{ matrix.artifact_name }}
+
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.os == 'macos-latest' && 'macos-artifact' || 'windows-artifact' }}
+          path: ${{ matrix.build_dir }}/${{ matrix.artifact_name }}
+
+  release:
+    name: Create GitHub Release
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - name: Download macOS Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: macos-artifact
+          path: artifacts/macos
+
+      - name: Download Windows Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-artifact
+          path: artifacts/windows
+
+      - name: Create GitHub Release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
+          artifacts: |
+            artifacts/macos/Comet.dmg
+            artifacts/windows/Comet.zip
