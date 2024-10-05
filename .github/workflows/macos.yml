@@ -1,9 +1,6 @@
 name: macOS build
 run-name: macOS build
 on:
-  pull_request:
-    branches:
-      - main
   push:
     tags:
       - '*'
