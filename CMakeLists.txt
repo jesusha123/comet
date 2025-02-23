@@ -17,9 +17,9 @@ qt_add_qml_module(appcomet
     VERSION 1.0
     QML_FILES
         qml/Main.qml
-        QML_FILES qml/RequestControlPanel.qml
-        QML_FILES qml/Table.qml
-        QML_FILES
+        qml/RequestControlPanel.qml
+        qml/Table.qml
+        qml/TransactionPanel.qml
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

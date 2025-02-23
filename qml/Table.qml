@@ -1,74 +1,68 @@
 import QtQuick
-import QtQuick.Layouts
-import Qt.labs.qmlmodels
-
-import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import Qt.labs.qmlmodels
 
-TableView {
-    id: tableView
-    columnSpacing: 1
-    rowSpacing: 1
-    clip: true
+ColumnLayout {
+    HorizontalHeaderView {
+        id: horizontalHeader
+        Layout.fillWidth: true
+        syncView: tableView
+        clip: true
+        model: ["Key", "Value"]
 
-    model: TableModel {
-        TableModelColumn { display: "name" }
-        TableModelColumn { display: "color" }
+        delegate: Rectangle {
+            implicitWidth: tableView.width / 2
+            implicitHeight: 30
 
-        rows: [
-            { "name": "cat", "color": "black" },
-            { "name": "dog", "color": "brown" },
-            { "name": "cat", "color": "black" },
-            { "name": "dog", "color": "brown" },
-            { "name": "cat", "color": "black" },
-            { "name": "dog", "color": "brown" },
-            { "name": "cat", "color": "black" },
-            { "name": "dog", "color": "brown" },
-            { "name": "cat", "color": "black" },
-            { "name": "dog", "color": "brown" },
-            { "name": "cat", "color": "black" },
-            { "name": "dog", "color": "brown" },
-            { "name": "cat", "color": "black" },
-            { "name": "dog", "color": "brown" },
-            { "name": "cat", "color": "black" },
-            { "name": "dog", "color": "brown" },
-            { "name": "cat", "color": "black" },
-            { "name": "dog", "color": "brown" },
-            { "name": "cat", "color": "black" },
-            { "name": "dog", "color": "brown" },
-            { "name": "cat", "color": "black" },
-            { "name": "dog", "color": "brown" },
-            { "name": "cat", "color": "black" },
-            { "name": "dog", "color": "brown" },
-            { "name": "cat", "color": "black" },
-            { "name": "dog", "color": "brown" },
-            { "name": "cat", "color": "black" },
-            { "name": "dog", "color": "brown" },
-            { "name": "cat", "color": "black" },
-            { "name": "dog", "color": "brown" },
-            { "name": "cat", "color": "black" },
-            { "name": "dog", "color": "brown" },
-            { "name": "cat", "color": "black" },
-            { "name": "dog", "color": "brown" },
-            { "name": "cat", "color": "black" },
-            { "name": "dog", "color": "brown" },
-            { "name": "bird", "color": "white" }
-        ]
+            color: "transparent"
+
+            TextField {
+                anchors.fill: parent
+                text: modelData
+                background: null // Disable TextField border
+
+                horizontalAlignment: Text.AlignLeft
+                verticalAlignment: Text.AlignVCenter
+            }
+        }
     }
 
-    delegate: Rectangle {
-        implicitWidth: tableView.width / 2
-        implicitHeight: 30
+    TableView {
+        id: tableView
 
-        TextField {
-            anchors.fill: parent
-            text: display
-            background: null // Disable TextField border
+        Layout.fillWidth: true
+        Layout.fillHeight: true
 
-            horizontalAlignment: Text.AlignLeft
-            verticalAlignment: Text.AlignVCenter
+        columnSpacing: 1
+        rowSpacing: 1
+        clip: true
+
+        model: TableModel {
+            TableModelColumn { display: "name" }
+            TableModelColumn { display: "color" }
+
+            rows: [
+                { "name": "cat", "color": "black" },
+                { "name": "dog", "color": "brown" },
+                { "name": "bird", "color": "white" }
+            ]
+        }
+
+        delegate: Rectangle {
+            implicitWidth: tableView.width / 2
+            implicitHeight: 30
+
+            // color: "transparent"
+
+            TextField {
+                anchors.fill: parent
+                text: display
+                background: null // Disable TextField border
+
+                horizontalAlignment: Text.AlignLeft
+                verticalAlignment: Text.AlignVCenter
+            }
         }
     }
 }
