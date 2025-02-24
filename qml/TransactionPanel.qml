@@ -76,4 +76,8 @@ SplitView {
             }
         }
     }
+
+    function processResponse(response) {
+        responseBodyText.text = response;
+    }
 }
