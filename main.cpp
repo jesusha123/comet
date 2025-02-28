@@ -1,11 +1,16 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QQmlContext>
+#include "NetworkManager.h"
 
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
-
     QQmlApplicationEngine engine;
+
+    NetworkManager networkManager;
+    engine.rootContext()->setContextProperty("NetworkManager", &networkManager);
+
     QObject::connect(
         &engine,
         &QQmlApplicationEngine::objectCreationFailed,

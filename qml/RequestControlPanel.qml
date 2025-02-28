@@ -1,28 +1,26 @@
+import comet 1.0
 import QtQuick.Controls
 import QtQuick.Layouts
 
 RowLayout {
-    property alias url: urlTextField.text
-    property alias httpVerb: httpVerbComboBox.currentText
+    property Request request
     signal sendRequestTriggered()
 
     ComboBox {
-        id: httpVerbComboBox
         model: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"]
+        onCurrentTextChanged: request.method = currentText
     }
 
     TextField {
-        id: urlTextField
         placeholderText: "Enter URL"
-        text: "http://httpbin.org/anything"
+        text: request.url
         Layout.fillWidth: true
+        onTextChanged: request.url = text
     }
 
     Button {
         text: "Send"
 
-        onClicked: {
-            sendRequestTriggered()
-        }
+        onClicked: sendRequestTriggered()
     }
 }

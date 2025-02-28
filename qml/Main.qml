@@ -1,3 +1,4 @@
+import comet 1.0
 import QtQuick.Controls
 import QtQuick.Layouts
 
@@ -7,6 +8,14 @@ ApplicationWindow {
     height: 600
     title: "Comet"
 
+    Request {
+        id: request
+        url: "https://example.com"
+    }
+    Response {
+        id: response
+    }
+
     ColumnLayout {
         anchors.fill: parent
         anchors.margins: 10
@@ -14,25 +23,14 @@ ApplicationWindow {
 
         RequestControlPanel {
             id: requestControlPanel
+            request: request
             Layout.fillWidth: true
-            onSendRequestTriggered: {
-                let xhr = new XMLHttpRequest();
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState === XMLHttpRequest.DONE) {
-                        if (xhr.status === 200) {
-                            transactionPanel.processResponse(xhr.responseText);
-                        } else {
-                            transactionPanel.processResponse("Error: " + xhr.status);
-                        }
-                    }
-                }
-                xhr.open(requestControlPanel.httpVerb, requestControlPanel.url);
-                xhr.send();
-            }
+            onSendRequestTriggered: NetworkManager.sendRequest(request, response)
         }
 
         TransactionPanel {
             id: transactionPanel
+            response: response
 
             Layout.fillWidth: true
             Layout.fillHeight: true
