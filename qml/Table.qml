@@ -4,6 +4,10 @@ import QtQuick.Layouts
 import Qt.labs.qmlmodels
 
 ColumnLayout {
+    id: table
+    property var model
+    property bool readOnly: false
+
     HorizontalHeaderView {
         id: horizontalHeader
         Layout.fillWidth: true
@@ -38,16 +42,7 @@ ColumnLayout {
         rowSpacing: 1
         clip: true
 
-        model: TableModel {
-            TableModelColumn { display: "name" }
-            TableModelColumn { display: "color" }
-
-            rows: [
-                { "name": "cat", "color": "black" },
-                { "name": "dog", "color": "brown" },
-                { "name": "bird", "color": "white" }
-            ]
-        }
+        model: table.model
 
         delegate: Rectangle {
             implicitWidth: tableView.width / 2
@@ -59,6 +54,7 @@ ColumnLayout {
                 anchors.fill: parent
                 text: display
                 background: null // Disable TextField border
+                readOnly: table.readOnly
 
                 horizontalAlignment: Text.AlignLeft
                 verticalAlignment: Text.AlignVCenter

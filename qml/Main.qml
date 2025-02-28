@@ -10,7 +10,7 @@ ApplicationWindow {
 
     Request {
         id: request
-        url: "https://example.com"
+        url: "http://httpbin.org/anything"
     }
     Response {
         id: response

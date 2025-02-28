@@ -74,8 +74,10 @@ SplitView {
                 text: response.body
             }
             Table {
+                model: response.headersModel
                 Layout.fillWidth: true
                 Layout.fillHeight: true
+                readOnly: true
             }
         }
     }

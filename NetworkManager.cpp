@@ -21,6 +21,17 @@ void NetworkManager::sendRequest(Request *request, Response *response)
         response->setStatusCode(statusCode);
         response->setBody(QString::fromUtf8(data));
 
+        TableModel* model = response->headersModel();
+        model->removeRows(0, model->rowCount());
+        const QList<QByteArray> headerList = reply->rawHeaderList();
+        for (const QByteArray &headerName : headerList) {
+            QByteArray headerValue = reply->rawHeader(headerName);
+            QList<QStandardItem*> row;
+            row << new QStandardItem(QString::fromUtf8(headerName))
+                << new QStandardItem(QString::fromUtf8(headerValue));
+            model->appendRow(row);
+        }
+
         reply->deleteLater();
     });
 }
