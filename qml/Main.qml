@@ -30,6 +30,7 @@ ApplicationWindow {
 
         TransactionPanel {
             id: transactionPanel
+            request: request
             response: response
 
             Layout.fillWidth: true

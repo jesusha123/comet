@@ -4,6 +4,7 @@ import QtQuick.Layouts
 
 SplitView {
     id: mainSplitView
+    property Request request
     property Response response
     orientation: Qt.Horizontal
     spacing: 10
@@ -41,6 +42,8 @@ SplitView {
                 placeholderText: "Enter request body here..."
                 Layout.fillWidth: true
                 Layout.fillHeight: true
+                text: request.body
+                onTextChanged: request.body = text
             }
         }
     }

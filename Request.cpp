@@ -26,3 +26,14 @@ void Request::setMethod(const QString &method) {
         emit methodChanged();
     }
 }
+
+QString Request::body() const {
+    return m_body;
+}
+
+void Request::setBody(const QString &body) {
+    if (m_body != body) {
+        m_body = body;
+        emit bodyChanged();
+    }
+}
