@@ -1,8 +1,10 @@
+import comet 1.0
 import QtQuick.Controls
 import QtQuick.Layouts
 
 SplitView {
     id: mainSplitView
+    property Response response
     orientation: Qt.Horizontal
     spacing: 10
 
@@ -69,15 +71,12 @@ SplitView {
                 placeholderText: "Response Body"
                 Layout.fillWidth: true
                 Layout.fillHeight: true
+                text: response.body
             }
             Table {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
             }
         }
-    }
-
-    function processResponse(response) {
-        responseBodyText.text = response;
     }
 }
