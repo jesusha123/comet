@@ -38,12 +38,14 @@ SplitView {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
             }
-            TextArea {
-                placeholderText: "Enter request body here..."
+            ScrollView {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                text: request.body
-                onTextChanged: request.body = text
+                TextArea {
+                    placeholderText: "Enter request body here..."
+                    text: request.body
+                    onTextChanged: request.body = text
+                }
             }
         }
     }
@@ -68,13 +70,15 @@ SplitView {
             Layout.fillWidth: true
             Layout.fillHeight: true
 
-            TextArea {
-                id: responseBodyText
-                readOnly: true
-                placeholderText: "Response Body"
+            ScrollView {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                text: response.body
+                TextArea {
+                    id: responseBodyText
+                    readOnly: true
+                    placeholderText: "Response Body"
+                    text: response.body
+                }
             }
             Table {
                 model: response.headersModel
