@@ -58,6 +58,10 @@ ColumnLayout {
 
                 horizontalAlignment: Text.AlignLeft
                 verticalAlignment: Text.AlignVCenter
+
+                onTextChanged: {
+                    table.model.setData(tableView.index(row, column), text, Qt.EditRole)
+                }
             }
         }
     }

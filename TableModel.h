@@ -8,6 +8,7 @@ class TableModel : public QStandardItemModel {
 public:
     using QStandardItemModel::QStandardItemModel;
 
+    Q_INVOKABLE void appendEmptyRow();
     QHash<int, QByteArray> roleNames() const override;
 };
 
