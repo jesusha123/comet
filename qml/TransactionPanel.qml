@@ -4,6 +4,7 @@ import QtQuick.Layouts
 
 SplitView {
     id: mainSplitView
+    property Request request
     property Response response
     orientation: Qt.Horizontal
     spacing: 10
@@ -29,18 +30,42 @@ SplitView {
             Layout.fillWidth: true
             Layout.fillHeight: true
 
-            Table {
+            ColumnLayout {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
+                Table {
+                    id: paramsTable
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    model: request.paramsModel
+                }
+                Button {
+                    text: "Add Param"
+                    onClicked: request.paramsModel.appendEmptyRow()
+                }
             }
-            Table {
+            ColumnLayout {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
+                Table {
+                    id: headersTable
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    model: request.headersModel
+                }
+                Button {
+                    text: "Add Header"
+                    onClicked: request.headersModel.appendEmptyRow()
+                }
             }
-            TextArea {
-                placeholderText: "Enter request body here..."
+            ScrollView {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
+                TextArea {
+                    placeholderText: "Enter request body here..."
+                    text: request.body
+                    onTextChanged: request.body = text
+                }
             }
         }
     }
@@ -65,17 +90,21 @@ SplitView {
             Layout.fillWidth: true
             Layout.fillHeight: true
 
-            TextArea {
-                id: responseBodyText
-                readOnly: true
-                placeholderText: "Response Body"
+            ScrollView {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                text: response.body
+                TextArea {
+                    id: responseBodyText
+                    readOnly: true
+                    placeholderText: "Response Body"
+                    text: response.body
+                }
             }
             Table {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
+                readOnly: true
+                model: response.headersModel
             }
         }
     }

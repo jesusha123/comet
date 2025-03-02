@@ -3,6 +3,7 @@
 Response::Response(QObject *parent)
     : QObject(parent)
     , m_statusCode(0)
+    , m_headersModel(new TableModel(this))
 {
 }
 
@@ -26,4 +27,8 @@ void Response::setBody(const QString &body) {
         m_body = body;
         emit bodyChanged();
     }
+}
+
+TableModel* Response::headersModel() const {
+    return m_headersModel;
 }

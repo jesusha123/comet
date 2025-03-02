@@ -10,7 +10,7 @@ ApplicationWindow {
 
     Request {
         id: request
-        url: "https://example.com"
+        url: "http://httpbin.org/anything"
     }
     Response {
         id: response
@@ -30,6 +30,7 @@ ApplicationWindow {
 
         TransactionPanel {
             id: transactionPanel
+            request: request
             response: response
 
             Layout.fillWidth: true

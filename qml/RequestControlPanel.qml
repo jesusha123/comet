@@ -20,7 +20,6 @@ RowLayout {
 
     Button {
         text: "Send"
-
         onClicked: sendRequestTriggered()
     }
 }

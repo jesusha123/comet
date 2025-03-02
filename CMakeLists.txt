@@ -16,6 +16,8 @@ qt_add_executable(appcomet
     Request.h
     Response.cpp
     Response.h
+    TableModel.cpp
+    TableModel.h
 )
 
 qt_add_qml_module(appcomet
