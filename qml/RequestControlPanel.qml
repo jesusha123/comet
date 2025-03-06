@@ -1,6 +1,6 @@
-import comet 1.0
 import QtQuick.Controls
 import QtQuick.Layouts
+import comet 1.0
 
 RowLayout {
     property Request request

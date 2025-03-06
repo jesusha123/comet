@@ -1,6 +1,4 @@
-import comet 1.0
 import QtQuick.Controls
-import QtQuick.Layouts
 
 ApplicationWindow {
     visible: true
@@ -8,33 +6,19 @@ ApplicationWindow {
     height: 600
     title: "Comet"
 
-    Request {
-        id: request
-        url: "http://httpbin.org/anything"
-    }
-    Response {
-        id: response
-    }
-
-    ColumnLayout {
+    SplitView {
         anchors.fill: parent
-        anchors.margins: 10
-        spacing: 10
 
-        RequestControlPanel {
-            id: requestControlPanel
-            request: request
-            Layout.fillWidth: true
-            onSendRequestTriggered: NetworkManager.sendRequest(request, response)
+        FileTreeView {
+            SplitView.preferredWidth: 250
+            SplitView.fillHeight: true
+            onFileClicked: (fileName) => requestArea.addTab(fileName)
         }
 
-        TransactionPanel {
-            id: transactionPanel
-            request: request
-            response: response
-
-            Layout.fillWidth: true
-            Layout.fillHeight: true
+        RequestArea {
+            id: requestArea
+            SplitView.fillWidth: true
+            SplitView.fillHeight: true
         }
     }
 }

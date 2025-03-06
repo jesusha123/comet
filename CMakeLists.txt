@@ -4,7 +4,7 @@ project(comet VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Quick)
+find_package(Qt6 REQUIRED COMPONENTS Quick QuickControls2)
 
 qt_standard_project_setup(REQUIRES 6.5)
 
@@ -24,8 +24,11 @@ qt_add_qml_module(appcomet
     URI comet
     VERSION 1.0
     QML_FILES
+        qml/FileTreeView.qml
         qml/Main.qml
+        qml/RequestArea.qml
         qml/RequestControlPanel.qml
+        qml/RequestPage.qml
         qml/Table.qml
         qml/TransactionPanel.qml
 )
@@ -43,6 +46,7 @@ set_target_properties(appcomet PROPERTIES
 
 target_link_libraries(appcomet
     PRIVATE Qt6::Quick
+    PRIVATE Qt6::QuickControls2
 )
 
 include(GNUInstallDirs)

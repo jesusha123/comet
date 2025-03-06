@@ -1,24 +1,19 @@
-import comet 1.0
 import QtQuick.Controls
 import QtQuick.Layouts
+import comet 1.0
 
 SplitView {
     id: mainSplitView
     property Request request
     property Response response
     orientation: Qt.Horizontal
-    spacing: 10
 
     ColumnLayout {
         id: requestArea
-        SplitView.preferredWidth: mainSplitView.width/2
-        spacing: 5
 
         TabBar {
             id: requestTabBar
             Layout.fillWidth: true
-            currentIndex: requestStack.currentIndex
-            onCurrentIndexChanged: requestStack.currentIndex = currentIndex
 
             TabButton { text: "Params" }
             TabButton { text: "Headers" }
@@ -29,6 +24,7 @@ SplitView {
             id: requestStack
             Layout.fillWidth: true
             Layout.fillHeight: true
+            currentIndex: requestTabBar.currentIndex
 
             ColumnLayout {
                 Layout.fillWidth: true
@@ -72,8 +68,6 @@ SplitView {
 
     ColumnLayout {
         id: responseArea
-        SplitView.preferredWidth: mainSplitView.width/2
-        spacing: 5
 
         TabBar {
             id: responseTabBar
