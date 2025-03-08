@@ -2,6 +2,7 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QQuickStyle>
+#include "FileSystemModel.h"
 #include "NetworkManager.h"
 
 int main(int argc, char *argv[])
@@ -12,6 +13,8 @@ int main(int argc, char *argv[])
 
     NetworkManager networkManager;
     engine.rootContext()->setContextProperty("NetworkManager", &networkManager);
+    FileSystemModel fileSystemModel;
+    engine.rootContext()->setContextProperty("FileSystemModel", &fileSystemModel);
 
     QObject::connect(
         &engine,

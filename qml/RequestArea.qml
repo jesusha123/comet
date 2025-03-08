@@ -5,10 +5,13 @@ import QtQuick.Layouts
 ColumnLayout {
     TabBar {
         id: requestTabBar
+        Layout.fillWidth: true
     }
 
     StackLayout {
         id: requestStackLayout
+        Layout.fillWidth: true
+        Layout.fillHeight: true
         currentIndex: requestTabBar.currentIndex
     }
 

@@ -6,20 +6,19 @@ TreeView {
 
     signal fileClicked(string fileName)
 
-    model: ListModel {
-        ListElement { display: "Apple" }
-        ListElement { display: "Orange" }
-        ListElement { display: "Banana" }
-    }
+    model: FileSystemModel
 
     delegate: TreeViewDelegate {
         implicitWidth: treeView.width
 
         TapHandler {
             acceptedButtons: Qt.LeftButton
-            onSingleTapped: () => {
-                treeView.fileClicked(model.display)
-            }
+            onSingleTapped: treeView.fileClicked(model.display)
         }
+    }
+
+    function setPath(path) {
+        FileSystemModel.path = path
+        treeView.rootIndex = FileSystemModel.rootIndex()
     }
 }
