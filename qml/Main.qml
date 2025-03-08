@@ -1,6 +1,7 @@
-import comet 1.0
+import QtCore
+import QtQuick
 import QtQuick.Controls
-import QtQuick.Layouts
+import QtQuick.Dialogs
 
 ApplicationWindow {
     visible: true
@@ -8,33 +9,38 @@ ApplicationWindow {
     height: 600
     title: "Comet"
 
-    Request {
-        id: request
-        url: "http://httpbin.org/anything"
-    }
-    Response {
-        id: response
+    menuBar: MenuBar {
+        Menu {
+            title: "&File"
+            Action {
+                text: "&Open Folder"
+                onTriggered: folderDialog.open()
+            }
+        }
     }
 
-    ColumnLayout {
+    FolderDialog {
+        id: folderDialog
+        title: "Open Folder"
+        currentFolder: StandardPaths.writableLocation(StandardPaths.DocumentsLocation)
+        onAccepted: fileTreeView.setPath(FileSystemModel.toPath(selectedFolder))
+
+    }
+
+    SplitView {
         anchors.fill: parent
-        anchors.margins: 10
-        spacing: 10
 
-        RequestControlPanel {
-            id: requestControlPanel
-            request: request
-            Layout.fillWidth: true
-            onSendRequestTriggered: NetworkManager.sendRequest(request, response)
+        FileTreeView {
+            id: fileTreeView
+            SplitView.preferredWidth: 250
+            SplitView.fillHeight: true
+            onFileClicked: (fileName) => requestArea.addTab(fileName)
         }
 
-        TransactionPanel {
-            id: transactionPanel
-            request: request
-            response: response
-
-            Layout.fillWidth: true
-            Layout.fillHeight: true
+        RequestArea {
+            id: requestArea
+            SplitView.fillWidth: true
+            SplitView.fillHeight: true
         }
     }
 }
