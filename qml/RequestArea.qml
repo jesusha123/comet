@@ -3,9 +3,33 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 ColumnLayout {
+    ListModel {
+        id: requestModel
+    }
+
     TabBar {
         id: requestTabBar
         Layout.fillWidth: true
+        clip: true
+
+        Repeater {
+            model: requestModel
+            TabButton {
+                id: tabButton
+                width: implicitWidth
+                text: model.title
+
+                contentItem: RowLayout {
+                    Text {
+                        text: tabButton.text
+                    }
+                    Button {
+                        text: "X"
+                        onClicked: requestTabBar.removeItem(tabButton)
+                    }
+                }
+            }
+        }
     }
 
     StackLayout {
@@ -13,20 +37,15 @@ ColumnLayout {
         Layout.fillWidth: true
         Layout.fillHeight: true
         currentIndex: requestTabBar.currentIndex
-    }
 
-    Component {
-        id: requestTabButton
-        TabButton {}
-    }
-
-    Component {
-        id: requestPage
-        RequestPage {}
+        Repeater {
+            model: requestModel
+            RequestPage {}
+        }
     }
 
     function addTab(tabText) {
-        requestTabBar.addItem(requestTabButton.createObject(requestTabBar, {"text": tabText}))
-        requestPage.createObject(requestStackLayout)
+        requestModel.append({ title: tabText });
+        requestTabBar.currentIndex = requestTabBar.count - 1;
     }
 }

@@ -24,7 +24,6 @@ ApplicationWindow {
         title: "Open Folder"
         currentFolder: StandardPaths.writableLocation(StandardPaths.DocumentsLocation)
         onAccepted: fileTreeView.setPath(FileSystemModel.toPath(selectedFolder))
-
     }
 
     SplitView {
