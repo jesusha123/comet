@@ -19,6 +19,16 @@ ColumnLayout {
                 width: implicitWidth
                 text: model.title
 
+                MouseArea {
+                    anchors.fill: parent
+                    acceptedButtons: Qt.RightButton
+                    onClicked: (mouse) => {
+                        if (mouse.button === Qt.RightButton) {
+                            requestTabBar.removeItem(tabButton)
+                        }
+                    }
+                }
+
                 contentItem: RowLayout {
                     Text {
                         text: tabButton.text
