@@ -17,7 +17,7 @@ ColumnLayout {
             TabButton {
                 id: tabButton
                 width: implicitWidth
-                text: model.title
+                text: fileNameWithoutExtension(model.title)
 
                 MouseArea {
                     anchors.fill: parent
@@ -69,5 +69,13 @@ ColumnLayout {
 
     function removeRequestPage(index) {
         requestModel.remove(index);
+    }
+
+    function fileNameWithoutExtension(fullPath) {
+        var fileName = fullPath.split("/").pop();
+        var dotIndex = fileName.lastIndexOf(".");
+        if (dotIndex === -1)
+            return fileName;
+        return fileName.substring(0, dotIndex);
     }
 }
