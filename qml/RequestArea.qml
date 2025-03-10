@@ -54,8 +54,8 @@ ColumnLayout {
         }
     }
 
-    function addTab(tabText) {
-        requestModel.append({ title: tabText });
+    function addTab(fileName) {
+        requestModel.append({ title: fileName });
         requestTabBar.currentIndex = requestTabBar.count - 1;
     }
 }
