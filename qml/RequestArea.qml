@@ -24,7 +24,7 @@ ColumnLayout {
                     acceptedButtons: Qt.RightButton
                     onClicked: (mouse) => {
                         if (mouse.button === Qt.RightButton) {
-                            requestTabBar.removeItem(tabButton)
+                            removeRequestPage(index)
                         }
                     }
                 }
@@ -35,7 +35,7 @@ ColumnLayout {
                     }
                     Button {
                         text: "X"
-                        onClicked: requestTabBar.removeItem(tabButton)
+                        onClicked: removeRequestPage(index)
                     }
                 }
             }
@@ -54,7 +54,7 @@ ColumnLayout {
         }
     }
 
-    function addTab(fileName) {
+    function addRequestPage(fileName) {
         // Check if an element with the same fileName already exists
         for (let i = 0; i < requestModel.count; i++) {
             if (requestModel.get(i).title === fileName) {
@@ -65,5 +65,9 @@ ColumnLayout {
 
         requestModel.append({ title: fileName });
         requestTabBar.currentIndex = requestTabBar.count - 1;
+    }
+
+    function removeRequestPage(index) {
+        requestModel.remove(index);
     }
 }

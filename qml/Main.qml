@@ -33,7 +33,7 @@ ApplicationWindow {
             id: fileTreeView
             SplitView.preferredWidth: 250
             SplitView.fillHeight: true
-            onFileClicked: (fileName) => requestArea.addTab(fileName)
+            onFileClicked: (fileName) => requestArea.addRequestPage(fileName)
         }
 
         RequestArea {
