@@ -55,6 +55,14 @@ ColumnLayout {
     }
 
     function addTab(fileName) {
+        // Check if an element with the same fileName already exists
+        for (let i = 0; i < requestModel.count; i++) {
+            if (requestModel.get(i).title === fileName) {
+                requestTabBar.currentIndex = i;
+                return;
+            }
+        }
+
         requestModel.append({ title: fileName });
         requestTabBar.currentIndex = requestTabBar.count - 1;
     }
