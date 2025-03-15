@@ -17,8 +17,17 @@ public:
 
     Q_INVOKABLE QModelIndex rootIndex();
     Q_INVOKABLE QString toPath(const QUrl &url) const;
+    Q_INVOKABLE QString filePathForIndex(const QModelIndex &index) const;
 signals:
     void pathChanged();
+protected:
+    enum Roles {
+        FilePathRole = Qt::UserRole + 1,
+        IsDirRole = Qt::UserRole + 2
+    };
+
+    QHash<int, QByteArray> roleNames() const override;
+    QVariant data(const QModelIndex &index, int role) const override;
 };
 
 #endif

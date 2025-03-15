@@ -1,5 +1,5 @@
 import QtQuick
-import QtQuick.Controls.Fusion
+import QtQuick.Controls
 
 TreeView {
     id: treeView
@@ -13,7 +13,10 @@ TreeView {
 
         TapHandler {
             acceptedButtons: Qt.LeftButton
-            onSingleTapped: treeView.fileClicked(model.display)
+            onSingleTapped: {
+                if (!model.isDir)
+                    treeView.fileClicked(model.filePath)
+            }
         }
     }
 
