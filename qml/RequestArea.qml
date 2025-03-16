@@ -92,4 +92,22 @@ ColumnLayout {
         if (currentItem)
             currentItem.sendRequest();
     }
+
+    function nextTab() {
+        if (requestTabBar.count > 0) {
+            if (requestTabBar.currentIndex < requestTabBar.count - 1)
+                requestTabBar.currentIndex++
+            else
+                requestTabBar.currentIndex = 0
+        }
+    }
+
+    function previousTab() {
+        if (requestTabBar.count > 0) {
+            if (requestTabBar.currentIndex > 0)
+                requestTabBar.currentIndex--
+            else
+                requestTabBar.currentIndex = requestTabBar.count - 1
+        }
+    }
 }
