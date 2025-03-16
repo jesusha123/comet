@@ -8,6 +8,7 @@ RowLayout {
 
     ComboBox {
         model: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"]
+        currentIndex: model.indexOf(request.method)
         onCurrentTextChanged: request.method = currentText
     }
 

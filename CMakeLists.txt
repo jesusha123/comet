@@ -16,6 +16,8 @@ qt_add_executable(appcomet
     NetworkManager.h
     Request.cpp
     Request.h
+    RequestLoader.cpp
+    RequestLoader.h
     Response.cpp
     Response.h
     TableModel.cpp
