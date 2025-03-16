@@ -44,3 +44,27 @@ void RequestFileManager::loadRequestFromFile(const QString &filePath, Request *r
     }
     file.close();
 }
+
+Q_INVOKABLE bool RequestFileManager::saveRequestToFile(const QString &filePath, Request *request) {
+    if (!request) {
+        qWarning() << "Request pointer is null!";
+        return false;
+    }
+
+    QFile file(filePath);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        qWarning() << "Cannot open file for writing:" << filePath;
+        return false;
+    }
+
+    QTextStream out(&file);
+    // Write YAML document start marker
+    out << "---\n";
+    // Write key/value pairs. Enclose values in quotes if necessary.
+    out << "url: \"" << request->url() << "\"\n";
+    out << "method: \"" << request->method() << "\"\n";
+    out << "body: \"" << request->body() << "\"\n";
+
+    file.close();
+    return true;
+}

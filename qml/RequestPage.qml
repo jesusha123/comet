@@ -3,6 +3,7 @@ import QtQuick.Layouts
 import comet 1.0
 
 ColumnLayout {
+    id: requestPage
     property string filePath
 
     Request {
@@ -17,6 +18,7 @@ ColumnLayout {
     RequestControlPanel {
         id: requestControlPanel
         request: request
+        filePath: requestPage.filePath
         Layout.fillWidth: true
         onSendRequestTriggered: sendRequest()
     }
