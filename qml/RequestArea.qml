@@ -21,9 +21,9 @@ ColumnLayout {
 
                 MouseArea {
                     anchors.fill: parent
-                    acceptedButtons: Qt.RightButton
+                    acceptedButtons: Qt.MiddleButton
                     onClicked: (mouse) => {
-                        if (mouse.button === Qt.RightButton) {
+                        if (mouse.button === Qt.MiddleButton) {
                             removeRequestPage(index)
                         }
                     }
