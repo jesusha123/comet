@@ -7,7 +7,6 @@ ColumnLayout {
 
     Request {
         id: request
-        url: "http://httpbin.org/anything"
     }
     Response {
         id: response

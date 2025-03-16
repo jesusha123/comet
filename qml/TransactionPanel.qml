@@ -3,13 +3,15 @@ import QtQuick.Layouts
 import comet 1.0
 
 SplitView {
-    id: mainSplitView
+    id: splitView
     property Request request
     property Response response
-    orientation: Qt.Horizontal
+    orientation: Qt.Vertical
 
     ColumnLayout {
         id: requestArea
+        SplitView.preferredHeight: splitView.height / 2
+        SplitView.minimumHeight: 50
 
         TabBar {
             id: requestTabBar
@@ -68,6 +70,8 @@ SplitView {
 
     ColumnLayout {
         id: responseArea
+        SplitView.preferredHeight: splitView.height / 2
+        SplitView.minimumHeight: 50
 
         TabBar {
             id: responseTabBar
