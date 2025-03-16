@@ -12,7 +12,7 @@ ColumnLayout {
         id: response
     }
 
-    Component.onCompleted: RequestLoader.loadRequestFromFile(filePath, request)
+    Component.onCompleted: RequestFileManager.loadRequestFromFile(filePath, request)
 
     RequestControlPanel {
         id: requestControlPanel

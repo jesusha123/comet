@@ -17,8 +17,8 @@ qt_add_executable(appcomet
     NetworkManager.h
     Request.cpp
     Request.h
-    RequestLoader.cpp
-    RequestLoader.h
+    RequestFileManager.cpp
+    RequestFileManager.h
     resources.qrc
     Response.cpp
     Response.h

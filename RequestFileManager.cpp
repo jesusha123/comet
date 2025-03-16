@@ -1,12 +1,12 @@
-#include "RequestLoader.h"
+#include "RequestFileManager.h"
 #include <QFile>
 
-RequestLoader::RequestLoader(QObject *parent)
+RequestFileManager::RequestFileManager(QObject *parent)
     : QObject(parent)
 {
 }
 
-void RequestLoader::loadRequestFromFile(const QString &filePath, Request *request) {
+void RequestFileManager::loadRequestFromFile(const QString &filePath, Request *request) {
     if (!request) {
         qWarning() << "Request pointer is null!";
         return;
