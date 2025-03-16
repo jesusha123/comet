@@ -31,8 +31,9 @@ ApplicationWindow {
 
         FileTreeView {
             id: fileTreeView
-            SplitView.preferredWidth: 250
             SplitView.fillHeight: true
+            SplitView.minimumWidth: 100
+            SplitView.preferredWidth: 250
             onFileClicked: (filePath) => requestArea.addRequestPage(filePath)
         }
 
@@ -40,6 +41,7 @@ ApplicationWindow {
             id: requestArea
             SplitView.fillWidth: true
             SplitView.fillHeight: true
+            SplitView.minimumWidth: 100
         }
     }
 
