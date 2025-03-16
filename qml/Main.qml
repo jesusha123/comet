@@ -42,4 +42,9 @@ ApplicationWindow {
             SplitView.fillHeight: true
         }
     }
+
+    Shortcut {
+        sequences: [StandardKey.Close]
+        onActivated: requestArea.removeCurrentPage()
+    }
 }

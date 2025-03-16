@@ -73,6 +73,12 @@ ColumnLayout {
         requestModel.remove(index);
     }
 
+    function removeCurrentPage() {
+        if (requestTabBar.currentIndex >= 0)
+            requestModel.remove(requestTabBar.currentIndex);
+    }
+
+
     function fileNameWithoutExtension(filePath) {
         var fileName = filePath.split("/").pop();
         var dotIndex = fileName.lastIndexOf(".");
