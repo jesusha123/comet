@@ -45,10 +45,20 @@ ApplicationWindow {
         }
     }
 
+    // Shortcut for opening folder
+    Shortcut {
+        sequences: [StandardKey.Open]
+        onActivated: folderDialog.open()
+    }
     // Shortcut for closing the active tab
     Shortcut {
         sequences: [StandardKey.Close]
         onActivated: requestArea.removeCurrentPage()
+    }
+    // Shortcut for saving the active request
+    Shortcut {
+        sequences: [StandardKey.Save]
+        onActivated: requestArea.saveCurrentPage()
     }
     // Shortcut for sending a request on the active tab
     Shortcut {

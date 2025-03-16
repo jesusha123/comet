@@ -18,9 +18,9 @@ ColumnLayout {
     RequestControlPanel {
         id: requestControlPanel
         request: request
-        filePath: requestPage.filePath
         Layout.fillWidth: true
         onSendRequestTriggered: sendRequest()
+        onSaveRequestTriggered: saveRequest()
     }
 
     TransactionPanel {
@@ -34,5 +34,8 @@ ColumnLayout {
 
     function sendRequest() {
         NetworkManager.sendRequest(request, response)
+    }
+    function saveRequest() {
+        RequestFileManager.saveRequestToFile(filePath, request)
     }
 }

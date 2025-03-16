@@ -87,6 +87,12 @@ ColumnLayout {
         return fileName.substring(0, dotIndex);
     }
 
+    function saveCurrentPage() {
+        var currentItem = requestStackLayout.itemAt(requestStackLayout.currentIndex)
+        if (currentItem)
+            currentItem.saveRequest();
+    }
+
     function sendRequestToCurrentPage() {
         var currentItem = requestStackLayout.itemAt(requestStackLayout.currentIndex)
         if (currentItem)
