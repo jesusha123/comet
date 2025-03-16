@@ -19,8 +19,15 @@ RowLayout {
         onTextChanged: request.url = text
     }
 
-    Button {
-        text: "Send"
+    ToolButton {
+        id: saveButton
+        icon.source: "qrc:/icons/save.svg"
+        onClicked: console.log("Saving")
+    }
+
+    ToolButton {
+        id: sendButton
+        icon.source: "qrc:/icons/send.svg"
         onClicked: sendRequestTriggered()
     }
 }

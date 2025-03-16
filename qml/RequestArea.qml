@@ -33,8 +33,8 @@ ColumnLayout {
                     Text {
                         text: tabButton.text
                     }
-                    Button {
-                        text: "X"
+                    ToolButton {
+                        icon.source: "qrc:/icons/x.svg"
                         onClicked: removeRequestPage(index)
                     }
                 }
