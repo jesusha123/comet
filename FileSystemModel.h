@@ -12,6 +12,8 @@ class FileSystemModel : public QFileSystemModel {
 public:
     explicit FileSystemModel(QObject *parent = nullptr);
 
+    int columnCount(const QModelIndex &parent = QModelIndex()) const override;
+
     QString path() const;
     void setPath(const QString &path);
 

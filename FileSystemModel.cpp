@@ -5,6 +5,12 @@ FileSystemModel::FileSystemModel(QObject *parent)
 {
 }
 
+int FileSystemModel::columnCount(const QModelIndex &parent) const
+{
+    Q_UNUSED(parent);
+    return 1;
+}
+
 QString FileSystemModel::path() const {
     return rootPath();
 }

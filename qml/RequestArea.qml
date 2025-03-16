@@ -21,9 +21,9 @@ ColumnLayout {
 
                 MouseArea {
                     anchors.fill: parent
-                    acceptedButtons: Qt.RightButton
+                    acceptedButtons: Qt.MiddleButton
                     onClicked: (mouse) => {
-                        if (mouse.button === Qt.RightButton) {
+                        if (mouse.button === Qt.MiddleButton) {
                             removeRequestPage(index)
                         }
                     }
@@ -33,8 +33,8 @@ ColumnLayout {
                     Text {
                         text: tabButton.text
                     }
-                    Button {
-                        text: "X"
+                    ToolButton {
+                        icon.source: "qrc:/icons/x.svg"
                         onClicked: removeRequestPage(index)
                     }
                 }
@@ -70,8 +70,14 @@ ColumnLayout {
     }
 
     function removeRequestPage(index) {
-        requestModel.remove(index);
+        if (index >= 0)
+            requestModel.remove(index);
     }
+
+    function removeCurrentPage() {
+        removeRequestPage(requestTabBar.currentIndex)
+    }
+
 
     function fileNameWithoutExtension(filePath) {
         var fileName = filePath.split("/").pop();
@@ -79,5 +85,29 @@ ColumnLayout {
         if (dotIndex === -1)
             return fileName;
         return fileName.substring(0, dotIndex);
+    }
+
+    function sendRequestToCurrentPage() {
+        var currentItem = requestStackLayout.itemAt(requestStackLayout.currentIndex)
+        if (currentItem)
+            currentItem.sendRequest();
+    }
+
+    function nextTab() {
+        if (requestTabBar.count > 0) {
+            if (requestTabBar.currentIndex < requestTabBar.count - 1)
+                requestTabBar.currentIndex++
+            else
+                requestTabBar.currentIndex = 0
+        }
+    }
+
+    function previousTab() {
+        if (requestTabBar.count > 0) {
+            if (requestTabBar.currentIndex > 0)
+                requestTabBar.currentIndex--
+            else
+                requestTabBar.currentIndex = requestTabBar.count - 1
+        }
     }
 }

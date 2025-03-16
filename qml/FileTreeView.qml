@@ -3,9 +3,9 @@ import QtQuick.Controls
 
 TreeView {
     id: treeView
-
     signal fileClicked(string fileName)
 
+    alternatingRows: false
     model: FileSystemModel
 
     delegate: TreeViewDelegate {

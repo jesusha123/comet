@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.16)
 project(comet VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_AUTORCC ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Quick QuickControls2)
 
@@ -16,8 +17,9 @@ qt_add_executable(appcomet
     NetworkManager.h
     Request.cpp
     Request.h
-    RequestLoader.cpp
-    RequestLoader.h
+    RequestFileManager.cpp
+    RequestFileManager.h
+    resources.qrc
     Response.cpp
     Response.h
     TableModel.cpp

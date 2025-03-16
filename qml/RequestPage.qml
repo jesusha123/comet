@@ -3,23 +3,24 @@ import QtQuick.Layouts
 import comet 1.0
 
 ColumnLayout {
+    id: requestPage
     property string filePath
 
     Request {
         id: request
-        url: "http://httpbin.org/anything"
     }
     Response {
         id: response
     }
 
-    Component.onCompleted: RequestLoader.loadRequestFromFile(filePath, request)
+    Component.onCompleted: RequestFileManager.loadRequestFromFile(filePath, request)
 
     RequestControlPanel {
         id: requestControlPanel
         request: request
+        filePath: requestPage.filePath
         Layout.fillWidth: true
-        onSendRequestTriggered: NetworkManager.sendRequest(request, response)
+        onSendRequestTriggered: sendRequest()
     }
 
     TransactionPanel {
@@ -29,5 +30,9 @@ ColumnLayout {
 
         Layout.fillWidth: true
         Layout.fillHeight: true
+    }
+
+    function sendRequest() {
+        NetworkManager.sendRequest(request, response)
     }
 }
