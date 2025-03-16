@@ -4,6 +4,7 @@
 #include <QQuickStyle>
 #include "FileSystemModel.h"
 #include "NetworkManager.h"
+#include "RequestLoader.h"
 
 int main(int argc, char *argv[])
 {
@@ -15,6 +16,8 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("NetworkManager", &networkManager);
     FileSystemModel fileSystemModel;
     engine.rootContext()->setContextProperty("FileSystemModel", &fileSystemModel);
+    RequestLoader requestLoader;
+    engine.rootContext()->setContextProperty("RequestLoader", &requestLoader);
 
     QObject::connect(
         &engine,

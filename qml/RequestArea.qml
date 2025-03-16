@@ -17,7 +17,7 @@ ColumnLayout {
             TabButton {
                 id: tabButton
                 width: implicitWidth
-                text: fileNameWithoutExtension(model.title)
+                text: fileNameWithoutExtension(model.filePath)
 
                 MouseArea {
                     anchors.fill: parent
@@ -50,20 +50,22 @@ ColumnLayout {
 
         Repeater {
             model: requestModel
-            RequestPage {}
+            RequestPage {
+                filePath: model.filePath
+            }
         }
     }
 
-    function addRequestPage(fileName) {
-        // Check if an element with the same fileName already exists
+    function addRequestPage(filePath) {
+        // Check if an element with the same file path already exists
         for (let i = 0; i < requestModel.count; i++) {
-            if (requestModel.get(i).title === fileName) {
+            if (requestModel.get(i).filePath === filePath) {
                 requestTabBar.currentIndex = i;
                 return;
             }
         }
 
-        requestModel.append({ title: fileName });
+        requestModel.append({ filePath });
         requestTabBar.currentIndex = requestTabBar.count - 1;
     }
 
@@ -71,8 +73,8 @@ ColumnLayout {
         requestModel.remove(index);
     }
 
-    function fileNameWithoutExtension(fullPath) {
-        var fileName = fullPath.split("/").pop();
+    function fileNameWithoutExtension(filePath) {
+        var fileName = filePath.split("/").pop();
         var dotIndex = fileName.lastIndexOf(".");
         if (dotIndex === -1)
             return fileName;
