@@ -19,7 +19,7 @@ ColumnLayout {
         id: requestControlPanel
         request: request
         Layout.fillWidth: true
-        onSendRequestTriggered: NetworkManager.sendRequest(request, response)
+        onSendRequestTriggered: sendRequest()
     }
 
     TransactionPanel {
@@ -29,5 +29,9 @@ ColumnLayout {
 
         Layout.fillWidth: true
         Layout.fillHeight: true
+    }
+
+    function sendRequest() {
+        NetworkManager.sendRequest(request, response)
     }
 }

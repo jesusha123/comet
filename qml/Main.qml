@@ -47,4 +47,8 @@ ApplicationWindow {
         sequences: [StandardKey.Close]
         onActivated: requestArea.removeCurrentPage()
     }
+    Shortcut {
+        sequence: "Ctrl+Return"
+        onActivated: requestArea.sendRequestToCurrentPage()
+    }
 }

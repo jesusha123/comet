@@ -70,12 +70,12 @@ ColumnLayout {
     }
 
     function removeRequestPage(index) {
-        requestModel.remove(index);
+        if (index >= 0)
+            requestModel.remove(index);
     }
 
     function removeCurrentPage() {
-        if (requestTabBar.currentIndex >= 0)
-            requestModel.remove(requestTabBar.currentIndex);
+        removeRequestPage(requestTabBar.currentIndex)
     }
 
 
@@ -85,5 +85,11 @@ ColumnLayout {
         if (dotIndex === -1)
             return fileName;
         return fileName.substring(0, dotIndex);
+    }
+
+    function sendRequestToCurrentPage() {
+        var currentItem = requestStackLayout.itemAt(requestStackLayout.currentIndex)
+        if (currentItem)
+            currentItem.sendRequest();
     }
 }
