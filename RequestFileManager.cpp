@@ -1,5 +1,6 @@
 #include "RequestFileManager.h"
 #include <QFile>
+#include <yaml-cpp/yaml.h>
 
 RequestFileManager::RequestFileManager(QObject *parent)
     : QObject(parent)
@@ -11,38 +12,20 @@ void RequestFileManager::loadRequestFromFile(const QString &filePath, Request *r
         qWarning() << "Request pointer is null!";
         return;
     }
-    QFile file(filePath);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qWarning() << "Cannot open file:" << filePath;
-        return;
+
+    try {
+        YAML::Node node = YAML::LoadFile(filePath.toStdString());
+
+        // Update the Request object if keys exist in the YAML
+        if (node["url"])
+            request->setUrl(QString::fromStdString(node["url"].as<std::string>()));
+        if (node["method"])
+            request->setMethod(QString::fromStdString(node["method"].as<std::string>()));
+        if (node["body"])
+            request->setBody(QString::fromStdString(node["body"].as<std::string>()));
+    } catch (const YAML::Exception &e) {
+        qWarning() << "Failed to load or parse YAML file:" << filePath << "\nError:" << e.what();
     }
-
-    QTextStream in(&file);
-    while (!in.atEnd()) {
-        QString line = in.readLine().trimmed();
-        if (line.isEmpty() || line.startsWith("---") || line.startsWith("#"))
-            continue;
-
-        int colonIndex = line.indexOf(':');
-        if (colonIndex == -1)
-            continue;
-
-        QString key = line.left(colonIndex).trimmed();
-        QString value = line.mid(colonIndex + 1).trimmed();
-        if ((value.startsWith("\"") && value.endsWith("\"")) ||
-            (value.startsWith("'") && value.endsWith("'"))) {
-            value = value.mid(1, value.length() - 2);
-        }
-
-        // Update the Request object based on the key
-        if (key == "url")
-            request->setUrl(value);
-        else if (key == "method")
-            request->setMethod(value);
-        else if (key == "body")
-            request->setBody(value);
-    }
-    file.close();
 }
 
 Q_INVOKABLE bool RequestFileManager::saveRequestToFile(const QString &filePath, Request *request) {
@@ -51,20 +34,21 @@ Q_INVOKABLE bool RequestFileManager::saveRequestToFile(const QString &filePath, 
         return false;
     }
 
+    // Use YAML::Emitter to construct the YAML content.
+    YAML::Emitter out;
+    out << YAML::BeginMap;
+    out << YAML::Key << "url" << YAML::Value << request->url().toStdString();
+    out << YAML::Key << "method" << YAML::Value << request->method().toStdString();
+    out << YAML::Key << "body" << YAML::Value << request->body().toStdString();
+    out << YAML::EndMap;
+
+    // Write the YAML string to a file.
     QFile file(filePath);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         qWarning() << "Cannot open file for writing:" << filePath;
         return false;
     }
-
-    QTextStream out(&file);
-    // Write YAML document start marker
-    out << "---\n";
-    // Write key/value pairs. Enclose values in quotes if necessary.
-    out << "url: \"" << request->url() << "\"\n";
-    out << "method: \"" << request->method() << "\"\n";
-    out << "body: \"" << request->body() << "\"\n";
-
+    file.write(out.c_str());
     file.close();
     return true;
 }

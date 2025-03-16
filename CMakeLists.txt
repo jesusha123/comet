@@ -5,6 +5,14 @@ project(comet VERSION 0.1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTORCC ON)
 
+include(FetchContent)
+FetchContent_Declare(
+        yaml-cpp
+        GIT_REPOSITORY https://github.com/jbeder/yaml-cpp.git
+        GIT_TAG 0.8.0
+)
+FetchContent_MakeAvailable(yaml-cpp)
+
 find_package(Qt6 REQUIRED COMPONENTS Quick QuickControls2)
 
 qt_standard_project_setup(REQUIRES 6.5)
@@ -53,6 +61,7 @@ set_target_properties(appcomet PROPERTIES
 target_link_libraries(appcomet
     PRIVATE Qt6::Quick
     PRIVATE Qt6::QuickControls2
+    PRIVATE yaml-cpp::yaml-cpp
 )
 
 include(GNUInstallDirs)
