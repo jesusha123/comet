@@ -15,11 +15,19 @@ SplitView {
 
         TabBar {
             id: requestTabBar
-            Layout.fillWidth: true
 
-            TabButton { text: "Params" }
-            TabButton { text: "Headers" }
-            TabButton { text: "Body" }
+            TabButton {
+                text: "Params"
+                width: implicitWidth
+            }
+            TabButton {
+                text: "Headers"
+                width: implicitWidth
+            }
+            TabButton {
+                text: "Body"
+                width: implicitWidth
+            }
         }
 
         StackLayout {
@@ -75,12 +83,17 @@ SplitView {
 
         TabBar {
             id: responseTabBar
-            Layout.fillWidth: true
             currentIndex: responseStack.currentIndex
             onCurrentIndexChanged: responseStack.currentIndex = currentIndex
 
-            TabButton { text: "Body" }
-            TabButton { text: "Headers" }
+            TabButton {
+                text: "Body"
+                width: implicitWidth
+            }
+            TabButton {
+                text: "Headers"
+                width: implicitWidth
+            }
         }
 
         StackLayout {
