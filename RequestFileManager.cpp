@@ -42,6 +42,22 @@ void RequestFileManager::loadRequestFromFile(const QString &filePath, Request *r
                 }
             }
         }
+
+        // Deserialize parameters
+        if (node["params"]) {
+            YAML::Node paramsNode = node["params"];
+            request->paramsModel()->clear();
+            for (std::size_t i = 0; i < paramsNode.size(); ++i) {
+                YAML::Node param = paramsNode[i];
+                if (param["key"] && param["value"]) {
+                    QString key = QString::fromStdString(param["key"].as<std::string>());
+                    QString value = QString::fromStdString(param["value"].as<std::string>());
+                    QList<QStandardItem*> row;
+                    row << new QStandardItem(key) << new QStandardItem(value);
+                    request->paramsModel()->appendRow(row);
+                }
+            }
+        }
     } catch (const YAML::Exception &e) {
         qWarning() << "Failed to load or parse YAML file:" << filePath << "\nError:" << e.what();
     }
@@ -67,6 +83,21 @@ Q_INVOKABLE bool RequestFileManager::saveRequestToFile(const QString &filePath, 
     for (int row = 0; row < rowCount; ++row) {
         QStandardItem* keyItem = request->headersModel()->item(row, 0);
         QStandardItem* valueItem = request->headersModel()->item(row, 1);
+        if (keyItem && valueItem) {
+            out << YAML::BeginMap;
+            out << YAML::Key << "key" << YAML::Value << keyItem->text().toStdString();
+            out << YAML::Key << "value" << YAML::Value << valueItem->text().toStdString();
+            out << YAML::EndMap;
+        }
+    }
+    out << YAML::EndSeq;
+
+    // Serialize parameters from the paramsModel
+    out << YAML::Key << "params" << YAML::Value << YAML::BeginSeq;
+    int paramsRowCount = request->paramsModel()->rowCount();
+    for (int row = 0; row < paramsRowCount; ++row) {
+        QStandardItem* keyItem = request->paramsModel()->item(row, 0);
+        QStandardItem* valueItem = request->paramsModel()->item(row, 1);
         if (keyItem && valueItem) {
             out << YAML::BeginMap;
             out << YAML::Key << "key" << YAML::Value << keyItem->text().toStdString();
