@@ -39,6 +39,7 @@ qt_add_qml_module(appcomet
     VERSION 1.0
     QML_FILES
         qml/FileTreeView.qml
+        qml/GlobalShortcuts.qml
         qml/Main.qml
         qml/RequestArea.qml
         qml/RequestControlPanel.qml
