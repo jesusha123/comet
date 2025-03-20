@@ -4,8 +4,8 @@ import comet 1.0
 
 RowLayout {
     property Request request
-    property string filePath
     signal sendRequestTriggered()
+    signal saveRequestTriggered()
 
     ComboBox {
         model: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"]
@@ -23,7 +23,7 @@ RowLayout {
     ToolButton {
         id: saveButton
         icon.source: "qrc:/icons/save.svg"
-        onClicked: RequestFileManager.saveRequestToFile(filePath, request)
+        onClicked: saveRequestTriggered()
     }
 
     ToolButton {

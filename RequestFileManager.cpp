@@ -1,5 +1,6 @@
 #include "RequestFileManager.h"
 #include <QFile>
+#include <yaml-cpp/yaml.h>
 
 RequestFileManager::RequestFileManager(QObject *parent)
     : QObject(parent)
@@ -11,38 +12,55 @@ void RequestFileManager::loadRequestFromFile(const QString &filePath, Request *r
         qWarning() << "Request pointer is null!";
         return;
     }
-    QFile file(filePath);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qWarning() << "Cannot open file:" << filePath;
-        return;
-    }
 
-    QTextStream in(&file);
-    while (!in.atEnd()) {
-        QString line = in.readLine().trimmed();
-        if (line.isEmpty() || line.startsWith("---") || line.startsWith("#"))
-            continue;
+    try {
+        YAML::Node node = YAML::LoadFile(filePath.toStdString());
 
-        int colonIndex = line.indexOf(':');
-        if (colonIndex == -1)
-            continue;
+        // Update the Request object if keys exist in the YAML
+        if (node["url"])
+            request->setUrl(QString::fromStdString(node["url"].as<std::string>()));
+        if (node["method"])
+            request->setMethod(QString::fromStdString(node["method"].as<std::string>()));
+        if (node["body"])
+            request->setBody(QString::fromStdString(node["body"].as<std::string>()));
 
-        QString key = line.left(colonIndex).trimmed();
-        QString value = line.mid(colonIndex + 1).trimmed();
-        if ((value.startsWith("\"") && value.endsWith("\"")) ||
-            (value.startsWith("'") && value.endsWith("'"))) {
-            value = value.mid(1, value.length() - 2);
+        // Deserialize headers
+        if (node["headers"]) {
+            YAML::Node headersNode = node["headers"];
+            // Clear the current headersModel contents.
+            request->headersModel()->clear();
+
+            for (std::size_t i = 0; i < headersNode.size(); ++i) {
+                YAML::Node header = headersNode[i];
+                if (header["key"] && header["value"]) {
+                    QString key = QString::fromStdString(header["key"].as<std::string>());
+                    QString value = QString::fromStdString(header["value"].as<std::string>());
+                    // Create a new row with two items: key and value.
+                    QList<QStandardItem*> row;
+                    row << new QStandardItem(key) << new QStandardItem(value);
+                    request->headersModel()->appendRow(row);
+                }
+            }
         }
 
-        // Update the Request object based on the key
-        if (key == "url")
-            request->setUrl(value);
-        else if (key == "method")
-            request->setMethod(value);
-        else if (key == "body")
-            request->setBody(value);
+        // Deserialize parameters
+        if (node["params"]) {
+            YAML::Node paramsNode = node["params"];
+            request->paramsModel()->clear();
+            for (std::size_t i = 0; i < paramsNode.size(); ++i) {
+                YAML::Node param = paramsNode[i];
+                if (param["key"] && param["value"]) {
+                    QString key = QString::fromStdString(param["key"].as<std::string>());
+                    QString value = QString::fromStdString(param["value"].as<std::string>());
+                    QList<QStandardItem*> row;
+                    row << new QStandardItem(key) << new QStandardItem(value);
+                    request->paramsModel()->appendRow(row);
+                }
+            }
+        }
+    } catch (const YAML::Exception &e) {
+        qWarning() << "Failed to load or parse YAML file:" << filePath << "\nError:" << e.what();
     }
-    file.close();
 }
 
 Q_INVOKABLE bool RequestFileManager::saveRequestToFile(const QString &filePath, Request *request) {
@@ -51,20 +69,53 @@ Q_INVOKABLE bool RequestFileManager::saveRequestToFile(const QString &filePath, 
         return false;
     }
 
+    // Use YAML::Emitter to construct the YAML content.
+    YAML::Emitter out;
+    out << YAML::BeginMap;
+
+    out << YAML::Key << "url" << YAML::Value << request->url().toStdString();
+    out << YAML::Key << "method" << YAML::Value << request->method().toStdString();
+    out << YAML::Key << "body" << YAML::Value << request->body().toStdString();
+
+    // Serialize headers from the headersModel
+    out << YAML::Key << "headers" << YAML::Value << YAML::BeginSeq;
+    int rowCount = request->headersModel()->rowCount();
+    for (int row = 0; row < rowCount; ++row) {
+        QStandardItem* keyItem = request->headersModel()->item(row, 0);
+        QStandardItem* valueItem = request->headersModel()->item(row, 1);
+        if (keyItem && valueItem) {
+            out << YAML::BeginMap;
+            out << YAML::Key << "key" << YAML::Value << keyItem->text().toStdString();
+            out << YAML::Key << "value" << YAML::Value << valueItem->text().toStdString();
+            out << YAML::EndMap;
+        }
+    }
+    out << YAML::EndSeq;
+
+    // Serialize parameters from the paramsModel
+    out << YAML::Key << "params" << YAML::Value << YAML::BeginSeq;
+    int paramsRowCount = request->paramsModel()->rowCount();
+    for (int row = 0; row < paramsRowCount; ++row) {
+        QStandardItem* keyItem = request->paramsModel()->item(row, 0);
+        QStandardItem* valueItem = request->paramsModel()->item(row, 1);
+        if (keyItem && valueItem) {
+            out << YAML::BeginMap;
+            out << YAML::Key << "key" << YAML::Value << keyItem->text().toStdString();
+            out << YAML::Key << "value" << YAML::Value << valueItem->text().toStdString();
+            out << YAML::EndMap;
+        }
+    }
+    out << YAML::EndSeq;
+
+    out << YAML::EndMap;
+
+    // Write the YAML string to a file.
     QFile file(filePath);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         qWarning() << "Cannot open file for writing:" << filePath;
         return false;
     }
-
-    QTextStream out(&file);
-    // Write YAML document start marker
-    out << "---\n";
-    // Write key/value pairs. Enclose values in quotes if necessary.
-    out << "url: \"" << request->url() << "\"\n";
-    out << "method: \"" << request->method() << "\"\n";
-    out << "body: \"" << request->body() << "\"\n";
-
+    file.write(out.c_str());
     file.close();
     return true;
 }
